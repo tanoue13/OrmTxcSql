@@ -12,6 +12,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{4043
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrmTxcSql", "Sources\OrmTxcSql\OrmTxcSql.csproj", "{2B5C226B-A4D2-4EFA-8FE2-C2550E9FB6FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrmTxcSql.Npgsql", "Sources\OrmTxcSql.Npgsql\OrmTxcSql.Npgsql.csproj", "{08BCAF99-94B0-40F6-81D5-E0461CCE2493}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrmTxcSql.DB2", "Sources\OrmTxcSql.DB2\OrmTxcSql.DB2.csproj", "{23865A3D-687B-43DF-9AC9-CD7C54460CC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrmTxcSql.SqlClient", "Sources\OrmTxcSql.SqlClient\OrmTxcSql.SqlClient.csproj", "{2B546599-CD3A-4452-80E5-3904CB0352BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,12 +28,27 @@ Global
 		{2B5C226B-A4D2-4EFA-8FE2-C2550E9FB6FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B5C226B-A4D2-4EFA-8FE2-C2550E9FB6FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B5C226B-A4D2-4EFA-8FE2-C2550E9FB6FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08BCAF99-94B0-40F6-81D5-E0461CCE2493}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08BCAF99-94B0-40F6-81D5-E0461CCE2493}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08BCAF99-94B0-40F6-81D5-E0461CCE2493}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08BCAF99-94B0-40F6-81D5-E0461CCE2493}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23865A3D-687B-43DF-9AC9-CD7C54460CC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23865A3D-687B-43DF-9AC9-CD7C54460CC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23865A3D-687B-43DF-9AC9-CD7C54460CC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23865A3D-687B-43DF-9AC9-CD7C54460CC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B546599-CD3A-4452-80E5-3904CB0352BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B546599-CD3A-4452-80E5-3904CB0352BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B546599-CD3A-4452-80E5-3904CB0352BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B546599-CD3A-4452-80E5-3904CB0352BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2B5C226B-A4D2-4EFA-8FE2-C2550E9FB6FB} = {40438568-E5E2-421C-AEBA-625A1C22DF43}
+		{08BCAF99-94B0-40F6-81D5-E0461CCE2493} = {40438568-E5E2-421C-AEBA-625A1C22DF43}
+		{23865A3D-687B-43DF-9AC9-CD7C54460CC3} = {40438568-E5E2-421C-AEBA-625A1C22DF43}
+		{2B546599-CD3A-4452-80E5-3904CB0352BE} = {40438568-E5E2-421C-AEBA-625A1C22DF43}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1B432B9-F378-4E02-9331-85D7F99D3B4C}
