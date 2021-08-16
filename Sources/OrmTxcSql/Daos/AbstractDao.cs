@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
-using System.Threading.Tasks;
 using OrmTxcSql.Entities;
 
 namespace OrmTxcSql.Daos
@@ -85,20 +84,23 @@ namespace OrmTxcSql.Daos
                 // 文字列型のDataColumnを対象とする。（トリム）
                 IEnumerable<DataColumn> dataColumns = dt.Columns.Cast<DataColumn>()
                     .Where(dataColumn => typeof(string).Equals(dataColumn.DataType));
-                Parallel.ForEach(dataColumns, dataColumn =>
+                foreach (DataColumn dataColumn in dataColumns)
                 {
                     // カラム位置を取得する。
                     int ordinal = dataColumn.Ordinal;
                     // カラム位置を使用し、値がnullでないDataRowのみを対象とする。（トリム）
                     IEnumerable<DataRow> dataRows = dt.Rows.Cast<DataRow>()
                         .Where(dataRow => !dataRow.IsNull(ordinal));
-                    Parallel.ForEach(dataRows, dataRow =>
+                    foreach (DataRow dataRow in dataRows)
                     {
                         // トリムした値を設定する。
                         string value = dataRow[ordinal] as string;
                         dataRow[ordinal] = value.TrimEnd();
-                    });
-                });
+                    }
+                }
+                // 開発者向けコメント（2021.08.17田上）
+                // DataRowに対する書き込み操作は、同期する必要があるとのこと。
+                // したがって、非同期処理（Parallel.ForEach）を使用すると例外が投げられる。
             }
             // 内部処理での変更内容をコミットする。
             dt.AcceptChanges();
