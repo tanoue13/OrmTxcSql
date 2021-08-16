@@ -82,13 +82,12 @@ namespace OrmTxcSql.Daos
             if (this.TrimEnd)
             {
                 // 文字列型のDataColumnを対象とする。（トリム）
-                IEnumerable<DataColumn> dataColumns = dt.Columns.Cast<DataColumn>()
-                    .Where(dataColumn => typeof(string).Equals(dataColumn.DataType));
-                foreach (DataColumn dataColumn in dataColumns)
+                IEnumerable<int> ordinals = dt.Columns.Cast<DataColumn>()
+                    .Where(dataColumn => typeof(string).Equals(dataColumn.DataType))
+                    .Select(x => x.Ordinal);
+                foreach (int ordinal in ordinals)
                 {
-                    // カラム位置を取得する。
-                    int ordinal = dataColumn.Ordinal;
-                    // カラム位置を使用し、値がnullでないDataRowのみを対象とする。（トリム）
+                    // 値がnullでないDataRowのみを対象とする。（トリム）
                     IEnumerable<DataRow> dataRows = dt.Rows.Cast<DataRow>()
                         .Where(dataRow => !dataRow.IsNull(ordinal));
                     foreach (DataRow dataRow in dataRows)
