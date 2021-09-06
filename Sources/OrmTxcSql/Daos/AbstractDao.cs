@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 using OrmTxcSql.Entities;
+using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.Daos
 {
@@ -67,8 +68,8 @@ namespace OrmTxcSql.Daos
         /// <returns></returns>
         protected DataTable GetDataTable(TDbCommand command)
         {
-            // TODO: ログを出力する。
-            //LogUtils.LogSql(command);
+            // ログを出力する。
+            LogUtils.LogSql(command);
             //
             // コマンドを実行する。
             DataTable dt = new DataTable();

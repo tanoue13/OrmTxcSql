@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using OrmTxcSql.Daos;
+using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.Data
 {
@@ -58,8 +58,7 @@ namespace OrmTxcSql.Data
                     }
                     catch (DbException ex)
                     {
-                        Debug.WriteLine(ex.Message);
-                        Debug.WriteLine(ex.StackTrace);
+                        LogUtils.GetErrorLogger().Error(ex);
                         // トランザクションをロールバックする。
                         this.Rollback(tx);
                         //
@@ -68,8 +67,7 @@ namespace OrmTxcSql.Data
                     }
                     catch (Exception ex)
                     {
-                        Debug.WriteLine(ex.Message);
-                        Debug.WriteLine(ex.StackTrace);
+                        LogUtils.GetErrorLogger().Error(ex);
                         // トランザクションをロールバックする。
                         this.Rollback(tx);
                         //
@@ -98,14 +96,12 @@ namespace OrmTxcSql.Data
             {
                 // トランザクションは、既にコミットまたはロールバックされています。
                 // または、接続が切断されています。
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.StackTrace);
+                LogUtils.GetErrorLogger().Error(ex);
             }
             catch (Exception ex)
             {
                 // トランザクションのコミット中にエラーが発生しました。
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.StackTrace);
+                LogUtils.GetErrorLogger().Error(ex);
             }
         }
         /// <summary>
@@ -123,14 +119,12 @@ namespace OrmTxcSql.Data
             {
                 // トランザクションは、既にコミットまたはロールバックされています。
                 // または、接続が切断されています。
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.StackTrace);
+                LogUtils.GetErrorLogger().Error(ex);
             }
             catch (Exception ex)
             {
                 // トランザクションのロールバック中にエラーが発生しました。
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.StackTrace);
+                LogUtils.GetErrorLogger().Error(ex);
             }
         }
         /// <summary>
@@ -211,8 +205,8 @@ namespace OrmTxcSql.Data
         {
             try
             {
-                // TODO: ログを出力する。
-                // LogUtils.LogSql(command);
+                // ログを出力する。
+                LogUtils.LogSql(command);
                 //
                 // SQLを実行する。
                 int count = command.ExecuteNonQuery();
@@ -229,8 +223,8 @@ namespace OrmTxcSql.Data
             }
             catch (DbException ex)
             {
-                // TODO: ログを出力する。
-                // LogUtils.GetErrorLogger().Error(ex);
+                // ログを出力する。
+                LogUtils.GetErrorLogger().Error(ex);
                 //
                 // 例外を投げる。（丸投げ）
                 throw;
