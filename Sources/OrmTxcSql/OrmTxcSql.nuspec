@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>OrmTxcSql</id>
+    <version>1.0.0</version>
+    <authors>tanoue13</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/tanoue13/OrmTxcSql</projectUrl>
+    <description>O/R mapping, Transaction control, SQL</description>
+    <releaseNotes>First release of OrmTxcSql.</releaseNotes>
+    <tags>orm transaction sql</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.6.1">
+        <dependency id="NLog"        version="4.7.11" />
+        <dependency id="NLog.Config" version="4.7.11" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
