@@ -2,17 +2,17 @@
 <package >
   <metadata>
     <id>OrmTxcSql.DB2</id>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <authors>tanoue13</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/tanoue13/OrmTxcSql</projectUrl>
     <description>O/R mapping, Transaction control, SQL</description>
-    <releaseNotes>This package depends on OrmTxcSql v1.0.2.</releaseNotes>
+    <releaseNotes>This package depends on OrmTxcSql v1.0.3.</releaseNotes>
     <tags>orm transaction sql ibm iSeries db2</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.6.1">
-        <dependency id="OrmTxcSql" version="1.0.2" />
+        <dependency id="OrmTxcSql" version="1.0.3" />
         <dependency id="IBM.Data.DB2.iSeries" version="7.1.0" />
       </group>
     </dependencies>
