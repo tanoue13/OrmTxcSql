@@ -47,8 +47,9 @@ namespace OrmTxcSql.SqlClient.Daos
         }
         protected virtual void BuildInsertCommand(SqlCommand command, TEntity entity)
         {
-            // ディクショナリ（カラム名→プロパティ）を生成する。
+            // ディクショナリ（カラム名→プロパティ）を生成する。（UID属性なしのカラムのみ）
             Dictionary<string, PropertyInfo> dictionary = entity.GetColumnAttributes()
+                .Where(prop => prop.GetCustomAttribute<UIDAttribute>(false) == null)
                 .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName);
             // テーブル名を取得する。
             string tableName = entity.GetTableName();
@@ -169,9 +170,10 @@ namespace OrmTxcSql.SqlClient.Daos
         }
         private void BuildUpdateCommand(SqlCommand command, TEntity entity, string filter)
         {
-            // ディクショナリ（カラム名→プロパティ）を生成する。（主キー属性なしのカラムのみ）
+            // ディクショナリ（カラム名→プロパティ）を生成する。（主キー属性なし、UID属性なしのカラムのみ）
             Dictionary<string, PropertyInfo> dictionary = entity.GetColumnAttributes()
                 .Where(prop => prop.GetCustomAttribute<PrimaryKeyAttribute>(false) == null)
+                .Where(prop => prop.GetCustomAttribute<UIDAttribute>(false) == null)
                 .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName);
             // テーブル名を取得する。
             string tableName = entity.GetTableName();
