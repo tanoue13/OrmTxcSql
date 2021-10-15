@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package >
+<package>
   <metadata>
     <id>OrmTxcSql.SqlClient</id>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <authors>tanoue13</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/tanoue13/OrmTxcSql</projectUrl>
     <description>O/R mapping, Transaction control, SQL</description>
-    <releaseNotes>This package depends on OrmTxcSql v1.0.3.</releaseNotes>
+    <releaseNotes>This package depends on OrmTxcSql v1.0.4.</releaseNotes>
     <tags>orm transaction sql SQLServer SqlClient</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.6.1">
-        <dependency id="OrmTxcSql" version="1.0.3" />
+        <dependency id="OrmTxcSql" version="1.0.4" />
       </group>
     </dependencies>
   </metadata>
