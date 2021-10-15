@@ -16,7 +16,7 @@ namespace OrmTxcSql.Daos
     {
 
         IEnumerable<IDbCommand> IDao.Commands { get => this.CommandCollection; }
-        protected readonly ICollection<IDbCommand> CommandCollection;
+        private readonly IEnumerable<IDbCommand> CommandCollection;
 
         protected TDbCommand Command { get; set; } = new TDbCommand();
 
