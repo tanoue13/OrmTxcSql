@@ -132,6 +132,11 @@ namespace OrmTxcSql.SqlClient.Daos
             Dictionary<string, PropertyInfo> dictionary = entity.GetColumnAttributes()
                 .Where(prop => prop.GetCustomAttribute<PrimaryKeyAttribute>(false) != null)
                 .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName);
+            // validation: 主キー属性ありのカラムが存在しない場合、例外を投げる。
+            if (dictionary.Count() <= 0)
+            {
+                throw new MissingPrimaryKeyException(MissingPrimaryKeyExceptionMessage);
+            }
             //
             // コマンドの準備に必要なオブジェクトを生成する。
             var builder = new StringBuilder();
@@ -277,6 +282,11 @@ namespace OrmTxcSql.SqlClient.Daos
             Dictionary<string, PropertyInfo> dictionary = entity.GetColumnAttributes()
                 .Where(prop => prop.GetCustomAttribute<PrimaryKeyAttribute>(false) != null)
                 .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName);
+            // validation: 主キー属性ありのカラムが存在しない場合、例外を投げる。
+            if (dictionary.Count() <= 0)
+            {
+                throw new MissingPrimaryKeyException(MissingPrimaryKeyExceptionMessage);
+            }
             //
             // コマンドの準備に必要なオブジェクトを生成する。
             var builder = new StringBuilder();
