@@ -2,17 +2,16 @@
 <package>
   <metadata>
     <id>OrmTxcSql.Npgsql</id>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <authors>tanoue13</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/tanoue13/OrmTxcSql</projectUrl>
     <description>O/R mapping, Transaction control, SQL</description>
-    <releaseNotes>This package depends on OrmTxcSql v1.0.4.</releaseNotes>
     <tags>orm transaction sql npgsql postgresql</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.6.1">
-        <dependency id="OrmTxcSql" version="1.0.4" />
+        <dependency id="OrmTxcSql" version="1.0.5" />
         <dependency id="Npgsql"    version="4.1.9" />
       </group>
     </dependencies>
