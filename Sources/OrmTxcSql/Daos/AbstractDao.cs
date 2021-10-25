@@ -20,7 +20,7 @@ namespace OrmTxcSql.Daos
         /// <c>PrimaryKeyAttribute</c>が設定されていない<c>TEntity</c>において<c>UpdateByPk</c>, <c>SelectByPk</c>が呼び出された場合に、
         /// 投げられる例外に設定されるメッセージ。
         /// </summary>
-        protected static readonly string MissingPrimaryKeyExceptionMessage = $"{nameof(PrimaryKeyAttribute)} is not found in {nameof(TEntity)}.";
+        protected static readonly string MissingPrimaryKeyExceptionMessage = $"{nameof(PrimaryKeyAttribute)} is not found in {typeof(TEntity).Name}.";
 
         IEnumerable<IDbCommand> IDao.Commands { get => this.CommandCollection; }
         private readonly IEnumerable<IDbCommand> CommandCollection;
