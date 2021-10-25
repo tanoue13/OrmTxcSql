@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using OrmTxcSql.Attributes;
 using OrmTxcSql.Entities;
 using OrmTxcSql.Utils;
 
@@ -14,6 +15,12 @@ namespace OrmTxcSql.Daos
         where TDbCommand : DbCommand, new()
         where TDbDataAdapter : DbDataAdapter, new()
     {
+
+        /// <summary>
+        /// <c>PrimaryKeyAttribute</c>が設定されていない<c>TEntity</c>において<c>UpdateByPk</c>, <c>SelectByPk</c>が呼び出された場合に、
+        /// 投げられる例外に設定されるメッセージ。
+        /// </summary>
+        protected static readonly string MissingPrimaryKeyExceptionMessage = $"{nameof(PrimaryKeyAttribute)} is not found in {typeof(TEntity).Name}.";
 
         IEnumerable<IDbCommand> IDao.Commands { get => this.CommandCollection; }
         private readonly IEnumerable<IDbCommand> CommandCollection;

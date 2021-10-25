@@ -134,9 +134,14 @@ namespace OrmTxcSql.DB2.Daos
         protected virtual void BuildUpdateByPkCommand(iDB2Command command, TEntity entity)
         {
             // ディクショナリ（カラム名→プロパティ）を生成する。（主キー属性ありのカラムのみ）
-            Dictionary<string, PropertyInfo> dictionary = entity.GetColumnAttributes()
+            Dictionary<string, PropertyInfo> dictionary = EntityUtils.GetColumnAttributes<TEntity>()
                 .Where(prop => prop.GetCustomAttribute<PrimaryKeyAttribute>(false) != null)
                 .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName);
+            // validation: 主キー属性ありのカラムが存在しない場合、例外を投げる。
+            if (dictionary.Count() <= 0)
+            {
+                throw new MissingPrimaryKeyException(MissingPrimaryKeyExceptionMessage);
+            }
             //
             // コマンドの準備に必要なオブジェクトを生成する。
             var builder = new StringBuilder();
@@ -279,9 +284,14 @@ namespace OrmTxcSql.DB2.Daos
         protected virtual void BuildSelectByPkCommand(iDB2Command command, TEntity entity)
         {
             // ディクショナリ（カラム名→プロパティ）を生成する。（主キー属性ありのカラムのみ）
-            Dictionary<string, PropertyInfo> dictionary = entity.GetColumnAttributes()
+            Dictionary<string, PropertyInfo> dictionary = EntityUtils.GetColumnAttributes<TEntity>()
                 .Where(prop => prop.GetCustomAttribute<PrimaryKeyAttribute>(false) != null)
                 .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName);
+            // validation: 主キー属性ありのカラムが存在しない場合、例外を投げる。
+            if (dictionary.Count() <= 0)
+            {
+                throw new MissingPrimaryKeyException(MissingPrimaryKeyExceptionMessage);
+            }
             //
             // コマンドの準備に必要なオブジェクトを生成する。
             var builder = new StringBuilder();
