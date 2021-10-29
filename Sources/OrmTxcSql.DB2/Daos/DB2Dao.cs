@@ -10,6 +10,7 @@ using OrmTxcSql.Daos;
 using OrmTxcSql.Data;
 using OrmTxcSql.DB2.Data;
 using OrmTxcSql.DB2.Entities;
+using OrmTxcSql.Extensions;
 using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.DB2.Daos
@@ -266,9 +267,7 @@ namespace OrmTxcSql.DB2.Daos
                 case 1:
                     {
                         // 検索結果が１件の場合、オブジェクトに変換する。
-                        TEntity result = dt.AsEnumerable()
-                            .Select(dataRow => EntityUtils.Create<TEntity>(dataRow))
-                            .Single();
+                        TEntity result = dt.AsEnumerable<TEntity>().Single();
                         // 結果を戻す。
                         return result;
                     }

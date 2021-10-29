@@ -8,6 +8,7 @@ using Npgsql;
 using OrmTxcSql.Attributes;
 using OrmTxcSql.Daos;
 using OrmTxcSql.Data;
+using OrmTxcSql.Extensions;
 using OrmTxcSql.Npgsql.Data;
 using OrmTxcSql.Npgsql.Entities;
 using OrmTxcSql.Utils;
@@ -261,9 +262,7 @@ namespace OrmTxcSql.Npgsql.Daos
                 case 1:
                     {
                         // 検索結果が１件の場合、オブジェクトに変換する。
-                        TEntity result = dt.AsEnumerable()
-                            .Select(dataRow => EntityUtils.Create<TEntity>(dataRow))
-                            .Single();
+                        TEntity result = dt.AsEnumerable<TEntity>().Single();
                         // 結果を戻す。
                         return result;
                     }

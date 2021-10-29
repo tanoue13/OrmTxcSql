@@ -8,6 +8,7 @@ using System.Text;
 using OrmTxcSql.Attributes;
 using OrmTxcSql.Daos;
 using OrmTxcSql.Data;
+using OrmTxcSql.Extensions;
 using OrmTxcSql.SqlClient.Data;
 using OrmTxcSql.SqlClient.Entities;
 using OrmTxcSql.Utils;
@@ -261,9 +262,7 @@ namespace OrmTxcSql.SqlClient.Daos
                 case 1:
                     {
                         // 検索結果が１件の場合、オブジェクトに変換する。
-                        TEntity result = dt.AsEnumerable()
-                            .Select(dataRow => EntityUtils.Create<TEntity>(dataRow))
-                            .Single();
+                        TEntity result = dt.AsEnumerable<TEntity>().Single();
                         // 結果を戻す。
                         return result;
                     }
