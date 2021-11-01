@@ -55,6 +55,7 @@
     <Compile Include="Entities\AbstractEntityExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Data\TooManyRowsException.cs" />
+    <Compile Include="Utils\DataTableExtensions.cs" />
     <Compile Include="Utils\LogUtils.cs" />
     <Compile Include="Utils\EntityUtils.cs" />
     <Compile Include="Utils\MessageUtils.cs" />
