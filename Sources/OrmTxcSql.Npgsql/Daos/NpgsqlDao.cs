@@ -8,7 +8,6 @@ using Npgsql;
 using OrmTxcSql.Attributes;
 using OrmTxcSql.Daos;
 using OrmTxcSql.Data;
-using OrmTxcSql.Extensions;
 using OrmTxcSql.Npgsql.Data;
 using OrmTxcSql.Npgsql.Entities;
 using OrmTxcSql.Utils;

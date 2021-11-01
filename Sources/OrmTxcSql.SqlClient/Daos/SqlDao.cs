@@ -8,7 +8,6 @@ using System.Text;
 using OrmTxcSql.Attributes;
 using OrmTxcSql.Daos;
 using OrmTxcSql.Data;
-using OrmTxcSql.Extensions;
 using OrmTxcSql.SqlClient.Data;
 using OrmTxcSql.SqlClient.Entities;
 using OrmTxcSql.Utils;

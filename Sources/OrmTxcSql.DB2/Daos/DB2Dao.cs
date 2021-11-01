@@ -10,7 +10,6 @@ using OrmTxcSql.Daos;
 using OrmTxcSql.Data;
 using OrmTxcSql.DB2.Data;
 using OrmTxcSql.DB2.Entities;
-using OrmTxcSql.Extensions;
 using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.DB2.Daos
