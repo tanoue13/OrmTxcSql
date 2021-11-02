@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>OrmTxcSql</id>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <authors>tanoue13</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
