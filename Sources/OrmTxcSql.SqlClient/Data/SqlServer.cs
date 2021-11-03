@@ -20,7 +20,6 @@ namespace OrmTxcSql.SqlClient.Data
         /// </summary>
         /// <param name="command"></param>
         /// <param name="parameterName"></param>
-        /// <param name="dbType"></param>
         /// <param name="obj"></param>
         /// <param name="property"></param>
         /// <remarks></remarks>
@@ -70,8 +69,10 @@ namespace OrmTxcSql.SqlClient.Data
         /// <summary>
         /// コマンドにパラメータを追加する。パラメータが存在する場合、置き換えない。
         /// </summary>
-        /// <param name="command">command</param>
-        /// <param name="parameter">parameter</param>
+        /// <param name="command"></param>
+        /// <param name="parameterName"></param>
+        /// <param name="dbType"></param>
+        /// <param name="value"></param>
         /// <remarks></remarks>
         public static void AddParameterIfNotExists(IDbCommand command, string parameterName, SqlDbType dbType, object value)
         {
@@ -81,14 +82,15 @@ namespace OrmTxcSql.SqlClient.Data
         }
         /// <summary>
         /// 可変長データ型に応じたサイズ（Size, Precision, Scale）が設定済みのパラメータを生成する。
-        /// /// </summary>
+        /// </summary>
         /// <param name="parameterName"></param>
         /// <param name="dataType"></param>
         /// <param name="value"></param>
         /// <returns></returns>
         /// <remarks>
-        /// ・SQLServerではPrepareを呼び出す際、可変長データ型のパラメータにおいてはサイズの設定が必要。
-        /// <seealso cref="https://docs.microsoft.com/ja-jp/dotnet/api/system.data.sqlclient.sqlcommand.prepare?view=dotnet-plat-ext-3.1"/>
+        /// SQLServerではPrepareを呼び出す際、可変長データ型のパラメータにおいてはサイズの設定が必要。
+        /// <br/>
+        /// <seealso href="https://docs.microsoft.com/ja-jp/dotnet/api/system.data.sqlclient.sqlcommand.prepare?view=dotnet-plat-ext-3.1"/>
         /// </remarks>
         private static SqlParameter CreateSqlParameter(string parameterName, SqlDbType dataType, object value)
         {
@@ -160,8 +162,8 @@ namespace OrmTxcSql.SqlClient.Data
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        /// <seealso cref="https://docs.microsoft.com/ja-jp/dotnet/api/system.decimal.getbits?view=netcore-3.1"/>
-        /// <seealso cref="https://qiita.com/chocolamint/items/80ca5271c6ce1a185430"/>
+        /// <seealso href="https://docs.microsoft.com/ja-jp/dotnet/api/system.decimal.getbits?view=netcore-3.1"/>
+        /// <seealso href="https://qiita.com/chocolamint/items/80ca5271c6ce1a185430"/>
         private static int GetScale(decimal value)
         {
             int[] bits = Decimal.GetBits(value);
