@@ -4,16 +4,19 @@ using OrmTxcSql.Entities;
 
 namespace OrmTxcSql.Utils
 {
+    /// <summary>
+    /// <see cref="DataTable"/>クラスの拡張メソッドを定義します。<see cref="DataTableExtensions">OrmTxcSql.Utils.DataTableExtensions</see>は静的クラスです。
+    /// </summary>
     public static class DataTableExtensions
     {
 
         /// <summary>
-        /// <see cref="IEnumerable&lt;out T&gt;" />オブジェクトを返します。ここで、ジェネリックパラメータ T は<typeparamref name="TEntity"/>です。
+        /// <see cref="IEnumerable{T}"/>オブジェクトを返します。ここで、ジェネリックパラメータ T は<typeparamref name="TEntity"/>です。
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="source"></param>
         /// <returns>
-        /// <see cref="IEnumerable&lt;out T&gt;" />オブジェクトを返します。ここで、ジェネリックパラメータ T は<typeparamref name="TEntity"/>です。
+        /// <see cref="IEnumerable{T}"/>オブジェクトを返します。ここで、ジェネリックパラメータ T は<typeparamref name="TEntity"/>です。
         /// </returns>
         /// <remarks>
         /// <para>
