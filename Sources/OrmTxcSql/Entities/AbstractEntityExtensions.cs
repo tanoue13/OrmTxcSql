@@ -15,7 +15,6 @@ namespace OrmTxcSql.Entities
         /// <summary>
         /// エンティティが等価かどうかを判定する。
         /// </summary>
-        /// <param name="entity">entity</param>
         /// <returns></returns>
         /// <remarks>
         /// このメソッドにおける「等価」とは、エンティティのメタ情報（DBにおける共通項目）以外の値が等しいという意味である。

@@ -52,7 +52,6 @@ namespace OrmTxcSql.Utils
         /// <summary>
         /// カラム属性を取得する。
         /// </summary>
-        /// <param name="abstractEntity"></param>
         /// <returns></returns>
         public static IEnumerable<PropertyInfo> GetColumnAttributes<TEntity>() where TEntity : AbstractEntity
             => EntityUtils.GetColumnAttributes(typeof(TEntity));

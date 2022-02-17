@@ -180,6 +180,7 @@ namespace OrmTxcSql.Data
         /// </summary>
         /// <param name="command">command</param>
         /// <param name="parameter">parameter</param>
+        /// <param name="overwriteIfExists"></param>
         /// <remarks></remarks>
         private static void AddParameter(IDbCommand command, IDataParameter parameter, bool overwriteIfExists = true)
         {
