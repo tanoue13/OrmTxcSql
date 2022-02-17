@@ -3,6 +3,9 @@
 namespace OrmTxcSql.Utils
 {
 
+    /// <summary>
+    /// メッセージに関するユーティリティクラス。
+    /// </summary>
     public class MessageUtils
     {
         /// <summary>

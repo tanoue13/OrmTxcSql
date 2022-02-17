@@ -12,18 +12,40 @@ namespace OrmTxcSql.Data
     /// <see href="https://www.ibm.com/support/knowledgecenter/ja/SSEPGG_9.7.0/com.ibm.db2.luw.apdv.plsql.doc/doc/c0053876.html"/>
     public class TooManyRowsException : DbException
     {
+        /// <summary>
+        /// コンストラクタ.
+        /// </summary>
         public TooManyRowsException() : base()
         {
         }
+        /// <summary>
+        /// コンストラクタ.
+        /// </summary>
+        /// <param name="message"></param>
         public TooManyRowsException(string message) : base(message)
         {
         }
+        /// <summary>
+        /// コンストラクタ.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="innerException"></param>
         public TooManyRowsException(string message, Exception innerException) : base(message, innerException)
         {
         }
+        /// <summary>
+        /// コンストラクタ.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
         public TooManyRowsException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
+        /// <summary>
+        /// コンストラクタ.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="errorCode"></param>
         public TooManyRowsException(string message, int errorCode) : base(message, errorCode)
         {
         }
