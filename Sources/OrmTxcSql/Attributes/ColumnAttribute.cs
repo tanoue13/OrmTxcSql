@@ -15,6 +15,10 @@ namespace OrmTxcSql.Attributes
         /// </summary>
         public string ColumnName { get; private set; }
 
+        /// <summary>
+        /// コンストラクタ.
+        /// </summary>
+        /// <param name="name"></param>
         public ColumnAttribute(string name)
         {
             this.ColumnName = name;

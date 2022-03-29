@@ -4,6 +4,9 @@ using System.Data;
 namespace OrmTxcSql.Daos
 {
 
+    /// <summary>
+    /// Daoのインタフェース。
+    /// </summary>
     public interface IDao
     {
 

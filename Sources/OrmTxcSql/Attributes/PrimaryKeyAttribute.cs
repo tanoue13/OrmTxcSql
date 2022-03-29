@@ -9,11 +9,12 @@ namespace OrmTxcSql.Attributes
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class PrimaryKeyAttribute : Attribute
     {
-
+        /// <summary>
+        /// コンストラクタ.
+        /// </summary>
         public PrimaryKeyAttribute()
         {
         }
-
     }
 
 }

@@ -8,6 +8,9 @@ using NLog;
 namespace OrmTxcSql.Utils
 {
 
+    /// <summary>
+    /// ログに関するユーティリティクラス。
+    /// </summary>
     public class LogUtils
     {
 
@@ -26,12 +29,6 @@ namespace OrmTxcSql.Utils
         /// </summary>
         private static readonly Logger SqlLogger = LogManager.GetLogger($"{LoggerPrefix}.Sql");
 
-        public static Logger GetLogger()
-        {
-            Logger logger = LogManager.GetCurrentClassLogger();
-            return logger;
-        }
-
         //// <summary>
         //// 監査ロガーを取得します。
         //// </summary>
@@ -43,18 +40,18 @@ namespace OrmTxcSql.Utils
         //    return logger;
         //}
 
-        // <summary>
-        // エラーロガーを取得します。
-        // </summary>
-        // <returns></returns>
-        // <remarks>エラーロガーは、業務エラー、システムエラー、例外などの情報を記録します。</remarks>
+        /// <summary>
+        /// エラーロガーを取得します。
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>エラーロガーは、業務エラー、システムエラー、例外などの情報を記録します。</remarks>
         public static Logger GetErrorLogger() => LogUtils.ErrorLogger;
 
-        // <summary>
-        // SQLロガーを取得します。
-        // </summary>
-        // <returns></returns>
-        // <remarks>SQLロガーは、トランザクション、SQLなどの情報を記録します。</remarks>
+        /// <summary>
+        /// SQLロガーを取得します。
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>SQLロガーは、トランザクション、SQLなどの情報を記録します。</remarks>
         public static Logger GetSqlLogger() => LogUtils.SqlLogger;
 
         //// <summary>
@@ -114,11 +111,11 @@ namespace OrmTxcSql.Utils
         // <remarks></remarks>
         private static readonly Regex RegexTrim = new Regex(@"\s{2,}");
 
-        // <summary>
-        // SQLを記録する。
-        // </summary>
-        // <param name="command">command</param>
-        // <remarks></remarks>
+        /// <summary>
+        /// SQLを記録する。
+        /// </summary>
+        /// <param name="command">command</param>
+        /// <remarks></remarks>
         public static void LogSql(IDbCommand command)
         {
             var builder = new StringBuilder();

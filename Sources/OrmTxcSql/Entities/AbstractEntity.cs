@@ -33,6 +33,11 @@ namespace OrmTxcSql.Entities
                 this.SetProperty(dataRow, property);
             });
         }
+        /// <summary>
+        /// <paramref name="dataRow"/>から値を取得し、<paramref name="propertyInfo"/>で指定されたプロパティに設定する。
+        /// </summary>
+        /// <param name="dataRow"></param>
+        /// <param name="propertyInfo"></param>
         protected virtual void SetProperty(DataRow dataRow, PropertyInfo propertyInfo)
         {
             string columnName = propertyInfo.GetCustomAttribute<ColumnAttribute>(false).ColumnName;

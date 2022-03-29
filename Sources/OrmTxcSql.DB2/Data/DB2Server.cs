@@ -20,7 +20,6 @@ namespace OrmTxcSql.DB2.Data
         /// </summary>
         /// <param name="command"></param>
         /// <param name="parameterName"></param>
-        /// <param name="dbType"></param>
         /// <param name="obj"></param>
         /// <param name="property"></param>
         /// <remarks></remarks>

@@ -9,7 +9,9 @@ using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.Daos
 {
-
+    /// <summary>
+    /// Daoの基底クラス。
+    /// </summary>
     public abstract class AbstractDao<TEntity, TDbCommand, TDbDataAdapter> : IDao
         where TEntity : AbstractEntity, new()
         where TDbCommand : DbCommand, new()
@@ -25,7 +27,10 @@ namespace OrmTxcSql.Daos
         IEnumerable<IDbCommand> IDao.Commands { get => this.CommandCollection; }
         private readonly IEnumerable<IDbCommand> CommandCollection;
 
-        protected TDbCommand Command { get; set; } = new TDbCommand();
+        /// <summary>
+        /// <typeparamref name="TDbCommand"/>を取得します。
+        /// </summary>
+        protected TDbCommand Command { get; } = new TDbCommand();
 
         /// <summary>
         /// 文字列型のフィールドについて、末尾をトリムするかどうかを取得または設定します。
@@ -313,6 +318,16 @@ namespace OrmTxcSql.Daos
         {
             return this.GetCommonFieldForUpdateCondition(String.Empty, appendDelimiter);
         }
+        /// <summary>
+        /// UPDATE文用のWHERE句文字列を戻す。
+        /// </summary>
+        /// <param name="tableAlias">テーブル別名</param>
+        /// <param name="appendDelimiter">区切り文字の付加</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// 共通項目の前の区切り文字（ AND ）が必要な場合、引数（appendDelimiter）は設定不要です。
+        /// 共通項目の前に区切り文字（ AND ）が不要な場合、引数（appendDelimiter）にfalseを設定してください。
+        /// </remarks>
         protected virtual string GetCommonFieldForUpdateCondition(string tableAlias, bool appendDelimiter = true)
         {
             return String.Empty;

@@ -12,6 +12,9 @@ namespace OrmTxcSql.Attributes
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class UIDAttribute : Attribute
     {
+        /// <summary>
+        /// コンストラクタ.
+        /// </summary>
         public UIDAttribute()
         {
         }
