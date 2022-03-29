@@ -19,7 +19,6 @@ namespace OrmTxcSql.Npgsql.Data
         /// </summary>
         /// <param name="command"></param>
         /// <param name="parameterName"></param>
-        /// <param name="dbType"></param>
         /// <param name="obj"></param>
         /// <param name="property"></param>
         /// <remarks></remarks>
@@ -70,7 +69,9 @@ namespace OrmTxcSql.Npgsql.Data
         /// コマンドにパラメータを追加する。パラメータが存在する場合、置き換えない。
         /// </summary>
         /// <param name="command">command</param>
-        /// <param name="parameter">parameter</param>
+        /// <param name="parameterName"></param>
+        /// <param name="dbType"></param>
+        /// <param name="value"></param>
         /// <remarks></remarks>
         public static void AddParameterIfNotExists(IDbCommand command, string parameterName, NpgsqlDbType dbType, object value)
         {

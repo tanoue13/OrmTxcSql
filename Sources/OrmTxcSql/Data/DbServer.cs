@@ -22,10 +22,30 @@ namespace OrmTxcSql.Data
         /// </summary>
         public virtual DataSource DataSource { protected get; set; } = new ConnectionStringDataSource();
 
+        /// <summary>
+        /// <see cref="Execute(IEnumerable{IDao}, Action{IDbTransaction})"/>.
+        /// </summary>
+        /// <param name="dao"></param>
+        /// <param name="action"></param>
         public void Execute(IDao dao, Action action) => this.Execute(new IDao[] { dao }, action);
+        /// <summary>
+        /// <see cref="Execute(IEnumerable{IDao}, Action{IDbTransaction})"/>
+        /// </summary>
+        /// <param name="daos"></param>
+        /// <param name="action"></param>
         public void Execute(IEnumerable<IDao> daos, Action action) => this.Execute(daos, tx => { action(); });
+        /// <summary>
+        /// <see cref="Execute(IEnumerable{IDao}, Action{IDbTransaction})"/>
+        /// </summary>
+        /// <param name="dao"></param>
+        /// <param name="action"></param>
         public void Execute(IDao dao, Action<IDbTransaction> action) => this.Execute(new IDao[] { dao }, action);
 
+        /// <summary>
+        /// トランザクション管理下において、<paramref name="action"/>を実行する。
+        /// </summary>
+        /// <param name="daos">トランザクションに参加する<see cref="IDao"/>のコレクション</param>
+        /// <param name="action">トランザクション管理下で実行される処理</param>
         public virtual void Execute(IEnumerable<IDao> daos, Action<IDbTransaction> action)
         {
             using (var connection = new TConnection())
@@ -202,6 +222,12 @@ namespace OrmTxcSql.Data
         }
 
         #region "更新系処理に関する処理"
+        /// <summary>
+        /// SQLステートメントを実行する。楽観的排他制御が有効、かつ、更新件数が０件の場合、例外が投げられる。
+        /// </summary>
+        /// <param name="command"><see cref="IDbCommand"/></param>
+        /// <param name="enableOptimisticConcurrency">楽観的排他制御の実施有無</param>
+        /// <returns>SQLステートメントを実行した結果、影響を受けた行の数</returns>
         protected static int ExecuteNonQuery(IDbCommand command, bool enableOptimisticConcurrency = true)
         {
             try
@@ -231,6 +257,12 @@ namespace OrmTxcSql.Data
                 throw;
             }
         }
+        /// <summary>
+        /// 同時実行排他制御の失敗を通知するエラーメッセージを戻す。
+        /// </summary>
+        /// <param name="command"><see cref="IDbCommand"/></param>
+        /// <param name="numberOfRowsAffected">SQLステートメントにより影響を受けた行の数</param>
+        /// <returns></returns>
         protected static string GetDBConcurrencyExceptionMessage(IDbCommand command, int? numberOfRowsAffected = null)
         {
             string commandText = command.CommandText;
