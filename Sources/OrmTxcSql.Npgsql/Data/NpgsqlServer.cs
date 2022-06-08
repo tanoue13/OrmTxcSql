@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.Security;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using Npgsql;
 using NpgsqlTypes;
+using OrmTxcSql.Daos;
 using OrmTxcSql.Data;
 
 namespace OrmTxcSql.Npgsql.Data
@@ -78,6 +82,78 @@ namespace OrmTxcSql.Npgsql.Data
             IDataParameter parameter = new NpgsqlParameter(parameterName, dbType);
             parameter.Value = NpgsqlServer.ParameterValueConverter.Convert(value, null, null);
             DbServer<NpgsqlConnection>.AddParameterIfNotExists(command, parameter);
+        }
+
+
+        private bool OnRemoteCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            //
+            // 信頼されないSSL証明書を使用している場合：
+            // ServicePointManager.ServerCertificateValidationCallback
+            //     = new RemoteCertificateValidationCallback(OnRemoteCertificateValidationCallback);
+            //
+            // 「SSL証明書の使用は問題なし」と示す
+            return true;
+        }
+
+
+        public override void Execute(IEnumerable<IDao> daos, Action<IDbTransaction> action)
+        {
+            // base.Execute(daos, action);
+            //
+            using (var connection = new NpgsqlConnection())
+            {
+                connection.ConnectionString = this.DataSource.GetConnectionString();
+                connection.UserCertificateValidationCallback = new RemoteCertificateValidationCallback(OnRemoteCertificateValidationCallback);
+                connection.Open();
+                using (var tx = connection.BeginTransaction())
+                {
+                    // 前処理：コマンドに接続とトランザクションを設定する。
+                    foreach (IDao dao in daos)
+                    {
+                        IEnumerable<IDbCommand> commands = dao.Commands ?? Enumerable.Empty<IDbCommand>();
+                        foreach (IDbCommand command in commands)
+                        {
+                            // 接続を設定する。
+                            command.Connection = connection;
+                            // トランザクションを設定する。
+                            command.Transaction = tx;
+                        }
+                    }
+                    //
+                    // メイン処理：実装クラスのexecute()を実行する。
+                    try
+                    {
+                        // メイン処理を実行する。
+                        action(tx);
+                        //
+                        // トランザクションをコミットする。
+                        //this.Commit(tx);
+                    }
+                    //catch (DbException ex)
+                    //{
+                    //    LogUtils.GetErrorLogger().Error(ex);
+                    //    // トランザクションをロールバックする。
+                    //    this.Rollback(tx);
+                    //    //
+                    //    // 例外を投げる。（丸投げ）
+                    //    throw;
+                    //}
+                    catch (Exception ex)
+                    {
+                        //LogUtils.GetErrorLogger().Error(ex);
+                        // トランザクションをロールバックする。
+                        //this.Rollback(tx);
+                        //
+                        // 例外を投げる。（丸投げ）
+                        throw;
+                    }
+                }
+                // 
+                // 接続を閉じる。
+                this.CloseConnection(connection);
+            }
+
         }
 
         /// <summary>

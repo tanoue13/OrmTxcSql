@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Security;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using OrmTxcSql.Daos;
 using OrmTxcSql.Utils;
@@ -40,6 +45,11 @@ namespace OrmTxcSql.Data
         /// <param name="dao"></param>
         /// <param name="action"></param>
         public void Execute(IDao dao, Action<IDbTransaction> action) => this.Execute(new IDao[] { dao }, action);
+
+        private bool OnRemoteCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            return true;
+        }
 
         /// <summary>
         /// トランザクション管理下において、<paramref name="action"/>を実行する。
