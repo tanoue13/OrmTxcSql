@@ -8,10 +8,11 @@ using OrmTxcSql.Data;
 
 namespace OrmTxcSql.Npgsql.Data
 {
-
+    /// <summary>
+    /// DBMS（PostgreSQL）との接続、トランザクション管理を行うクラス。
+    /// </summary>
     public class NpgsqlServer : DbServer<NpgsqlConnection>
     {
-
         private static IParameterValueConverter ParameterValueConverter { get; set; } = new NpgsqlParameterValueConverter();
 
         /// <summary>
@@ -125,6 +126,12 @@ namespace OrmTxcSql.Npgsql.Data
         }
 
         #region "更新系処理に関する処理"
+        /// <summary>
+        /// <see cref="DbServer{TConnection}.ExecuteNonQuery(IDbCommand, bool)"/>
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="enableOptimisticConcurrency"></param>
+        /// <returns></returns>
         public static int ExecuteNonQuery(NpgsqlCommand command, bool enableOptimisticConcurrency = true)
         {
             try
@@ -154,7 +161,5 @@ namespace OrmTxcSql.Npgsql.Data
             }
         }
         #endregion
-
     }
-
 }
