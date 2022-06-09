@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using OrmTxcSql.Utils;
@@ -35,27 +34,6 @@ namespace OrmTxcSql.Entities
         public static bool HasEqualPropertyValues<TEntity>(this TEntity obj1, TEntity obj2, IEnumerable<PropertyInfo> properties)
             where TEntity : AbstractEntity
         {
-            // 比較対象の属性値を取得する。
-            IEnumerable<object> values1 = properties.Select(prop => prop.GetValue(obj1));
-            IEnumerable<object> values2 = properties.Select(prop => prop.GetValue(obj2));
-            // 比較する。
-            bool equivalent = Enumerable.SequenceEqual(values1, values2, new AttributeEqualityComparer());
-            // 結果を戻す。
-            return equivalent;
-        }
-
-        /// <summary>
-        /// エンティティが等価かどうかを判定する。
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// このメソッドにおける「等価」とは、エンティティのメタ情報（DBにおける共通項目）以外の値が等しいという意味である。
-        /// つまり、「等価」なエンティティでUpdateByPk(E)を実行した場合、共通項目以外が更新されない。
-        /// </remarks>
-        [Obsolete("HasEqualPropertyValuesに移行してください。")]
-        internal static bool IsEquivalentTo<TEntity>(this TEntity obj1, TEntity obj2) where TEntity : AbstractEntity
-        {
-            PropertyInfo[] properties = EntityUtils.GetColumnAttributes<TEntity>().ToArray();
             // 比較対象の属性値を取得する。
             IEnumerable<object> values1 = properties.Select(prop => prop.GetValue(obj1));
             IEnumerable<object> values2 = properties.Select(prop => prop.GetValue(obj2));
