@@ -1,4 +1,6 @@
-﻿namespace OrmTxcSql.Data
+﻿using System.Net.Security;
+
+namespace OrmTxcSql.Data
 {
 
     /// <summary>
@@ -23,6 +25,14 @@
         /// </remarks>
         public abstract string GetConnectionString();
 
+        /// <summary>
+        /// <see cref="RemoteCertificateValidationCallback"/>を取得します。
+        /// </summary>
+        /// <returns></returns>
+        public virtual RemoteCertificateValidationCallback GetRemoteCertificateValidationCallback()
+        {
+            return null;
+        }
     }
 
 }
