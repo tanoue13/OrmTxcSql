@@ -87,13 +87,57 @@ namespace OrmTxcSql.Npgsql.Data
 
         private bool OnRemoteCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
+            // 証明書ストアの現在のユーザ（Windowsアカウント）の「個人」を開く
+            X509Store store = new X509Store(StoreName.Root, StoreLocation.CurrentUser);
+            try
+            {
+                // 証明書ストアを開く
+                store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+                // 証明書を選ぶ（絞り込む）
+                DateTime now = DateTime.Now;
+                X509Certificate2 rootCrt = store.Certificates.Cast<X509Certificate2>()
+                    // 条件：有効期間内のもののみ対象とする。
+                    .Where(cert => cert.NotBefore < now)
+                    .Where(cert => cert.NotAfter > now)
+                    // （ここまで）
+                    // 条件：発行者で絞り込む。
+                    .Where(cert => cert.Issuer.Contains("NOK"))
+                    .Where(cert => cert.Issuer.Contains("Root"))
+                    .Where(cert => cert.Issuer.Contains("Certificate"))
+                    .Where(cert => cert.Issuer.Contains("Authority"))
+                    // （ここまで）
+                    // ソート：有効期間が最も遅いものを使用する。
+                    .OrderByDescending(cert => cert.NotAfter)
+                    .FirstOrDefault();
+                //
+                // ルート証明書が見つからない場合、エラーとする。
+                if (null == rootCrt)
+                {
+                    return false;
+                }
+                //
+                // 証明書チェーン内に信頼する証明書と一致するものがあれば OK とする
+                foreach (X509ChainElement element in chain.ChainElements.Cast<X509ChainElement>())
+                {
+                    bool isValid = rootCrt.Thumbprint.Equals(element.Certificate.Thumbprint);
+                    if (isValid)
+                    {
+                        Console.WriteLine($"VALID: {rootCrt.Thumbprint} - {element.Certificate.Thumbprint}");
+                        return true;
+                    }
+                }
+            }
+            finally
+            {
+                store.Close();
+            }
+            //
             //
             // 信頼されないSSL証明書を使用している場合：
             // ServicePointManager.ServerCertificateValidationCallback
             //     = new RemoteCertificateValidationCallback(OnRemoteCertificateValidationCallback);
             //
-            // 「SSL証明書の使用は問題なし」と示す
-            return true;
+            return false;
         }
 
 
