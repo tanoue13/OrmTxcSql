@@ -13,6 +13,50 @@ namespace OrmTxcSql.Npgsql.Data
     /// </summary>
     public class NpgsqlServer : DbServer<NpgsqlConnection>
     {
+        /// <summary>
+        /// ［拡張］接続のオープン、クローズのみ管理する。
+        /// </summary>
+        public void Connect(Action<NpgsqlConnection> action)
+        {
+            using (var connection = new NpgsqlConnection())
+            {
+                connection.ConnectionString = this.DataSource.GetConnectionString();
+                connection.Open();
+                //
+                // メイン処理
+                try
+                {
+                    // メイン処理を実行する。
+                    action(connection);
+                    //
+                }
+                catch (NpgsqlException)
+                {
+                    // 例外を投げる。（丸投げ）
+                    throw;
+                }
+                catch (Exception)
+                {
+                    // 例外を投げる。（丸投げ）
+                    throw;
+                }
+                // 接続を閉じる。
+                this.CloseConnection(connection);
+            }
+        }
+        /// <summary>
+        /// 接続を閉じる。
+        /// </summary>
+        /// <param name="connection"></param>
+        private void CloseConnection(NpgsqlConnection connection)
+        {
+            // 接続を閉じる。
+            if (connection.State == ConnectionState.Open)
+            {
+                connection.Close();
+            }
+        }
+
         private static IParameterValueConverter ParameterValueConverter { get; set; } = new NpgsqlParameterValueConverter();
 
         /// <summary>
@@ -79,50 +123,6 @@ namespace OrmTxcSql.Npgsql.Data
             IDataParameter parameter = new NpgsqlParameter(parameterName, dbType);
             parameter.Value = NpgsqlServer.ParameterValueConverter.Convert(value, null, null);
             DbServer<NpgsqlConnection>.AddParameterIfNotExists(command, parameter);
-        }
-
-        /// <summary>
-        /// ［拡張］接続のオープン、クローズのみ管理する。
-        /// </summary>
-        public void Connect(Action<NpgsqlConnection> action)
-        {
-            using (var connection = new NpgsqlConnection())
-            {
-                connection.ConnectionString = this.DataSource.GetConnectionString();
-                connection.Open();
-                //
-                // メイン処理
-                try
-                {
-                    // メイン処理を実行する。
-                    action(connection);
-                    //
-                }
-                catch (NpgsqlException)
-                {
-                    // 例外を投げる。（丸投げ）
-                    throw;
-                }
-                catch (Exception)
-                {
-                    // 例外を投げる。（丸投げ）
-                    throw;
-                }
-                // 接続を閉じる。
-                this.CloseConnection(connection);
-            }
-        }
-        /// <summary>
-        /// 接続を閉じる。
-        /// </summary>
-        /// <param name="connection"></param>
-        private void CloseConnection(NpgsqlConnection connection)
-        {
-            // 接続を閉じる。
-            if (connection.State == ConnectionState.Open)
-            {
-                connection.Close();
-            }
         }
 
         #region "更新系処理に関する処理"
