@@ -131,7 +131,7 @@ namespace OrmTxcSql.Daos
             TEntity result = this.SelectByPk(entity);
             if (result == null)
             {
-                if (entity.IsEquivalentTo(new TEntity()))
+                if (entity.HasEqualPropertyValues(new TEntity()))
                 {
                     // 引数のエンティティが初期状態と等価な場合、INSERT文を実行しない。
                     return 0;
@@ -144,7 +144,7 @@ namespace OrmTxcSql.Daos
             }
             else
             {
-                if (entity.IsEquivalentTo(result))
+                if (entity.HasEqualPropertyValues(result))
                 {
                     // 引数のエンティティが検索結果と等価な場合、UPDATE文を実行しない。
                     return 0;
