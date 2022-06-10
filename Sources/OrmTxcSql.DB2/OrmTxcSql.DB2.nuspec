@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>OrmTxcSql.DB2</id>
-    <version>1.0.8</version>
+    <version>1.0.10</version>
     <authors>tanoue13</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
@@ -11,7 +11,7 @@
     <tags>orm transaction sql ibm iSeries db2</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.6.1">
-        <dependency id="OrmTxcSql" version="1.0.8" />
+        <dependency id="OrmTxcSql" version="1.0.10" />
       </group>
     </dependencies>
   </metadata>
