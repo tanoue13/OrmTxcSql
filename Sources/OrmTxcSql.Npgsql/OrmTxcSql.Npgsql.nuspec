@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>OrmTxcSql.Npgsql</id>
-    <version>1.0.10</version>
+    <version>1.0.10.1</version>
     <authors>tanoue13</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
