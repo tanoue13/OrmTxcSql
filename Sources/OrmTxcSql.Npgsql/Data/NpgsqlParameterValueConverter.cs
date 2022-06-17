@@ -11,7 +11,13 @@ namespace OrmTxcSql.Npgsql.Data
     /// </remarks>
     public class NpgsqlParameterValueConverter : IParameterValueConverter
     {
-
+        /// <summary>
+        /// 変換する。
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="targetType"></param>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter)
         {
             if (value == null)
