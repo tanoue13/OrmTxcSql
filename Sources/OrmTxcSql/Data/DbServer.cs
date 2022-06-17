@@ -151,13 +151,15 @@ namespace OrmTxcSql.Data
         /// 接続を閉じる。
         /// </summary>
         /// <param name="connection"></param>
+        /// <remarks>
+        /// 参照：<see cref="IDbConnection.Close"/>
+        /// </remarks>
         private void CloseConnection(IDbConnection connection)
         {
             // 接続を閉じる。
-            if (connection.State == ConnectionState.Open)
-            {
-                connection.Close();
-            }
+            // 開発者向けコメント：
+            // ・アプリケーションでは、例外を生成せずに Close を複数回呼び出すことができる。
+            connection.Close();
         }
 
         /// <summary>

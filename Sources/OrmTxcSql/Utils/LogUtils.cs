@@ -20,6 +20,11 @@ namespace OrmTxcSql.Utils
         private static readonly string LoggerPrefix = "OrmTxcSql";
 
         /// <summary>
+        /// データロガー
+        /// </summary>
+        private static readonly Logger DataLogger = LogManager.GetLogger($"{LoggerPrefix}.Data");
+
+        /// <summary>
         /// エラーロガー
         /// </summary>
         private static readonly Logger ErrorLogger = LogManager.GetLogger($"{LoggerPrefix}.Error");
@@ -39,6 +44,13 @@ namespace OrmTxcSql.Utils
         //    ILog logger = LogManager.GetLogger("AuditLogger");
         //    return logger;
         //}
+
+        /// <summary>
+        /// データロガーを取得します。
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>エラーロガーは、業務エラー、システムエラー、例外などの情報を記録します。</remarks>
+        public static Logger GetDataLogger() => LogUtils.DataLogger;
 
         /// <summary>
         /// エラーロガーを取得します。

@@ -28,9 +28,16 @@ namespace OrmTxcSql.Npgsql.Data
             {
                 connection.ConnectionString = this.DataSource.GetConnectionString();
                 connection.UserCertificateValidationCallback = this.DataSource.GetRemoteCertificateValidationCallback();
+                //
+                LogUtils.GetDataLogger().Debug("Connection is being opened.");
                 connection.Open();
+                LogUtils.GetDataLogger().Debug("Connection has been opened.");
+                //
+                LogUtils.GetDataLogger().Debug("Transaction is starting.");
                 using (var tx = connection.BeginTransaction())
                 {
+                    LogUtils.GetDataLogger().Debug("Transaction has started.");
+                    //
                     // 前処理：コマンドに接続とトランザクションを設定する。
                     foreach (IDao dao in daos)
                     {
@@ -51,11 +58,11 @@ namespace OrmTxcSql.Npgsql.Data
                         action(tx);
                         //
                         // トランザクションをコミットする。
-                        NpgsqlTransaction npgsqlTx = tx as NpgsqlTransaction;
-                        this.Commit(npgsqlTx);
+                        this.Commit(tx);
                     }
                     catch (DbException ex)
                     {
+                        LogUtils.GetDataLogger().Error(ex);
                         LogUtils.GetErrorLogger().Error(ex);
                         // トランザクションをロールバックする。
                         this.Rollback(tx);
@@ -65,6 +72,7 @@ namespace OrmTxcSql.Npgsql.Data
                     }
                     catch (Exception ex)
                     {
+                        LogUtils.GetDataLogger().Error(ex);
                         LogUtils.GetErrorLogger().Error(ex);
                         // トランザクションをロールバックする。
                         this.Rollback(tx);
@@ -73,7 +81,7 @@ namespace OrmTxcSql.Npgsql.Data
                         throw;
                     }
                 }
-                // 
+                //
                 // 接続を閉じる。
                 this.CloseConnection(connection);
             }
@@ -89,18 +97,26 @@ namespace OrmTxcSql.Npgsql.Data
                 // トランザクションをコミットする。
                 if (!tx.IsCompleted)
                 {
-                    tx.CommitAsync();
+                    LogUtils.GetDataLogger().Debug("Transaction is being committed.");
+                    tx.Commit();
+                    LogUtils.GetDataLogger().Debug("Transaction has been committed.");
+                }
+                else
+                {
+                    LogUtils.GetDataLogger().Debug("Commit statement is skipped because the transaction has been completed.");
                 }
             }
             catch (InvalidOperationException ex)
             {
                 // トランザクションは、既にコミットまたはロールバックされています。
                 // または、接続が切断されています。
+                LogUtils.GetDataLogger().Error(ex);
                 LogUtils.GetErrorLogger().Error(ex);
             }
             catch (Exception ex)
             {
                 // トランザクションのコミット中にエラーが発生しました。
+                LogUtils.GetDataLogger().Error(ex);
                 LogUtils.GetErrorLogger().Error(ex);
             }
         }
@@ -115,18 +131,26 @@ namespace OrmTxcSql.Npgsql.Data
                 // トランザクションをロールバックする。
                 if (!tx.IsCompleted)
                 {
-                    tx.RollbackAsync();
+                    LogUtils.GetDataLogger().Debug("Transaction is being rollbacked.");
+                    tx.Rollback();
+                    LogUtils.GetDataLogger().Debug("Transaction has been rollbacked.");
+                }
+                else
+                {
+                    LogUtils.GetDataLogger().Debug("Rollback statement is skipped because the transaction has been completed.");
                 }
             }
             catch (InvalidOperationException ex)
             {
                 // トランザクションは、既にコミットまたはロールバックされています。
                 // または、接続が切断されています。
+                LogUtils.GetDataLogger().Error(ex);
                 LogUtils.GetErrorLogger().Error(ex);
             }
             catch (Exception ex)
             {
                 // トランザクションのロールバック中にエラーが発生しました。
+                LogUtils.GetDataLogger().Error(ex);
                 LogUtils.GetErrorLogger().Error(ex);
             }
         }
@@ -170,10 +194,9 @@ namespace OrmTxcSql.Npgsql.Data
         private void CloseConnection(NpgsqlConnection connection)
         {
             // 接続を閉じる。
-            if (connection.State == ConnectionState.Open)
-            {
-                connection.Close();
-            }
+            LogUtils.GetDataLogger().Debug($"Connection is being closed. [ConnectionState: {Enum.GetName(typeof(ConnectionState), connection.State)}]");
+            connection.Close();
+            LogUtils.GetDataLogger().Debug($"Connection has been closed.");
         }
 
         private static IParameterValueConverter ParameterValueConverter { get; set; } = new NpgsqlParameterValueConverter();
