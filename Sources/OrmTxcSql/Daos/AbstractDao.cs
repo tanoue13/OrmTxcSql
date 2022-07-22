@@ -126,7 +126,7 @@ namespace OrmTxcSql.Daos
         /// </summary>
         /// <param name="entity"></param>
         /// <returns>影響を受けた行の数</returns>
-        public int InsertOrUpdate(TEntity entity)
+        public int InsertOrUpdateByPk(TEntity entity)
         {
             TEntity result = this.SelectByPk(entity);
             if (result == null)
