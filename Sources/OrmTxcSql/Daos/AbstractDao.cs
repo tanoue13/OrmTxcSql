@@ -125,7 +125,7 @@ namespace OrmTxcSql.Daos
         /// レコードの存在有無を確認し、INSERT文、または、UPDATE文を実行する。
         /// </summary>
         /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <returns>影響を受けた行の数</returns>
         public int InsertOrUpdate(TEntity entity)
         {
             TEntity result = this.SelectByPk(entity);
