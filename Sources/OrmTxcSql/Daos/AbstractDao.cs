@@ -24,8 +24,8 @@ namespace OrmTxcSql.Daos
         /// </summary>
         protected static readonly string MissingPrimaryKeyExceptionMessage = $"{nameof(PrimaryKeyAttribute)} is not found in {typeof(TEntity).Name}.";
 
-        IEnumerable<IDbCommand> IDao.Commands { get => this.CommandCollection; }
-        private readonly IEnumerable<IDbCommand> CommandCollection;
+        IEnumerable<IDbCommand> IDao.Commands { get => this._commandCollection; }
+        private readonly IEnumerable<IDbCommand> _commandCollection;
 
         /// <summary>
         /// <typeparamref name="TDbCommand"/>を取得します。
@@ -42,7 +42,7 @@ namespace OrmTxcSql.Daos
         /// </summary>
         public AbstractDao()
         {
-            this.CommandCollection = new IDbCommand[] { this.Command };
+            this._commandCollection = new IDbCommand[] { this.Command };
         }
 
         /// <summary>
