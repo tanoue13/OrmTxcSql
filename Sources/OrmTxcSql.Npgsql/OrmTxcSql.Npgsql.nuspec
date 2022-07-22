@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>OrmTxcSql.Npgsql</id>
-    <version>1.0.10.1</version>
+    <version>1.1.0</version>
     <authors>tanoue13</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
@@ -11,7 +11,7 @@
     <tags>orm transaction sql npgsql postgresql</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.6.1">
-        <dependency id="OrmTxcSql" version="1.0.10" />
+        <dependency id="OrmTxcSql" version="1.1.0" />
         <dependency id="Npgsql"    version="4.1.11" />
       </group>
     </dependencies>
