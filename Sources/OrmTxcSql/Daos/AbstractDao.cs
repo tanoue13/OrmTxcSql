@@ -24,6 +24,15 @@ namespace OrmTxcSql.Daos
         /// </summary>
         protected static readonly string MissingPrimaryKeyExceptionMessage = $"{nameof(PrimaryKeyAttribute)} is not found in {typeof(TEntity).Name}.";
 
+        /// <summary>
+        /// 例外に設定されるメッセージ：INSERT文を実行する必要がないエンティティが渡された場合
+        /// </summary>
+        protected static readonly string ArgumentExceptionMessageForNoNeedToInsert = $"No property values are set.";
+        /// <summary>
+        /// 例外に設定されるメッセージ：UPDATE文を実行する必要がないエンティティが渡された場合
+        /// </summary>
+        protected static readonly string ArgumentExceptionMessageForNoNeedToUpdate = $"No property values are different to those in data source.";
+
         IEnumerable<IDbCommand> IDao.Commands { get => this._commandCollection; }
         private readonly IEnumerable<IDbCommand> _commandCollection;
 
@@ -126,6 +135,20 @@ namespace OrmTxcSql.Daos
         /// </summary>
         /// <param name="entity"></param>
         /// <returns>影響を受けた行の数</returns>
+        /// <remarks>
+        /// ・このメソッドは、エンティティをデータソースに登録する際に登録したいエンティティがデータソースに存在する／存在しないを気にせずに使用できます。<br/>
+        /// 　- 登録したいエンティティがデータソースに存在しない場合、新規登録されます。（INSERT文）<br/>
+        /// 　- 登録したいエンティティがデータソースに存在する場合、更新されます。（UPDATE文）<br/>
+        /// <br/>
+        /// ・ただし、このメソッドを使用する際は、データソースに何らかの変更が発生することを想定しているため、次の場合には例外が投げられます。<br/>
+        /// 　- 登録したいエンティティのプロパティに値が設定されたものが存在しない。（登録時に設定される値が存在しないため）<br/>
+        /// 　- 登録したいエンティティのプロパティ値がデータソースに存在するエンティティのプロパティとすべて一致している。（更新時に変更が発生しないため）<br/>
+        /// ・このような場合が発生する状況は呼び出し元でプロパティの設定が漏れていることがほとんどだと考えられるため、例外が投げられるようにしています。
+        /// </remarks>
+        /// <exception cref="ArgumentException">
+        /// ・<paramref name="entity"/> のプロパティに値が設定されたものが存在しない。（登録時に設定される値が存在せず、INSERT文を実行する意味がないため）<br/>
+        /// ・<paramref name="entity"/> のプロパティ値がデータソースに存在するエンティティのプロパティとすべて一致している。（更新時に変更が発生せず、UPDATE文を実行する意味がないため）<br/>
+        /// </exception>
         public int InsertOrUpdateByPk(TEntity entity)
         {
             TEntity result = this.SelectByPk(entity);
@@ -133,8 +156,8 @@ namespace OrmTxcSql.Daos
             {
                 if (entity.HasEqualPropertyValues(new TEntity()))
                 {
-                    // 引数のエンティティが初期状態と等価な場合、INSERT文を実行しない。
-                    return 0;
+                    // 例外を投げる：引数のエンティティが初期状態と等価な場合、INSERT文を実行しない。
+                    throw new ArgumentException(ArgumentExceptionMessageForNoNeedToInsert, nameof(entity));
                 }
                 else
                 {
@@ -146,8 +169,8 @@ namespace OrmTxcSql.Daos
             {
                 if (entity.HasEqualPropertyValues(result))
                 {
-                    // 引数のエンティティが検索結果と等価な場合、UPDATE文を実行しない。
-                    return 0;
+                    // 例外を投げる：引数のエンティティが検索結果と等価な場合、UPDATE文を実行しない。
+                    throw new ArgumentException(ArgumentExceptionMessageForNoNeedToUpdate, nameof(entity));
                 }
                 else
                 {
