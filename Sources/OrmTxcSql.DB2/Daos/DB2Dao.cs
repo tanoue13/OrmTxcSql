@@ -26,7 +26,13 @@ namespace OrmTxcSql.DB2.Daos
     public abstract class DB2Dao<TEntity> : AbstractDao<TEntity, iDB2Command, iDB2DataAdapter>
         where TEntity : DB2Entity, new()
     {
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="entity"></param>
+        /// <param name="enableOptimisticConcurrency"></param>
+        /// <returns></returns>
         protected override int ExecuteNonQuery(iDB2Command command, TEntity entity, bool enableOptimisticConcurrency = true)
             => DB2Server.ExecuteNonQuery(command, enableOptimisticConcurrency);
 
@@ -50,6 +56,11 @@ namespace OrmTxcSql.DB2.Daos
             // 結果を戻す。
             return result;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="entity"></param>
         protected virtual void BuildInsertCommand(iDB2Command command, TEntity entity)
         {
             // ディクショナリ（カラム名→プロパティ）を生成する。（UID属性なしのカラムのみ）
@@ -131,6 +142,11 @@ namespace OrmTxcSql.DB2.Daos
             // 結果を戻す。
             return result;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="entity"></param>
         protected virtual void BuildUpdateByPkCommand(iDB2Command command, TEntity entity)
         {
             // ディクショナリ（カラム名→プロパティ）を生成する。（主キー属性ありのカラムのみ）
@@ -239,6 +255,16 @@ namespace OrmTxcSql.DB2.Daos
         }
 
         /// <summary>
+        /// 更新する。（１件）（非null項目のみ）
+        /// </summary>
+        /// <param name="entity">entity</param>
+        /// <returns></returns>
+        public override int UpdateUnlessNullByPk(TEntity entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// 検索する。（１件）
         /// </summary>
         /// <param name="entity"></param>
@@ -279,6 +305,11 @@ namespace OrmTxcSql.DB2.Daos
                     }
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="entity"></param>
         protected virtual void BuildSelectByPkCommand(iDB2Command command, TEntity entity)
         {
             // ディクショナリ（カラム名→プロパティ）を生成する。（主キー属性ありのカラムのみ）

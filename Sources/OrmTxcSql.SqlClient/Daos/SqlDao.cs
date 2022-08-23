@@ -21,7 +21,13 @@ namespace OrmTxcSql.SqlClient.Daos
     public abstract class SqlDao<TEntity> : AbstractDao<TEntity, SqlCommand, SqlDataAdapter>
         where TEntity : SqlEntity, new()
     {
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="entity"></param>
+        /// <param name="enableOptimisticConcurrency"></param>
+        /// <returns></returns>
         protected override int ExecuteNonQuery(SqlCommand command, TEntity entity, bool enableOptimisticConcurrency = true)
             => SqlServer.ExecuteNonQuery(command, enableOptimisticConcurrency);
 
@@ -45,6 +51,11 @@ namespace OrmTxcSql.SqlClient.Daos
             // 結果を戻す。
             return result;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="entity"></param>
         protected virtual void BuildInsertCommand(SqlCommand command, TEntity entity)
         {
             // ディクショナリ（カラム名→プロパティ）を生成する。（UID属性なしのカラムのみ）
@@ -126,6 +137,11 @@ namespace OrmTxcSql.SqlClient.Daos
             // 結果を戻す。
             return result;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="entity"></param>
         protected virtual void BuildUpdateByPkCommand(SqlCommand command, TEntity entity)
         {
             // ディクショナリ（カラム名→プロパティ）を生成する。（主キー属性ありのカラムのみ）
@@ -234,6 +250,16 @@ namespace OrmTxcSql.SqlClient.Daos
         }
 
         /// <summary>
+        /// 更新する。（１件）（非null項目のみ）
+        /// </summary>
+        /// <param name="entity">entity</param>
+        /// <returns></returns>
+        public override int UpdateUnlessNullByPk(TEntity entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// 検索する。（１件）
         /// </summary>
         /// <param name="entity"></param>
@@ -274,6 +300,11 @@ namespace OrmTxcSql.SqlClient.Daos
                     }
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="entity"></param>
         protected virtual void BuildSelectByPkCommand(SqlCommand command, TEntity entity)
         {
             // ディクショナリ（カラム名→プロパティ）を生成する。（主キー属性ありのカラムのみ）

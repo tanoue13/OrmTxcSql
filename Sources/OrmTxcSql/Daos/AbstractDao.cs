@@ -68,6 +68,12 @@ namespace OrmTxcSql.Daos
         /// <param name="entity">entity</param>
         /// <returns></returns>
         public abstract int UpdateByPk(TEntity entity);
+        /// <summary>
+        /// 更新する。（１件）（非null項目のみ）
+        /// </summary>
+        /// <param name="entity">entity</param>
+        /// <returns></returns>
+        public abstract int UpdateUnlessNullByPk(TEntity entity);
 
         /// <summary>
         /// 検索する。（１件）
