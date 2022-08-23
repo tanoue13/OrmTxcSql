@@ -201,6 +201,12 @@ namespace OrmTxcSql.Npgsql.Daos
         }
         private void BuildUpdateCommand(NpgsqlCommand command, TEntity entity, IEnumerable<PropertyInfo> properties, string filter)
         {
+            // validation; 更新対象項目が存在しない場合、例外を投げる。
+            if ((null == properties) || (properties.Count() <= 0))
+            {
+                throw new ArgumentException("No target property is given.");
+            }
+            //
             // ディクショナリ（カラム名→プロパティ）を生成する。
             Dictionary<string, PropertyInfo> dictionary = properties.ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName);
             // テーブル名を取得する。
