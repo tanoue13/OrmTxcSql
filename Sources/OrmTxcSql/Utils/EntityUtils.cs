@@ -65,7 +65,7 @@ namespace OrmTxcSql.Utils
             // カラム属性を取得する。
             IEnumerable<PropertyInfo> attributes = type
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .Where(prop => prop.GetCustomAttribute<ColumnAttribute>(false) != null);
+                .Where(prop => null != prop.GetCustomAttribute<ColumnAttribute>(false));
             // 結果を戻す。
             return attributes;
         }

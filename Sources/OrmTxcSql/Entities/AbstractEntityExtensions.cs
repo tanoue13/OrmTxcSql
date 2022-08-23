@@ -50,17 +50,17 @@ namespace OrmTxcSql.Entities
         {
             bool IEqualityComparer<object>.Equals(object x, object y)
             {
-                if ((x == null) && (y == null))
+                if ((null == x) && (null == y))
                 {
                     // どちらも null の場合、「等価」と判定する。
                     return true;
                 }
-                else if ((x == null) && (y != null))
+                else if ((null == x) && (null != y))
                 {
                     // 「等価」でないと判定する。
                     return false;
                 }
-                else if ((x != null) && (y == null))
+                else if ((null != x) && (null == y))
                 {
                     // 「等価」でないと判定する。
                     return false;
@@ -76,7 +76,6 @@ namespace OrmTxcSql.Entities
                 return obj.GetHashCode();
             }
         }
-
     }
 
 }

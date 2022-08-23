@@ -20,7 +20,7 @@ namespace OrmTxcSql.Npgsql.Data
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter)
         {
-            if (value == null)
+            if (null == value)
             {
                 // nullの場合、DBNullを戻す。
                 return DBNull.Value;
@@ -36,7 +36,7 @@ namespace OrmTxcSql.Npgsql.Data
             {
                 // string型を変換する。
                 var sValue = value as string;
-                if (sValue != null)
+                if (null != sValue)
                 {
                     return value;
                 }
