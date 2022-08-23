@@ -12,7 +12,6 @@ namespace OrmTxcSql.DB2.Data
     /// </remarks>
     public class DB2ParameterValueConverter : IParameterValueConverter
     {
-
         /// <summary>
         /// 
         /// </summary>
@@ -22,7 +21,7 @@ namespace OrmTxcSql.DB2.Data
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter)
         {
-            if (value == null)
+            if (null == value)
             {
                 // nullの場合、DBNullを戻す。
                 return DB2ParameterValueConverter.GetDataSourceNullValue(targetType, parameter);
@@ -38,7 +37,7 @@ namespace OrmTxcSql.DB2.Data
             {
                 // string型を変換する。
                 var sValue = value as string;
-                if (sValue != null)
+                if (null != sValue)
                 {
                     return value;
                 }
