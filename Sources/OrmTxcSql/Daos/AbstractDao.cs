@@ -9,6 +9,7 @@ using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.Daos
 {
+
     /// <summary>
     /// Daoの基底クラス。
     /// </summary>
@@ -152,7 +153,7 @@ namespace OrmTxcSql.Daos
         public int InsertOrUpdateByPk(TEntity entity)
         {
             TEntity result = this.SelectByPk(entity);
-            if (result == null)
+            if (null == result)
             {
                 if (entity.HasEqualPropertyValues(new TEntity()))
                 {
