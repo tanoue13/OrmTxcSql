@@ -49,7 +49,7 @@ namespace OrmTxcSql.SqlClient.Daos
         {
             // ディクショナリ（カラム名→プロパティ）を生成する。（UID属性なしのカラムのみ）
             Dictionary<string, PropertyInfo> dictionary = entity.GetColumnAttributes()
-                .Where(prop => prop.GetCustomAttribute<UIDAttribute>(false) == null)
+                .Where(prop => null == prop.GetCustomAttribute<UIDAttribute>(false))
                 .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName);
             // テーブル名を取得する。
             string tableName = entity.GetTableName();
@@ -130,7 +130,7 @@ namespace OrmTxcSql.SqlClient.Daos
         {
             // ディクショナリ（カラム名→プロパティ）を生成する。（主キー属性ありのカラムのみ）
             Dictionary<string, PropertyInfo> dictionary = entity.GetColumnAttributes()
-                .Where(prop => prop.GetCustomAttribute<PrimaryKeyAttribute>(false) != null)
+                .Where(prop => null != prop.GetCustomAttribute<PrimaryKeyAttribute>(false))
                 .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName);
             // validation: 主キー属性ありのカラムが存在しない場合、例外を投げる。
             if (dictionary.Count() <= 0)
@@ -177,8 +177,8 @@ namespace OrmTxcSql.SqlClient.Daos
         {
             // ディクショナリ（カラム名→プロパティ）を生成する。（主キー属性なし、UID属性なしのカラムのみ）
             Dictionary<string, PropertyInfo> dictionary = entity.GetColumnAttributes()
-                .Where(prop => prop.GetCustomAttribute<PrimaryKeyAttribute>(false) == null)
-                .Where(prop => prop.GetCustomAttribute<UIDAttribute>(false) == null)
+                .Where(prop => null == prop.GetCustomAttribute<PrimaryKeyAttribute>(false))
+                .Where(prop => null == prop.GetCustomAttribute<UIDAttribute>(false))
                 .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName);
             // テーブル名を取得する。
             string tableName = entity.GetTableName();
@@ -278,7 +278,7 @@ namespace OrmTxcSql.SqlClient.Daos
         {
             // ディクショナリ（カラム名→プロパティ）を生成する。（主キー属性ありのカラムのみ）
             Dictionary<string, PropertyInfo> dictionary = entity.GetColumnAttributes()
-                .Where(prop => prop.GetCustomAttribute<PrimaryKeyAttribute>(false) != null)
+                .Where(prop => null != prop.GetCustomAttribute<PrimaryKeyAttribute>(false))
                 .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName);
             // validation: 主キー属性ありのカラムが存在しない場合、例外を投げる。
             if (dictionary.Count() <= 0)
