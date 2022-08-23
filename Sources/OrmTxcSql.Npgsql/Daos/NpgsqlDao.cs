@@ -273,7 +273,23 @@ namespace OrmTxcSql.Npgsql.Daos
             // コマンドの準備に必要なオブジェクトを生成する。
             NpgsqlCommand command = this.Command;
             //
-            // 更新対象項目を取得する。（主キー属性なし、UID属性なし、非null項目のカラムのみ）
+            // コマンドを準備する。
+            this.BuildUpdateUnlessNullByPk(command, entity);
+            //
+            // コマンドを実行する。
+            int result = this.ExecuteNonQuery(command, entity);
+            //
+            // 結果を戻す。
+            return result;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="entity"></param>
+        protected virtual void BuildUpdateUnlessNullByPk(NpgsqlCommand command, TEntity entity)
+        {
+            // 更新対象項目：主キー属性なし、UID属性なし、非null項目のカラムのみ
             IEnumerable<PropertyInfo> properties = entity.GetColumnAttributes()
                 // 主キー属性なし
                 .Where(prop => null == prop.GetCustomAttribute<PrimaryKeyAttribute>(false))
@@ -284,12 +300,6 @@ namespace OrmTxcSql.Npgsql.Daos
             //
             // コマンドを準備する。
             this.BuildUpdateByPkCommand(command, entity, properties);
-            //
-            // コマンドを実行する。
-            int result = this.ExecuteNonQuery(command, entity);
-            //
-            // 結果を戻す。
-            return result;
         }
 
         /// <summary>
