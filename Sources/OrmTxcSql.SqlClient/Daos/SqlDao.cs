@@ -64,7 +64,7 @@ namespace OrmTxcSql.SqlClient.Daos
             //
             // 対象項目を反復処理し、項目名とSQLパラメータを設定する。
             IEnumerator<KeyValuePair<string, PropertyInfo>> pairs = entity.GetColumnAttributes()
-                // UID属性なしのカラムのみ
+                // UID属性なし
                 .Where(prop => null == prop.GetCustomAttribute<UIDAttribute>(false))
                 // ディクショナリ（カラム名→プロパティ）に変換する。
                 .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName)
@@ -103,7 +103,7 @@ namespace OrmTxcSql.SqlClient.Daos
             else
             {
                 // fool-proof: 対象項目が存在しない場合、例外を投げる。
-                throw new ArgumentException("No target property is given.");
+                throw new ArgumentException(ArgumentExceptionMessageForNoTargetPropertyIsGiven);
             }
             //
             // テーブル名を取得する。
@@ -250,7 +250,7 @@ namespace OrmTxcSql.SqlClient.Daos
             else
             {
                 // fool-proof: 更新対象項目が存在しない場合、例外を投げる。
-                throw new ArgumentException("No target property is given.");
+                throw new ArgumentException(ArgumentExceptionMessageForNoTargetPropertyIsGiven);
             }
             //
             // テーブル名を取得する。
