@@ -16,7 +16,7 @@ namespace OrmTxcSql.DB2.Daos
 {
 
     /// <summary>
-    /// Daoの基底クラス。BaseEntityのサブクラスに対してInsert, UpdateByPk, FindByPkを実装済み。
+    /// DB2用のdao。BaseEntityのサブクラスに対してInsert, UpdateByPk, FindByPkを実装済み。
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <remarks>

@@ -16,7 +16,7 @@ namespace OrmTxcSql.SqlClient.Daos
 {
 
     /// <summary>
-    /// SQL Server用のdao
+    /// SQL Server用のdao。BaseEntityのサブクラスに対してInsert, UpdateByPk, FindByPkを実装済み。
     /// </summary>
     public abstract class SqlDao<TEntity> : AbstractDao<TEntity, SqlCommand, SqlDataAdapter>
         where TEntity : SqlEntity, new()
