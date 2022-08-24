@@ -56,7 +56,7 @@ namespace OrmTxcSql.Utils
         public static IEnumerable<PropertyInfo> GetColumnAttributes<TEntity>() where TEntity : AbstractEntity
             => EntityUtils.GetColumnAttributes(typeof(TEntity));
         /// <summary>
-        /// カラム名を取得する。
+        /// カラム属性を取得する。
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -66,6 +66,33 @@ namespace OrmTxcSql.Utils
             IEnumerable<PropertyInfo> attributes = type
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(prop => null != prop.GetCustomAttribute<ColumnAttribute>(false));
+            // 結果を戻す。
+            return attributes;
+        }
+
+        /// <summary>
+        /// 主キー属性を取得する。
+        /// </summary>
+        /// <param name="abstractEntity"></param>
+        /// <returns></returns>
+        public static IEnumerable<PropertyInfo> GetPrimaryKeyAttributes(this AbstractEntity abstractEntity)
+            => EntityUtils.GetPrimaryKeyAttributes(abstractEntity.GetType());
+        /// <summary>
+        /// 主キー属性を取得する。
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<PropertyInfo> GetPrimaryKeyAttributes<TEntity>() where TEntity : AbstractEntity
+            => EntityUtils.GetPrimaryKeyAttributes(typeof(TEntity));
+        /// <summary>
+        /// 主キー属性を取得する。
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private static IEnumerable<PropertyInfo> GetPrimaryKeyAttributes(Type type)
+        {
+            // 主キー属性を取得する。
+            IEnumerable<PropertyInfo> attributes = EntityUtils.GetColumnAttributes(type)
+                .Where(prop => null != prop.GetCustomAttribute<PrimaryKeyAttribute>(false));
             // 結果を戻す。
             return attributes;
         }

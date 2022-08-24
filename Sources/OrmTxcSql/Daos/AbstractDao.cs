@@ -33,6 +33,11 @@ namespace OrmTxcSql.Daos
         /// 例外に設定されるメッセージ：UPDATE文を実行する必要がないエンティティが渡された場合
         /// </summary>
         protected static readonly string ArgumentExceptionMessageForNoNeedToUpdate = $"No property values are different to those in data source.";
+       
+        /// <summary>
+        /// 例外に設定されるメッセージ：対象プロパティが与えられていない場合
+        /// </summary>
+        protected static readonly string ArgumentExceptionMessageForNoTargetPropertyIsGiven = $"No target property is given.";
 
         IEnumerable<IDbCommand> IDao.Commands { get => this._commandCollection; }
         private readonly IEnumerable<IDbCommand> _commandCollection;
@@ -68,6 +73,12 @@ namespace OrmTxcSql.Daos
         /// <param name="entity">entity</param>
         /// <returns></returns>
         public abstract int UpdateByPk(TEntity entity);
+        /// <summary>
+        /// 更新する。（１件）（非null項目のみ）
+        /// </summary>
+        /// <param name="entity">entity</param>
+        /// <returns></returns>
+        public abstract int UpdateUnlessNullByPk(TEntity entity);
 
         /// <summary>
         /// 検索する。（１件）

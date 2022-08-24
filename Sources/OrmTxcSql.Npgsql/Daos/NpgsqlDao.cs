@@ -16,12 +16,18 @@ namespace OrmTxcSql.Npgsql.Daos
 {
 
     /// <summary>
-    /// PostgreSQL用のdao
+    /// PostgreSQL用のdao。BaseEntityのサブクラスに対してInsert, UpdateByPk, FindByPkを実装済み。
     /// </summary>
     public abstract class NpgsqlDao<TEntity> : AbstractDao<TEntity, NpgsqlCommand, NpgsqlDataAdapter>
         where TEntity : NpgsqlEntity, new()
     {
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="entity"></param>
+        /// <param name="enableOptimisticConcurrency"></param>
+        /// <returns></returns>
         protected override int ExecuteNonQuery(NpgsqlCommand command, TEntity entity, bool enableOptimisticConcurrency = true)
             => NpgsqlServer.ExecuteNonQuery(command, enableOptimisticConcurrency);
 
@@ -45,20 +51,25 @@ namespace OrmTxcSql.Npgsql.Daos
             // 結果を戻す。
             return result;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="entity"></param>
         protected virtual void BuildInsertCommand(NpgsqlCommand command, TEntity entity)
         {
-            // ディクショナリ（カラム名→プロパティ）を生成する。（UID属性なしのカラムのみ）
-            Dictionary<string, PropertyInfo> dictionary = entity.GetColumnAttributes()
-                .Where(prop => null == prop.GetCustomAttribute<UIDAttribute>(false))
-                .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName);
-            // テーブル名を取得する。
-            string tableName = entity.GetTableName();
-            //
             // コマンドの準備に必要なオブジェクトを生成する。
             var columnStringBuilder = new StringBuilder();
             var valueStringBuilder = new StringBuilder();
             //
-            IEnumerator<KeyValuePair<string, PropertyInfo>> pairs = dictionary.GetEnumerator();
+            // 対象項目を反復処理し、項目名とSQLパラメータを設定する。
+            IEnumerator<KeyValuePair<string, PropertyInfo>> pairs = entity.GetColumnAttributes()
+                // UID属性なし
+                .Where(prop => null == prop.GetCustomAttribute<UIDAttribute>(false))
+                // ディクショナリ（カラム名→プロパティ）に変換する。
+                .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName)
+                // IEnumeratorを取得する。
+                .GetEnumerator();
             if (pairs.MoveNext())
             {
                 // １件目についての処理：
@@ -89,7 +100,14 @@ namespace OrmTxcSql.Npgsql.Daos
                     NpgsqlServer.AddParameterOrReplace(command, parameterName, entity, propertyInfo);
                 }
             }
+            else
+            {
+                // fool-proof: 対象項目が存在しない場合、例外を投げる。
+                throw new ArgumentException(ArgumentExceptionMessageForNoTargetPropertyIsGiven);
+            }
             //
+            // テーブル名を取得する。
+            string tableName = entity.GetTableName();
             // コマンドテキストを生成する。
             var builder = new StringBuilder();
             builder.Append(" insert into ").Append(tableName).Append(" (");
@@ -126,22 +144,34 @@ namespace OrmTxcSql.Npgsql.Daos
             // 結果を戻す。
             return result;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="entity"></param>
         protected virtual void BuildUpdateByPkCommand(NpgsqlCommand command, TEntity entity)
         {
-            // ディクショナリ（カラム名→プロパティ）を生成する。（主キー属性ありのカラムのみ）
-            Dictionary<string, PropertyInfo> dictionary = entity.GetColumnAttributes()
-                .Where(prop => null != prop.GetCustomAttribute<PrimaryKeyAttribute>(false))
-                .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName);
-            // validation: 主キー属性ありのカラムが存在しない場合、例外を投げる。
-            if (dictionary.Count() <= 0)
-            {
-                throw new MissingPrimaryKeyException(MissingPrimaryKeyExceptionMessage);
-            }
+            // 更新対象項目を取得する。（主キー属性なし、UID属性なしのカラムのみ）
+            IEnumerable<PropertyInfo> properties = entity.GetColumnAttributes()
+                .Where(prop => null == prop.GetCustomAttribute<PrimaryKeyAttribute>(false))
+                .Where(prop => null == prop.GetCustomAttribute<UIDAttribute>(false));
             //
+            // コマンドを準備する。
+            this.BuildUpdateByPkCommand(command, entity, properties);
+        }
+        private void BuildUpdateByPkCommand(NpgsqlCommand command, TEntity entity, IEnumerable<PropertyInfo> properties)
+        {
             // コマンドの準備に必要なオブジェクトを生成する。
             var builder = new StringBuilder();
             //
-            IEnumerator<KeyValuePair<string, PropertyInfo>> pairs = dictionary.GetEnumerator();
+            // 主キー項目を反復処理する。
+            IEnumerator<KeyValuePair<string, PropertyInfo>> pairs = EntityUtils
+                // 主キー属性を取得する。
+                .GetPrimaryKeyAttributes<TEntity>()
+                // ディクショナリ（カラム名→プロパティ）に変換する。
+                .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName)
+                // IEnumeratorを取得する。
+                .GetEnumerator();
             if (pairs.MoveNext())
             {
                 // １件目についての処理：
@@ -170,23 +200,25 @@ namespace OrmTxcSql.Npgsql.Daos
                 // 共通項目についての処理：
                 builder.Append(this.GetCommonFieldForUpdateCondition("x", true));
             }
+            else
+            {
+                // fool-proof: 主キー属性ありのカラムが存在しない場合、例外を投げる。
+                throw new MissingPrimaryKeyException(MissingPrimaryKeyExceptionMessage);
+            }
             //
-            this.BuildUpdateCommand(command, entity, builder.ToString());
+            this.BuildUpdateCommand(command, entity, properties, builder.ToString());
         }
-        private void BuildUpdateCommand(NpgsqlCommand command, TEntity entity, string filter)
+        private void BuildUpdateCommand(NpgsqlCommand command, TEntity entity, IEnumerable<PropertyInfo> properties, string filter)
         {
-            // ディクショナリ（カラム名→プロパティ）を生成する。（主キー属性なし、UID属性なしのカラムのみ）
-            Dictionary<string, PropertyInfo> dictionary = entity.GetColumnAttributes()
-                .Where(prop => null == prop.GetCustomAttribute<PrimaryKeyAttribute>(false))
-                .Where(prop => null == prop.GetCustomAttribute<UIDAttribute>(false))
-                .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName);
-            // テーブル名を取得する。
-            string tableName = entity.GetTableName();
-            //
             // コマンドの準備に必要なオブジェクトを生成する。
             var columnStringBuilder = new StringBuilder();
-            // 更新列とSQLパラメータを設定する。
-            IEnumerator<KeyValuePair<string, PropertyInfo>> pairs = dictionary.GetEnumerator();
+            //
+            // 対象項目を反復処理し、更新列とSQLパラメータを設定する。
+            IEnumerator<KeyValuePair<string, PropertyInfo>> pairs = properties
+                // ディクショナリ（カラム名→プロパティ）に変換する。
+                .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName)
+                // IEnumeratorを取得する。
+                .GetEnumerator();
             if (pairs.MoveNext())
             {
                 // １件目についての処理：
@@ -215,7 +247,14 @@ namespace OrmTxcSql.Npgsql.Daos
                 // 共通項目についての処理：
                 columnStringBuilder.Append(this.GetCommonFieldForUpdate(true));
             }
+            else
+            {
+                // fool-proof: 更新対象項目が存在しない場合、例外を投げる。
+                throw new ArgumentException(ArgumentExceptionMessageForNoTargetPropertyIsGiven);
+            }
             //
+            // テーブル名を取得する。
+            string tableName = entity.GetTableName();
             // コマンドテキストを生成する。
             // 開発者向けコメント：（fool-proof：条件の前に、空白を１つはさむ）
             // OK: update table_name set a = @a, b = @b, c = @c where x = @x
@@ -231,6 +270,46 @@ namespace OrmTxcSql.Npgsql.Daos
             command.CommandText = builder.ToString();
             // データソースにコマンドを準備する。
             command.Prepare();
+        }
+
+        /// <summary>
+        /// 更新する。（１件）（非null項目のみ）
+        /// </summary>
+        /// <param name="entity">entity</param>
+        /// <returns></returns>
+        public override int UpdateUnlessNullByPk(TEntity entity)
+        {
+            //
+            // コマンドの準備に必要なオブジェクトを生成する。
+            NpgsqlCommand command = this.Command;
+            //
+            // コマンドを準備する。
+            this.BuildUpdateUnlessNullByPk(command, entity);
+            //
+            // コマンドを実行する。
+            int result = this.ExecuteNonQuery(command, entity);
+            //
+            // 結果を戻す。
+            return result;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="entity"></param>
+        protected virtual void BuildUpdateUnlessNullByPk(NpgsqlCommand command, TEntity entity)
+        {
+            // 更新対象項目：主キー属性なし、UID属性なし、非null項目のカラムのみ
+            IEnumerable<PropertyInfo> properties = entity.GetColumnAttributes()
+                // 主キー属性なし
+                .Where(prop => null == prop.GetCustomAttribute<PrimaryKeyAttribute>(false))
+                // UID属性なし
+                .Where(prop => null == prop.GetCustomAttribute<UIDAttribute>(false))
+                // 非null項目
+                .Where(prop => null != prop.GetValue(entity));
+            //
+            // コマンドを準備する。
+            this.BuildUpdateByPkCommand(command, entity, properties);
         }
 
         /// <summary>
@@ -274,22 +353,24 @@ namespace OrmTxcSql.Npgsql.Daos
                     }
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="entity"></param>
         protected virtual void BuildSelectByPkCommand(NpgsqlCommand command, TEntity entity)
         {
-            // ディクショナリ（カラム名→プロパティ）を生成する。（主キー属性ありのカラムのみ）
-            Dictionary<string, PropertyInfo> dictionary = entity.GetColumnAttributes()
-                .Where(prop => null != prop.GetCustomAttribute<PrimaryKeyAttribute>(false))
-                .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName);
-            // validation: 主キー属性ありのカラムが存在しない場合、例外を投げる。
-            if (dictionary.Count() <= 0)
-            {
-                throw new MissingPrimaryKeyException(MissingPrimaryKeyExceptionMessage);
-            }
-            //
             // コマンドの準備に必要なオブジェクトを生成する。
             var builder = new StringBuilder();
             //
-            IEnumerator<KeyValuePair<string, PropertyInfo>> pairs = dictionary.GetEnumerator();
+            // 主キー項目を反復処理する。
+            IEnumerator<KeyValuePair<string, PropertyInfo>> pairs = EntityUtils
+                // 主キー属性を取得する。
+                .GetPrimaryKeyAttributes<TEntity>()
+                // ディクショナリ（カラム名→プロパティ）に変換する。
+                .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName)
+                // IEnumeratorを取得する。
+                .GetEnumerator();
             if (pairs.MoveNext())
             {
                 // １件目についての処理：
@@ -317,6 +398,11 @@ namespace OrmTxcSql.Npgsql.Daos
                 }
                 // 共通項目についての処理：
                 builder.Append(this.GetCommonFieldForSelectCondition("x", true));
+            }
+            else
+            {
+                // fool-proof: 主キー属性ありのカラムが存在しない場合、例外を投げる。
+                throw new MissingPrimaryKeyException(MissingPrimaryKeyExceptionMessage);
             }
             //
             this.BuildSelectCommand(command, entity, builder.ToString());
