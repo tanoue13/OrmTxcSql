@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31515.178
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{310C3B9A-93C4-4F8F-B9ED-8737DF0E508C}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,6 +17,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrmTxcSql.DB2", "Sources\OrmTxcSql.DB2\OrmTxcSql.DB2.csproj", "{23865A3D-687B-43DF-9AC9-CD7C54460CC3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrmTxcSql.SqlClient", "Sources\OrmTxcSql.SqlClient\OrmTxcSql.SqlClient.csproj", "{2B546599-CD3A-4452-80E5-3904CB0352BE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources.Net6", "Sources.Net6", "{FAF77276-88C8-4438-88EC-9690DA1C7925}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
