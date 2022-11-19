@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using OrmTxcSql.Attributes;
+using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.Entities
 {
