@@ -180,13 +180,9 @@ namespace OrmTxcSql.Entities
                 else
                 {
                     // どちらも null でない場合、比較結果を戻す。
-#if NET6_0_OR_GREATER
 #nullable disable
-#endif
                     return x.Equals(y);
-#if NET6_0_OR_GREATER
 #nullable restore
-#endif
                 }
             }
             int IEqualityComparer<object?>.GetHashCode(object obj)
@@ -195,7 +191,7 @@ namespace OrmTxcSql.Entities
             }
         }
 #else
-  /// <summary>
+        /// <summary>
         /// 属性の等価比較を行う IEqualityComparer 。
         /// </summary>
         private class AttributeEqualityComparer : IEqualityComparer<object>
