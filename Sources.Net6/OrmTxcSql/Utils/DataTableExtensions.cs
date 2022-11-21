@@ -26,7 +26,7 @@ namespace OrmTxcSql.Utils
         /// Excuse（言い訳）：<br/>
         /// 本来は、OrmTxcSql.Extensions名前空間にOrmTxcSql.Extensions.DataTableExtensions.AsEnumerable&lt;TEntity&gt;(DataTable)として定義したかった。<br/>
         /// しかし、通常はOrmTxcSql.Extensions名前空間のusingが存在しないため、コードにAsEnumerable&lt;TEntity&gt;(DataTable)を記述すると<br/>
-        /// <see cref="System.Data"/>名前空間に定義されている<see cref="System.Data.TypedTableBaseExtensions.AsEnumerable{TRow}(TypedTableBase{TRow})"/>と解釈され、<br/>
+        /// <see cref="System.Data"/>名前空間に定義されている<c>System.Data.TypedTableBaseExtensions.AsEnumerable&lt;DataRow&gt;(TypedTableBase&lt;DataRow&gt;)</c>と解釈され、<br/>
         /// コンパイルエラーとなってしまう。（&lt;TRow&gt;の部分が定義に合わないことが原因と考えられる。）<br/>
         /// <see cref="AsEnumerable{TEntity}(DataTable)">AsEnumerable&lt;TEntity&gt;(DataTable)</see>を利用する場面では
         /// <see cref="EntityUtils"/>も利用すると想定されるため、<br/>
@@ -35,6 +35,6 @@ namespace OrmTxcSql.Utils
         /// </remarks>
         public static IEnumerable<TEntity> AsEnumerable<TEntity>(this DataTable source)
             where TEntity : AbstractEntity, new()
-            => source.AsEnumerable().Select(dataRow => EntityUtils.Create<TEntity>(dataRow));
+            => source.Rows.Cast<DataRow>().Select(dataRow => EntityUtils.Create<TEntity>(dataRow));
     }
 }
