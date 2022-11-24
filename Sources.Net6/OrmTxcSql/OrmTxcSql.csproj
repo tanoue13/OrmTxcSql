@@ -7,4 +7,11 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
 </Project>
