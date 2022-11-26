@@ -19,7 +19,7 @@ namespace OrmTxcSql.Npgsql.Data
         /// <param name="parameter"></param>
         /// <returns></returns>
 #if NET6_0_OR_GREATER
-        public object Convert(object value, [AllowNull] Type targetType, [AllowNull] object parameter)
+        public object Convert([AllowNull] object value, [AllowNull] Type targetType, [AllowNull] object parameter)
 #else
         public object Convert(object value, Type targetType, object parameter)
 #endif

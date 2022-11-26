@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Npgsql;
@@ -247,7 +248,11 @@ namespace OrmTxcSql.Npgsql.Data
                 dbType = NpgsqlDbType.Varchar;
             }
             // パラメータに設定する値を取得する。
+#if NET6_0_OR_GREATER
+            object? value = property.GetValue(obj);
+#else
             object value = property.GetValue(obj);
+#endif
             //
             // nullを考慮し、下のメソッド経由で設定する。
             NpgsqlServer.AddParameterOrReplace(command, parameterName, dbType, value);
@@ -261,7 +266,11 @@ namespace OrmTxcSql.Npgsql.Data
         /// <param name="dbType"></param>
         /// <param name="value"></param>
         /// <remarks>値がnullの場合、DBNull.Valueに変換して設定する。</remarks>
+#if NET6_0_OR_GREATER
+        public static void AddParameterOrReplace(IDbCommand command, string parameterName, NpgsqlDbType dbType, [AllowNull] object value)
+#else
         public static void AddParameterOrReplace(IDbCommand command, string parameterName, NpgsqlDbType dbType, object value)
+#endif
         {
             IDataParameter parameter = new NpgsqlParameter(parameterName, dbType);
             parameter.Value = NpgsqlServer.ParameterValueConverter.Convert(value, null, null);
