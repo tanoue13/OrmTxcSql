@@ -6,6 +6,10 @@
     <PackageTags>orm transaction sql npgsql postgresql</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="5.1.0" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OrmTxcSql\OrmTxcSql.csproj" />
   </ItemGroup>

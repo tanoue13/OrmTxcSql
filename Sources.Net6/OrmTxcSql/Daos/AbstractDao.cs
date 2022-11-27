@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Linq;
 using OrmTxcSql.Attributes;
 using OrmTxcSql.Entities;
+using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.Daos
 {
@@ -99,8 +100,8 @@ namespace OrmTxcSql.Daos
         /// <returns></returns>
         protected DataTable GetDataTable(TDbCommand command)
         {
-            // FIXME:ログを出力する。
-            // LogUtils.LogSql(command);
+            // ログを出力する。
+            LogUtils.LogSql(command);
             //
             // コマンドを実行する。
             DataTable dt = new DataTable();
@@ -204,7 +205,7 @@ namespace OrmTxcSql.Daos
         /// <returns>影響を受けた行の数</returns>
         protected abstract int ExecuteNonQuery(TDbCommand command, TEntity entity, bool enableOptimisticConcurrency = true);
 
-#region"BaseEntity（共通項目）に関するプロパティや処理（メソッド名前を共通化するため、抽象メソッドとして定義）"
+        #region"BaseEntity（共通項目）に関するプロパティや処理（メソッド名前を共通化するため、抽象メソッドとして定義）"
 
         /// <summary>
         /// SELECT文用の共通項目文字列を戻す。
@@ -371,7 +372,7 @@ namespace OrmTxcSql.Daos
             return String.Empty;
         }
 
-#endregion
+        #endregion
 
     }
 }

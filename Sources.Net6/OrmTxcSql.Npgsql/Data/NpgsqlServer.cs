@@ -9,6 +9,7 @@ using Npgsql;
 using NpgsqlTypes;
 using OrmTxcSql.Daos;
 using OrmTxcSql.Data;
+using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.Npgsql.Data
 {
@@ -29,11 +30,11 @@ namespace OrmTxcSql.Npgsql.Data
                 connection.ConnectionString = this.DataSource.GetConnectionString();
                 connection.UserCertificateValidationCallback = this.DataSource.GetRemoteCertificateValidationCallback();
                 //
-                //LogUtils.GetDataLogger().Debug("Connection is being opened.");
+                LogUtils.GetDataLogger().Debug("Connection is being opened.");
                 connection.Open();
-                //LogUtils.GetDataLogger().Debug("Connection has been opened.");
+                LogUtils.GetDataLogger().Debug("Connection has been opened.");
                 //
-                //LogUtils.GetDataLogger().Debug("Transaction is starting.");
+                LogUtils.GetDataLogger().Debug("Transaction is starting.");
                 using (var tx = connection.BeginTransaction())
                 {
                     //LogUtils.GetDataLogger().Debug("Transaction has started.");
@@ -62,8 +63,8 @@ namespace OrmTxcSql.Npgsql.Data
                     }
                     catch (DbException ex)
                     {
-                        //LogUtils.GetDataLogger().Error(ex);
-                        //LogUtils.GetErrorLogger().Error(ex);
+                        LogUtils.GetDataLogger().Error(ex);
+                        LogUtils.GetErrorLogger().Error(ex);
                         // トランザクションをロールバックする。
                         this.Rollback(tx);
                         //
@@ -72,8 +73,8 @@ namespace OrmTxcSql.Npgsql.Data
                     }
                     catch (Exception ex)
                     {
-                        //LogUtils.GetDataLogger().Error(ex);
-                        //LogUtils.GetErrorLogger().Error(ex);
+                        LogUtils.GetDataLogger().Error(ex);
+                        LogUtils.GetErrorLogger().Error(ex);
                         // トランザクションをロールバックする。
                         this.Rollback(tx);
                         //
@@ -118,14 +119,14 @@ namespace OrmTxcSql.Npgsql.Data
             {
                 // トランザクションは、既にコミットまたはロールバックされています。
                 // または、接続が切断されています。
-                //LogUtils.GetDataLogger().Error(ex);
-                //LogUtils.GetErrorLogger().Error(ex);
+                LogUtils.GetDataLogger().Error(ex);
+                LogUtils.GetErrorLogger().Error(ex);
             }
             catch (Exception ex)
             {
                 // トランザクションのコミット中にエラーが発生しました。
-                //LogUtils.GetDataLogger().Error(ex);
-                //LogUtils.GetErrorLogger().Error(ex);
+                LogUtils.GetDataLogger().Error(ex);
+                LogUtils.GetErrorLogger().Error(ex);
             }
         }
         /// <summary>
@@ -160,14 +161,14 @@ namespace OrmTxcSql.Npgsql.Data
             {
                 // トランザクションは、既にコミットまたはロールバックされています。
                 // または、接続が切断されています。
-                //LogUtils.GetDataLogger().Error(ex);
-                //LogUtils.GetErrorLogger().Error(ex);
+                LogUtils.GetDataLogger().Error(ex);
+                LogUtils.GetErrorLogger().Error(ex);
             }
             catch (Exception ex)
             {
                 // トランザクションのロールバック中にエラーが発生しました。
-                //LogUtils.GetDataLogger().Error(ex);
-                //LogUtils.GetErrorLogger().Error(ex);
+                LogUtils.GetDataLogger().Error(ex);
+                LogUtils.GetErrorLogger().Error(ex);
             }
         }
 

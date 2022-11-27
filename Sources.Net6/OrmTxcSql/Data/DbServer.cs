@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using OrmTxcSql.Daos;
+using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.Data
 {
@@ -76,7 +77,7 @@ namespace OrmTxcSql.Data
                     }
                     catch (DbException ex)
                     {
-                        //LogUtils.GetErrorLogger().Error(ex);
+                        LogUtils.GetErrorLogger().Error(ex);
                         // トランザクションをロールバックする。
                         this.Rollback(tx);
                         //
@@ -85,7 +86,7 @@ namespace OrmTxcSql.Data
                     }
                     catch (Exception ex)
                     {
-                        //LogUtils.GetErrorLogger().Error(ex);
+                        LogUtils.GetErrorLogger().Error(ex);
                         // トランザクションをロールバックする。
                         this.Rollback(tx);
                         //
@@ -114,12 +115,12 @@ namespace OrmTxcSql.Data
             {
                 // トランザクションは、既にコミットまたはロールバックされています。
                 // または、接続が切断されています。
-                //LogUtils.GetErrorLogger().Error(ex);
+                LogUtils.GetErrorLogger().Error(ex);
             }
             catch (Exception ex)
             {
                 // トランザクションのコミット中にエラーが発生しました。
-                //LogUtils.GetErrorLogger().Error(ex);
+                LogUtils.GetErrorLogger().Error(ex);
             }
         }
         /// <summary>
@@ -137,12 +138,12 @@ namespace OrmTxcSql.Data
             {
                 // トランザクションは、既にコミットまたはロールバックされています。
                 // または、接続が切断されています。
-                //LogUtils.GetErrorLogger().Error(ex);
+                LogUtils.GetErrorLogger().Error(ex);
             }
             catch (Exception ex)
             {
                 // トランザクションのロールバック中にエラーが発生しました。
-                //LogUtils.GetErrorLogger().Error(ex);
+                LogUtils.GetErrorLogger().Error(ex);
             }
         }
         /// <summary>
@@ -233,7 +234,7 @@ namespace OrmTxcSql.Data
             try
             {
                 // ログを出力する。
-                //LogUtils.LogSql(command);
+                LogUtils.LogSql(command);
                 //
                 // SQLを実行する。
                 int count = command.ExecuteNonQuery();
@@ -251,7 +252,7 @@ namespace OrmTxcSql.Data
             catch (DbException ex)
             {
                 // ログを出力する。
-                //LogUtils.GetErrorLogger().Error(ex);
+                LogUtils.GetErrorLogger().Error(ex);
                 //
                 // 例外を投げる。（丸投げ）
                 throw;
