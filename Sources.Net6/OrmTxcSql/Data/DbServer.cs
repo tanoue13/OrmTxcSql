@@ -296,17 +296,20 @@ namespace OrmTxcSql.Data
         public static string GetParametersString(IDataParameterCollection parameterCollection, string delimiter = ", ")
         {
             //
+            // ローカル関数を定義する。（戻り値：パラメータ名=パラメタ値）
+            string parameterNameAndValue(IDataParameter parameter) => $"{parameter?.ParameterName}={parameter?.Value}";
+            //
             // パラメータ文字列
             var builder = new StringBuilder();
             //
-            IEnumerator<IDataParameter> enumerator = (IEnumerator<IDataParameter>)parameterCollection.GetEnumerator();
+            IEnumerator<IDataParameter> enumerator = parameterCollection.Cast<IDataParameter>().GetEnumerator();
             if (enumerator.MoveNext())
             {
                 // １件目の処理
                 {
                     IDataParameter parameter = enumerator.Current;
                     // パラメータ名、値を追加する。
-                    builder.Append(DbServer<TConnection>.GetParameterNameValue(parameter));
+                    builder.Append(parameterNameAndValue(parameter));
                 }
                 // ２件目以降の処理
                 while (enumerator.MoveNext())
@@ -314,14 +317,12 @@ namespace OrmTxcSql.Data
                     IDataParameter parameter = enumerator.Current;
                     // デリミタ、パラメータ名、値を追加する。
                     builder.Append(delimiter);
-                    builder.Append(DbServer<TConnection>.GetParameterNameValue(parameter));
+                    builder.Append(parameterNameAndValue(parameter));
                 }
             }
             // 結果を戻す。
             return builder.ToString();
         }
-        private static string GetParameterNameValue(IDataParameter parameter)
-            => $"{parameter.ParameterName}={parameter.Value}";
         #endregion
 
     }
