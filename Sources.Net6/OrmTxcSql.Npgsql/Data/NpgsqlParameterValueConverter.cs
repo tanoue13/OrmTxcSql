@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using OrmTxcSql.Data;
 
 namespace OrmTxcSql.Npgsql.Data
@@ -19,7 +18,7 @@ namespace OrmTxcSql.Npgsql.Data
         /// <param name="parameter"></param>
         /// <returns></returns>
 #if NET6_0_OR_GREATER
-        public object Convert([AllowNull] object value, [AllowNull] Type targetType, [AllowNull] object parameter)
+        public object Convert(object? value, Type? targetType, object? parameter)
 #else
         public object Convert(object value, Type targetType, object parameter)
 #endif

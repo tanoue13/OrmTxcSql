@@ -16,7 +16,7 @@ namespace OrmTxcSql.Data
         /// <param name="parameter"></param>
         /// <returns></returns>
 #if NET6_0_OR_GREATER
-        object Convert([AllowNull] object value, [AllowNull] Type targetType, [AllowNull] object parameter);
+        object Convert(object? value, Type? targetType, object? parameter);
 #else
         object Convert(object value, Type targetType, object parameter);
 #endif
