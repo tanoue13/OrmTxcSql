@@ -84,7 +84,11 @@ namespace OrmTxcSql.Daos
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
+#if NET6_0_OR_GREATER
+        public abstract TEntity? SelectByPk(TEntity entity);
+#else
         public abstract TEntity SelectByPk(TEntity entity);
+#endif
 
         /// <summary>
         /// 検索する。（複数件）
@@ -167,7 +171,11 @@ namespace OrmTxcSql.Daos
         /// </exception>
         public int InsertOrUpdateByPk(TEntity entity)
         {
+#if NET6_0_OR_GREATER
+            TEntity? result = this.SelectByPk(entity);
+#else
             TEntity result = this.SelectByPk(entity);
+#endif
             if (null == result)
             {
                 if (entity.HasEqualPropertyValues(new TEntity()))
