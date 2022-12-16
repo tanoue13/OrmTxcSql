@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
@@ -19,17 +20,22 @@ namespace OrmTxcSql.Entities
         /// <param name="dataRow"></param>
         public virtual void SetProperties(DataRow dataRow)
         {
-#if NET6_0_OR_GREATER
-#nullable disable
-#endif
             // DataTable.Columnsを取得する。
             DataColumnCollection dataColumnCollection = dataRow.Table.Columns;
             // DataTable.Columnsに存在するカラム属性のみを取得する。
             IEnumerable<PropertyInfo> properties = this.GetColumnAttributes()
-                .Where(prop => dataColumnCollection.Contains(prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName));
-#if NET6_0_OR_GREATER
-#nullable restore
-#endif
+                // 変換
+                .Select(prop => new
+                {
+                    PropertyInfo = prop,
+                    ColumnName = prop.GetCustomAttribute<ColumnAttribute>(false)?.ColumnName ?? String.Empty
+                })
+                // カラム名を取得できない場合、対象外とする。
+                .Where(src => !String.IsNullOrEmpty(src.ColumnName))
+                // DataTable.Columnsに存在するカラム属性のみを取得する。
+                .Where(src => dataColumnCollection.Contains(src.ColumnName))
+                // 選択
+                .Select(src => src.PropertyInfo);
             //
             // プロパティを設定する。
             Parallel.ForEach(properties, property =>
@@ -44,13 +50,10 @@ namespace OrmTxcSql.Entities
         /// <param name="propertyInfo"></param>
         protected virtual void SetProperty(DataRow dataRow, PropertyInfo propertyInfo)
         {
-#if NET6_0_OR_GREATER
-#nullable disable
-#endif
-            string columnName = propertyInfo.GetCustomAttribute<ColumnAttribute>(false).ColumnName;
-#if NET6_0_OR_GREATER
-#nullable restore
-#endif
+            // プロパティのカラム属性からカラム名を取得する。
+            // カラム名を取得できない場合、例外を投げる。（呼び出し元で検証済みの前提であり、通常はありえない状況）
+            string columnName = propertyInfo.GetCustomAttribute<ColumnAttribute>(false)?.ColumnName
+                ?? throw new ArgumentException($"{typeof(ColumnAttribute).Name} is not set on {propertyInfo.Name}.");
             if (dataRow.IsNull(columnName))
             {
                 // DBNullの場合、nullを設定する。
