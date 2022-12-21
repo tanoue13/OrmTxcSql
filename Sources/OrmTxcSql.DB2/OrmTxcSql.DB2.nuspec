@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>OrmTxcSql.DB2</id>
-    <version>1.2.0</version>
+    <version>1.2.0.1</version>
     <authors>tanoue13</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
@@ -16,6 +16,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\ReferenceAssemblies\IBM.Data.DB2.iSeries.dll" target="lib\net461" />
+    <file src="..\..\ReferenceAssemblies\IBM.Data.DB2.iSeries.dll" target="lib\net462" />
   </files>
 </package>
