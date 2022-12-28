@@ -239,6 +239,12 @@ namespace OrmTxcSql.Npgsql.Data
             {
                 dbType = NpgsqlDbType.Numeric;
             }
+#if NET6_0_OR_GREATER
+            else if (new Type[] { typeof(DateOnly), typeof(DateOnly?) }.Contains(propertyType))
+            {
+                dbType = NpgsqlDbType.Date;
+            }
+#endif
             else if (new Type[] { typeof(DateTime), typeof(DateTime?) }.Contains(propertyType))
             {
                 dbType = NpgsqlDbType.TimestampTz;

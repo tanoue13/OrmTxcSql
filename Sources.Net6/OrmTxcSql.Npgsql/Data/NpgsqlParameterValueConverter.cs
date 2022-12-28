@@ -74,6 +74,21 @@ namespace OrmTxcSql.Npgsql.Data
                     return DBNull.Value;
                 }
             }
+#if NET6_0_OR_GREATER
+            else if (typeof(DateOnly?).Equals(valueType))
+            {
+                // DateTime型を変換する。
+                DateOnly? dValue = value as DateOnly?;
+                if (dValue.HasValue)
+                {
+                    return value;
+                }
+                else
+                {
+                    return DBNull.Value;
+                }
+            }
+#endif
             else if (typeof(DateTime?).Equals(valueType))
             {
                 // DateTime型を変換する。
@@ -109,12 +124,16 @@ namespace OrmTxcSql.Npgsql.Data
         /// </summary>
         /// <param name="value">DateTimeオブジェクト</param>
         /// <returns></returns>
+        /// <remarks>
+        /// <see href="https://www.npgsql.org/doc/types/datetime.html#timestamps-and-timezones">参考文献</see>
+        /// </remarks>
         private DateTime SpecifyKindLocalIfUnspecified(DateTime value)
         {
             if (value.Kind == DateTimeKind.Unspecified)
             {
                 DateTime dateTimeLocal = DateTime.SpecifyKind(value, DateTimeKind.Local);
-                return dateTimeLocal;
+                DateTime dateTimeUtc = dateTimeLocal.ToUniversalTime();
+                return dateTimeUtc;
             }
             //
             // fool-proof
