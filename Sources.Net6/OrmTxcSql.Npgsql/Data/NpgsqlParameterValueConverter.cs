@@ -129,7 +129,7 @@ namespace OrmTxcSql.Npgsql.Data
         /// </remarks>
         private DateTime SpecifyKindLocalIfUnspecified(DateTime value)
         {
-            if (value.Kind == DateTimeKind.Unspecified)
+            if (DateTimeKind.Unspecified == value.Kind)
             {
                 DateTime dateTimeLocal = DateTime.SpecifyKind(value, DateTimeKind.Local);
                 DateTime dateTimeUtc = dateTimeLocal.ToUniversalTime();
