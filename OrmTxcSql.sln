@@ -31,7 +31,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NpgsqlSample01", "Samples\N
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AFE0B887-2A93-44A6-BD52-74FB5F403774}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NpgsqlSample01Tests", "Tests\NpgsqlSample01Tests\NpgsqlSample01Tests.csproj", "{C2CE89E8-23F9-47F9-B6C7-711939B18492}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NpgsqlSample01Tests", "Tests\NpgsqlSample01Tests\NpgsqlSample01Tests.csproj", "{C2CE89E8-23F9-47F9-B6C7-711939B18492}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrmTxcSql.NpgsqlTests", "Tests\OrmTxcSql.NpgsqlTests\OrmTxcSql.NpgsqlTests.csproj", "{9695D5FF-FFE3-48D1-8807-9565F12E2BD8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{C2CE89E8-23F9-47F9-B6C7-711939B18492}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2CE89E8-23F9-47F9-B6C7-711939B18492}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2CE89E8-23F9-47F9-B6C7-711939B18492}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9695D5FF-FFE3-48D1-8807-9565F12E2BD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9695D5FF-FFE3-48D1-8807-9565F12E2BD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9695D5FF-FFE3-48D1-8807-9565F12E2BD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9695D5FF-FFE3-48D1-8807-9565F12E2BD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +90,7 @@ Global
 		{3E51A74B-C872-405F-9010-372A01EAAD4E} = {FAF77276-88C8-4438-88EC-9690DA1C7925}
 		{558647CE-0435-4A1C-A7B1-8DBC7FEDEF59} = {925D4FE4-4705-4947-B584-C2E3E203F548}
 		{C2CE89E8-23F9-47F9-B6C7-711939B18492} = {AFE0B887-2A93-44A6-BD52-74FB5F403774}
+		{9695D5FF-FFE3-48D1-8807-9565F12E2BD8} = {AFE0B887-2A93-44A6-BD52-74FB5F403774}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1B432B9-F378-4E02-9331-85D7F99D3B4C}
