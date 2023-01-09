@@ -1,0 +1,21 @@
+﻿
+-- USAGE:
+--   1. Login to database "sample01" as user "montblanc".
+--   2. Run queries below.
+--
+
+
+create sequence if not exists auto_numbering_table_uid_seq;
+
+create table if not exists auto_numbering_table (
+  version_no numeric(18) not null
+  , active_flag character varying(1) not null
+  , toroku_nitiji timestamp(6) with time zone not null
+  , toroku_username character varying(6) not null
+  , kosin_nitiji timestamp(6) with time zone not null
+  , kosin_username character varying(6) not null
+  , uid numeric(18) default nextval('auto_numbering_table_uid_seq'::regclass) not null
+  , description character varying(50)
+  , primary key (uid)
+);
+
