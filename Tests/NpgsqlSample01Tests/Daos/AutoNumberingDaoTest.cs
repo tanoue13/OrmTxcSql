@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using NLog.Filters;
 using Npgsql;
 using NpgsqlSample01.Daos;
 using NpgsqlSample01.Data;
