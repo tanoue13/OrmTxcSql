@@ -244,6 +244,10 @@ namespace OrmTxcSql.Npgsql.Data
             {
                 dbType = NpgsqlDbType.Date;
             }
+            else if (new Type[] { typeof(TimeOnly), typeof(TimeOnly?) }.Contains(propertyType))
+            {
+                dbType = NpgsqlDbType.TimeTz;
+            }
 #endif
             else if (new Type[] { typeof(DateTime), typeof(DateTime?) }.Contains(propertyType))
             {
