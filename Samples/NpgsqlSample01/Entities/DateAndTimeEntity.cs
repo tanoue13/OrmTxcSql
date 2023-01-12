@@ -20,11 +20,7 @@ namespace NpgsqlSample01.Entities
         public DateTime? ColumnTimestampWithTimeZone { get; set; }
 
         [Column("column_date")]
-#if NET6_0_OR_GREATER
-        public DateOnly? ColumnDate { get; set; }
-#else
         public DateTime? ColumnDate { get; set; }
-#endif
 
         [Column("column_time_without_time_zone")]
 #if NET6_0_OR_GREATER
@@ -38,6 +34,11 @@ namespace NpgsqlSample01.Entities
         public TimeOnly? ColumnTimeWithTimeZone { get; set; }
 #else
         public DateTime? ColumnTimeWithTimeZone { get; set; }
+#endif
+
+#if NET6_0_OR_GREATER
+        [Column("column_net6_date")]
+        public DateOnly? ColumnNet6Date { get; set; }
 #endif
 
 #if NET6_0_OR_GREATER
