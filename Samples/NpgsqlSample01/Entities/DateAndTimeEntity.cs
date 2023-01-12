@@ -23,22 +23,18 @@ namespace NpgsqlSample01.Entities
         public DateTime? ColumnDate { get; set; }
 
         [Column("column_time_without_time_zone")]
-#if NET6_0_OR_GREATER
-        public TimeOnly? ColumnTimeWithoutTimeZone { get; set; }
-#else
-        public DateTime? ColumnTimeWithoutTimeZone { get; set; }
-#endif
+        public TimeSpan? ColumnTimeWithoutTimeZone { get; set; }
 
         [Column("column_time_with_time_zone")]
-#if NET6_0_OR_GREATER
-        public TimeOnly? ColumnTimeWithTimeZone { get; set; }
-#else
-        public DateTime? ColumnTimeWithTimeZone { get; set; }
-#endif
+        public DateTimeOffset? ColumnTimeWithTimeZone { get; set; }
 
 #if NET6_0_OR_GREATER
         [Column("column_net6_date")]
         public DateOnly? ColumnNet6Date { get; set; }
+        [Column("column_net6_time_without_time_zone")]
+        public TimeOnly? ColumnNet6TimeWithoutTimeZone { get; set; }
+        [Column("column_net6_time_with_time_zone")]
+        public DateTimeOffset? ColumnNet6TimeWithTimeZone { get; set; }
 #endif
 
 #if NET6_0_OR_GREATER

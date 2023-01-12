@@ -137,6 +137,19 @@ namespace NpgsqlSample01.Entities
                     return dateTimeValue;
                 }
             }
+            else if (value is TimeSpan timeSpanValue)
+            {
+                // プロパティの型にあわせて変換する。
+                Type type = propertyInfo.PropertyType;
+                if (new Type[] { typeof(TimeOnly), typeof(TimeOnly?) }.Contains(type))
+                {
+                    return TimeOnly.FromTimeSpan(timeSpanValue);
+                }
+                else
+                {
+                    return timeSpanValue;
+                }
+            }
 #endif
             // </例外処理>
             //

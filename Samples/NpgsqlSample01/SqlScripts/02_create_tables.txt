@@ -34,6 +34,8 @@ create table if not exists date_and_time_table (
   , column_time_without_time_zone       time without time zone
   , column_time_with_time_zone          time with time zone
   , column_net6_date                    date
+  , column_net6_time_without_time_zone  time without time zone
+  , column_net6_time_with_time_zone     time with time zone
   , description character varying(50)
   , primary key (key)
 );

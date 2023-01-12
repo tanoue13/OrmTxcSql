@@ -246,12 +246,20 @@ namespace OrmTxcSql.Npgsql.Data
             }
             else if (new Type[] { typeof(TimeOnly), typeof(TimeOnly?) }.Contains(propertyType))
             {
-                dbType = NpgsqlDbType.TimeTz;
+                dbType = NpgsqlDbType.Time;
             }
 #endif
             else if (new Type[] { typeof(DateTime), typeof(DateTime?) }.Contains(propertyType))
             {
                 dbType = NpgsqlDbType.TimestampTz;
+            }
+            else if (new Type[] { typeof(TimeSpan), typeof(TimeSpan?) }.Contains(propertyType))
+            {
+                dbType = NpgsqlDbType.Time;
+            }
+            else if (new Type[] { typeof(DateTimeOffset), typeof(DateTimeOffset?) }.Contains(propertyType))
+            {
+                dbType = NpgsqlDbType.TimeTz;
             }
             else
             {
