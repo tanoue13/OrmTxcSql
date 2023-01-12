@@ -81,6 +81,110 @@ namespace NpgsqlSample01Tests.Daos
             });
         }
 
+        /// <summary>
+        /// 正常系：TimestampWithoutTimeZone
+        /// </summary>
+        [Test]
+        public void InsertTest_N01()
+        {
+            var entityI0 = new DateAndTimeEntity()
+            {
+                Key = "A00",
+                ColumnTimestampWithoutTimeZone = DateTime.Now,
+            };
+            var entityI1 = new DateAndTimeEntity()
+            {
+                Key = "A01",
+                ColumnTimestampWithoutTimeZone = new DateTime(2020, 4, 10, 13, 15, 30),
+            };
+            var entityI2 = new DateAndTimeEntity()
+            {
+                Key = "A02",
+                ColumnTimestampWithoutTimeZone = new DateTime(2020, 4, 10, 13, 15, 30, DateTimeKind.Unspecified),
+            };
+            var entityI3 = new DateAndTimeEntity()
+            {
+                Key = "A03",
+                ColumnTimestampWithoutTimeZone = new DateTime(2020, 4, 10, 13, 15, 30, DateTimeKind.Local),
+            };
+            var entityI4 = new DateAndTimeEntity()
+            {
+                Key = "A04",
+                ColumnTimestampWithoutTimeZone = new DateTime(2020, 4, 10, 13, 15, 30, DateTimeKind.Utc),
+            };
+            //
+            var dao = new DateAndTimeDaoExt();
+            //
+            var server = new NpgsqlServer();
+            server.DataSource = new NpgsqlDataSource();
+            server.Execute(new IDao[] { dao }, tx =>
+            {
+                dao.Insert(entityI0);
+                dao.Insert(entityI1);
+                dao.Insert(entityI2);
+                dao.Insert(entityI3);
+                dao.Insert(entityI4);
+                var result = dao.SelectAll();
+                //
+                // ロールバックする。
+                tx.Rollback();
+                //
+                DebugUtils.DumpEntity<DateAndTimeEntity>(result);
+            });
+        }
+
+        /// <summary>
+        /// 正常系：ColumnTimestampWithTimeZone
+        /// </summary>
+        [Test]
+        public void InsertTest_N02()
+        {
+            var entityI0 = new DateAndTimeEntity()
+            {
+                Key = "A00",
+                ColumnTimestampWithTimeZone = DateTime.Now,
+            };
+            var entityI1 = new DateAndTimeEntity()
+            {
+                Key = "A01",
+                ColumnTimestampWithTimeZone = new DateTime(2020, 4, 10, 13, 15, 30),
+            };
+            var entityI2 = new DateAndTimeEntity()
+            {
+                Key = "A02",
+                ColumnTimestampWithTimeZone = new DateTime(2020, 4, 10, 13, 15, 30, DateTimeKind.Unspecified),
+            };
+            var entityI3 = new DateAndTimeEntity()
+            {
+                Key = "A03",
+                ColumnTimestampWithTimeZone = new DateTime(2020, 4, 10, 13, 15, 30, DateTimeKind.Local),
+            };
+            var entityI4 = new DateAndTimeEntity()
+            {
+                Key = "A04",
+                ColumnTimestampWithTimeZone = new DateTime(2020, 4, 10, 13, 15, 30, DateTimeKind.Utc),
+            };
+            //
+            var dao = new DateAndTimeDaoExt();
+            //
+            var server = new NpgsqlServer();
+            server.DataSource = new NpgsqlDataSource();
+            server.Execute(new IDao[] { dao }, tx =>
+            {
+                dao.Insert(entityI0);
+                dao.Insert(entityI1);
+                dao.Insert(entityI2);
+                dao.Insert(entityI3);
+                dao.Insert(entityI4);
+                var result = dao.SelectAll();
+                //
+                // ロールバックする。
+                tx.Rollback();
+                //
+                DebugUtils.DumpEntity<DateAndTimeEntity>(result);
+            });
+        }
+
         [Test]
         public void InsertUpdateByPkSelectByPkTest()
         {
