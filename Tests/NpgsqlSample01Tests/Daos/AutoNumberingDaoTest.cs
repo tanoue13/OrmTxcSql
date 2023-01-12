@@ -106,7 +106,7 @@ namespace NpgsqlSample01Tests.Daos
                 DebugUtils.DumpEntity<AutoNumberingEntity>(result00);
                 //
                 var entityU0 = result00.First();
-                entityU0.Description = entityU0.Description.ToUpperInvariant();
+                entityU0.Description = entityU0.Description?.ToUpperInvariant();
                 //
                 dao.UpdateByPk(entityU0);
                 //
