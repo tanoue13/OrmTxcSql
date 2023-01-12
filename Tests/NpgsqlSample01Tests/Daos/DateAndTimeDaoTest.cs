@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -185,25 +186,12 @@ namespace NpgsqlSample01Tests.Daos
             });
         }
 
-
         /// <summary>
         /// 正常系：ColumnTimestampWithTimeZone
         /// </summary>
         [Test]
         public void InsertTest_N03()
         {
-#if NET6_0_OR_GREATER
-            var entityI10 = new DateAndTimeEntity()
-            {
-                Key = "B00",
-                // ColumnDate = DateOnly.Now, // not implemented
-            };
-            var entityI11 = new DateAndTimeEntity()
-            {
-                Key = "B01",
-                ColumnDate = new DateOnly(2020, 4, 10),
-            };
-#else
             var entityI00 = new DateAndTimeEntity()
             {
                 Key = "A00",
@@ -229,7 +217,31 @@ namespace NpgsqlSample01Tests.Daos
                 Key = "A04",
                 ColumnDate = new DateTime(2020, 4, 10, 13, 15, 30, DateTimeKind.Utc),
             };
-#endif
+            var entityI10 = new DateAndTimeEntity()
+            {
+                Key = "B00",
+                ColumnDate = DateTime.Now.Date,
+            };
+            var entityI11 = new DateAndTimeEntity()
+            {
+                Key = "B01",
+                ColumnDate = new DateTime(2021, 5, 15, 0, 0, 0).Date,
+            };
+            var entityI12 = new DateAndTimeEntity()
+            {
+                Key = "B02",
+                ColumnDate = new DateTime(2021, 5, 15, 0, 0, 0, DateTimeKind.Unspecified).Date,
+            };
+            var entityI13 = new DateAndTimeEntity()
+            {
+                Key = "B03",
+                ColumnDate = new DateTime(2021, 5, 15, 0, 0, 0, DateTimeKind.Local).Date,
+            };
+            var entityI14 = new DateAndTimeEntity()
+            {
+                Key = "B04",
+                ColumnDate = new DateTime(2021, 5, 15, 0, 0, 0, DateTimeKind.Utc).Date,
+            };
             //
             var dao = new DateAndTimeDaoExt();
             //
@@ -237,16 +249,16 @@ namespace NpgsqlSample01Tests.Daos
             server.DataSource = new NpgsqlDataSource();
             server.Execute(new IDao[] { dao }, tx =>
             {
-#if NET6_0_OR_GREATER
-                dao.Insert(entityI10);
-                dao.Insert(entityI11);
-#else
                 dao.Insert(entityI00);
                 dao.Insert(entityI01);
                 dao.Insert(entityI02);
                 dao.Insert(entityI03);
                 dao.Insert(entityI04);
-#endif
+                dao.Insert(entityI10);
+                dao.Insert(entityI11);
+                dao.Insert(entityI12);
+                dao.Insert(entityI13);
+                dao.Insert(entityI14);
                 var result = dao.SelectAll();
                 //
                 // ロールバックする。
@@ -275,7 +287,7 @@ namespace NpgsqlSample01Tests.Daos
                 DebugUtils.DumpEntity<DateAndTimeEntity>(result00);
                 //
                 var entityU0 = result00.First();
-                entityU0.Description = entityU0.Description.ToUpperInvariant();
+                entityU0.Description = entityU0.Description?.ToUpperInvariant();
                 //
                 dao.UpdateByPk(entityU0);
                 //
