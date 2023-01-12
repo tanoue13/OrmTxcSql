@@ -185,6 +185,77 @@ namespace NpgsqlSample01Tests.Daos
             });
         }
 
+
+        /// <summary>
+        /// 正常系：ColumnTimestampWithTimeZone
+        /// </summary>
+        [Test]
+        public void InsertTest_N03()
+        {
+#if NET6_0_OR_GREATER
+            var entityI10 = new DateAndTimeEntity()
+            {
+                Key = "B00",
+                // ColumnDate = DateOnly.Now, // not implemented
+            };
+            var entityI11 = new DateAndTimeEntity()
+            {
+                Key = "B01",
+                ColumnDate = new DateOnly(2020, 4, 10),
+            };
+#else
+            var entityI00 = new DateAndTimeEntity()
+            {
+                Key = "A00",
+                ColumnDate = DateTime.Now,
+            };
+            var entityI01 = new DateAndTimeEntity()
+            {
+                Key = "A01",
+                ColumnDate = new DateTime(2020, 4, 10, 13, 15, 30),
+            };
+            var entityI02 = new DateAndTimeEntity()
+            {
+                Key = "A02",
+                ColumnDate = new DateTime(2020, 4, 10, 13, 15, 30, DateTimeKind.Unspecified),
+            };
+            var entityI03 = new DateAndTimeEntity()
+            {
+                Key = "A03",
+                ColumnDate = new DateTime(2020, 4, 10, 13, 15, 30, DateTimeKind.Local),
+            };
+            var entityI04 = new DateAndTimeEntity()
+            {
+                Key = "A04",
+                ColumnDate = new DateTime(2020, 4, 10, 13, 15, 30, DateTimeKind.Utc),
+            };
+#endif
+            //
+            var dao = new DateAndTimeDaoExt();
+            //
+            var server = new NpgsqlServer();
+            server.DataSource = new NpgsqlDataSource();
+            server.Execute(new IDao[] { dao }, tx =>
+            {
+#if NET6_0_OR_GREATER
+                dao.Insert(entityI10);
+                dao.Insert(entityI11);
+#else
+                dao.Insert(entityI00);
+                dao.Insert(entityI01);
+                dao.Insert(entityI02);
+                dao.Insert(entityI03);
+                dao.Insert(entityI04);
+#endif
+                var result = dao.SelectAll();
+                //
+                // ロールバックする。
+                tx.Rollback();
+                //
+                DebugUtils.DumpEntity<DateAndTimeEntity>(result);
+            });
+        }
+
         [Test]
         public void InsertUpdateByPkSelectByPkTest()
         {
