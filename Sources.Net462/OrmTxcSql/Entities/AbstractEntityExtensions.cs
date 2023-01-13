@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Reflection;
 using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.Entities
 {
+
     /// <summary>
     /// AbstractEntityの拡張メソッドを定義します。（静的クラス）
     /// </summary>
@@ -35,56 +35,14 @@ namespace OrmTxcSql.Entities
             where TEntity : AbstractEntity
         {
             // 比較対象の属性値を取得する。
-#if NET6_0_OR_GREATER
-            IEnumerable<object?> values1 = properties.Select(prop => prop.GetValue(obj1));
-            IEnumerable<object?> values2 = properties.Select(prop => prop.GetValue(obj2));
-#else
             IEnumerable<object> values1 = properties.Select(prop => prop.GetValue(obj1));
             IEnumerable<object> values2 = properties.Select(prop => prop.GetValue(obj2));
-#endif
             // 比較する。
             bool equivalent = Enumerable.SequenceEqual(values1, values2, new AttributeEqualityComparer());
             // 結果を戻す。
             return equivalent;
         }
 
-#if NET6_0_OR_GREATER
-        /// <summary>
-        /// 属性の等価比較を行う IEqualityComparer 。
-        /// </summary>
-        private class AttributeEqualityComparer : IEqualityComparer<object?>
-        {
-            bool IEqualityComparer<object?>.Equals(object? x, object? y)
-            {
-                if ((null == x) && (null == y))
-                {
-                    // どちらも null の場合、「等価」と判定する。
-                    return true;
-                }
-                else if ((null == x) && (null != y))
-                {
-                    // 「等価」でないと判定する。
-                    return false;
-                }
-                else if ((null != x) && (null == y))
-                {
-                    // 「等価」でないと判定する。
-                    return false;
-                }
-                else
-                {
-                    // どちらも null でない場合、比較結果を戻す。
-#nullable disable
-                    return x.Equals(y);
-#nullable restore
-                }
-            }
-            int IEqualityComparer<object?>.GetHashCode(object obj)
-            {
-                return obj.GetHashCode();
-            }
-        }
-#else
         /// <summary>
         /// 属性の等価比較を行う IEqualityComparer 。
         /// </summary>
@@ -118,7 +76,6 @@ namespace OrmTxcSql.Entities
                 return obj.GetHashCode();
             }
         }
-#endif
-
     }
+
 }

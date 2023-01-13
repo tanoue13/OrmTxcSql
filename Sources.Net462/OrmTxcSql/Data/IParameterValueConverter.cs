@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace OrmTxcSql.Data
 {
@@ -15,10 +14,6 @@ namespace OrmTxcSql.Data
         /// <param name="targetType"></param>
         /// <param name="parameter"></param>
         /// <returns></returns>
-#if NET6_0_OR_GREATER
-        object Convert(object? value, Type? targetType, object? parameter);
-#else
         object Convert(object value, Type targetType, object parameter);
-#endif
     }
 }

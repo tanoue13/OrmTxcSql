@@ -20,8 +20,8 @@
     <PackageReference Include="Npgsql" Version="4.1.12" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Sources.Net6\OrmTxcSql.Npgsql\OrmTxcSql.Npgsql.csproj" />
-    <ProjectReference Include="..\..\Sources.Net6\OrmTxcSql\OrmTxcSql.csproj" />
+    <ProjectReference Include="..\..\Sources\OrmTxcSql.Npgsql\OrmTxcSql.Npgsql.csproj" />
+    <ProjectReference Include="..\..\Sources\OrmTxcSql\OrmTxcSql.csproj" />
   </ItemGroup>
 
 </Project>

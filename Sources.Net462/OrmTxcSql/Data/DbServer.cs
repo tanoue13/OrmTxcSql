@@ -9,6 +9,7 @@ using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.Data
 {
+
     /// <summary>
     /// DBMSとの接続、トランザクション管理を行う基底クラス。
     /// </summary>
@@ -211,7 +212,7 @@ namespace OrmTxcSql.Data
                 // 存在する場合、かつ、上書き可能の場合、パラメータを上書きする。
                 if (overwriteIfExists)
                 {
-                    IDataParameter dataParameter = (IDataParameter)command.Parameters[parameterName];
+                    IDataParameter dataParameter = command.Parameters[parameterName] as IDataParameter;
                     dataParameter.Value = parameter.Value;
                 }
             }
@@ -296,20 +297,17 @@ namespace OrmTxcSql.Data
         public static string GetParametersString(IDataParameterCollection parameterCollection, string delimiter = ", ")
         {
             //
-            // ローカル関数を定義する。（戻り値：パラメータ名=パラメタ値）
-            string parameterNameAndValue(IDataParameter parameter) => $"{parameter?.ParameterName}={parameter?.Value}";
-            //
             // パラメータ文字列
             var builder = new StringBuilder();
             //
-            IEnumerator<IDataParameter> enumerator = parameterCollection.Cast<IDataParameter>().GetEnumerator();
+            IEnumerator<IDataParameter> enumerator = (IEnumerator<IDataParameter>)parameterCollection.GetEnumerator();
             if (enumerator.MoveNext())
             {
                 // １件目の処理
                 {
                     IDataParameter parameter = enumerator.Current;
                     // パラメータ名、値を追加する。
-                    builder.Append(parameterNameAndValue(parameter));
+                    builder.Append(DbServer<TConnection>.GetParameterNameValue(parameter));
                 }
                 // ２件目以降の処理
                 while (enumerator.MoveNext())
@@ -317,11 +315,18 @@ namespace OrmTxcSql.Data
                     IDataParameter parameter = enumerator.Current;
                     // デリミタ、パラメータ名、値を追加する。
                     builder.Append(delimiter);
-                    builder.Append(parameterNameAndValue(parameter));
+                    builder.Append(DbServer<TConnection>.GetParameterNameValue(parameter));
                 }
             }
             // 結果を戻す。
             return builder.ToString();
+        }
+        private static string GetParameterNameValue(IDataParameter parameter)
+        {
+            string name = parameter.ParameterName;
+            object value = parameter.Value;
+            string nameValue = String.Format("{0}={1}", new object[] { name, value });
+            return nameValue;
         }
         #endregion
 

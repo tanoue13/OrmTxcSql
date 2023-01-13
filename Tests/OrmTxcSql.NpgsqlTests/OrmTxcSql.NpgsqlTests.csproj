@@ -28,8 +28,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Sources.Net6\OrmTxcSql.Npgsql\OrmTxcSql.Npgsql.csproj" />
-  </ItemGroup>
-
 </Project>
