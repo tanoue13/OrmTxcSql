@@ -1,0 +1,18 @@
+<Project>
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net462</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+    <SignAssembly>False</SignAssembly>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Description>OrmTxcSql helps you with O/R mapping, Transaction control, and running SQL.</Description>
+    <PackageProjectUrl>https://github.com/tanoue13/OrmTxcSql</PackageProjectUrl>
+    <PackageTags>orm transaction sql</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Version>2.0.0</Version>
+    <Authors>tanoue13</Authors>
+  </PropertyGroup>
+</Project>

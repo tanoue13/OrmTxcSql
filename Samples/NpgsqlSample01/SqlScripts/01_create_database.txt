@@ -1,0 +1,12 @@
+﻿
+-- USAGE:
+--   1. Login to database "postgres" as user "postgres" (super user).
+--   2. Run queries below.
+--
+
+-- STEP1: Create databases.
+create database sample01        template = template0;
+
+-- STEP2: Create roles of database admin. Password of roles are valid until infinity if option 'valid until' is not used.
+create role montblanc        login password 'mississippi' ;
+

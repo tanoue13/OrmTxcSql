@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net462</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <UseWPF>false</UseWPF>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+    <PackageReference Include="Npgsql" Version="6.0.7" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
+    <PackageReference Include="Npgsql" Version="4.1.12" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Sources.Net6\OrmTxcSql.Npgsql\OrmTxcSql.Npgsql.csproj" />
+    <ProjectReference Include="..\..\Sources.Net6\OrmTxcSql\OrmTxcSql.csproj" />
+  </ItemGroup>
+
+</Project>
