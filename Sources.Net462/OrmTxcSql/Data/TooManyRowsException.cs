@@ -4,8 +4,9 @@ using System.Runtime.Serialization;
 
 namespace OrmTxcSql.Data
 {
+
     /// <summary>
-    /// 単一レコードしか許されない部分で複数レコードが戻されている場合に投げられる例外クラス。
+    /// 単一レコードしか許されない部分で複数行処理戻されている場合に投げられる例外クラス。
     /// </summary>
     /// <see href="https://www.shift-the-oracle.com/plsql/exception/predefined-exception.html"/>
     /// <see href="https://www.ibm.com/support/knowledgecenter/ja/SSEPGG_9.7.0/com.ibm.db2.luw.apdv.plsql.doc/doc/c0053876.html"/>
@@ -49,4 +50,5 @@ namespace OrmTxcSql.Data
         {
         }
     }
+
 }

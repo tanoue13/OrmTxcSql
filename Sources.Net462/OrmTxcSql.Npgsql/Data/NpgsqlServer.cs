@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Npgsql;
@@ -37,7 +36,7 @@ namespace OrmTxcSql.Npgsql.Data
                 LogUtils.GetDataLogger().Debug("Transaction is starting.");
                 using (var tx = connection.BeginTransaction())
                 {
-                    //LogUtils.GetDataLogger().Debug("Transaction has started.");
+                    LogUtils.GetDataLogger().Debug("Transaction has started.");
                     //
                     // 前処理：コマンドに接続とトランザクションを設定する。
                     foreach (IDao dao in daos)
@@ -96,24 +95,16 @@ namespace OrmTxcSql.Npgsql.Data
             try
             {
                 // トランザクションをコミットする。
-#if NET6_0_OR_GREATER
-                // The NpgsqlTransaction.IsCompleted property has been removed.
-                // cf. https://www.npgsql.org/doc/release-notes/5.0.html
-                //LogUtils.GetDataLogger().Debug("Transaction is being committed.");
-                tx.Commit();
-                //LogUtils.GetDataLogger().Debug("Transaction has been committed.");
-#else
                 if (!tx.IsCompleted)
                 {
-                    //LogUtils.GetDataLogger().Debug("Transaction is being committed.");
+                    LogUtils.GetDataLogger().Debug("Transaction is being committed.");
                     tx.Commit();
-                    //LogUtils.GetDataLogger().Debug("Transaction has been committed.");
+                    LogUtils.GetDataLogger().Debug("Transaction has been committed.");
                 }
                 else
                 {
-                    //LogUtils.GetDataLogger().Debug("Commit statement is skipped because the transaction has been completed.");
+                    LogUtils.GetDataLogger().Debug("Commit statement is skipped because the transaction has been completed.");
                 }
-#endif
             }
             catch (InvalidOperationException ex)
             {
@@ -138,24 +129,16 @@ namespace OrmTxcSql.Npgsql.Data
             try
             {
                 // トランザクションをロールバックする。
-#if NET6_0_OR_GREATER
-                // The NpgsqlTransaction.IsCompleted property has been removed.
-                // cf. https://www.npgsql.org/doc/release-notes/5.0.html
-                //LogUtils.GetDataLogger().Debug("Transaction is being rollbacked.");
-                tx.Rollback();
-                //LogUtils.GetDataLogger().Debug("Transaction has been rollbacked.");
-#else
                 if (!tx.IsCompleted)
                 {
-                    //LogUtils.GetDataLogger().Debug("Transaction is being rollbacked.");
+                    LogUtils.GetDataLogger().Debug("Transaction is being rollbacked.");
                     tx.Rollback();
-                    //LogUtils.GetDataLogger().Debug("Transaction has been rollbacked.");
+                    LogUtils.GetDataLogger().Debug("Transaction has been rollbacked.");
                 }
                 else
                 {
-                    //LogUtils.GetDataLogger().Debug("Rollback statement is skipped because the transaction has been completed.");
+                    LogUtils.GetDataLogger().Debug("Rollback statement is skipped because the transaction has been completed.");
                 }
-#endif
             }
             catch (InvalidOperationException ex)
             {
@@ -211,9 +194,9 @@ namespace OrmTxcSql.Npgsql.Data
         private void CloseConnection(NpgsqlConnection connection)
         {
             // 接続を閉じる。
-            //LogUtils.GetDataLogger().Debug($"Connection is being closed. [ConnectionState: {Enum.GetName(typeof(ConnectionState), connection.State)}]");
+            LogUtils.GetDataLogger().Debug($"Connection is being closed. [ConnectionState: {Enum.GetName(typeof(ConnectionState), connection.State)}]");
             connection.Close();
-            //LogUtils.GetDataLogger().Debug($"Connection has been closed.");
+            LogUtils.GetDataLogger().Debug($"Connection has been closed.");
         }
 
         private static IParameterValueConverter ParameterValueConverter { get; set; } = new NpgsqlParameterValueConverter();
@@ -239,27 +222,9 @@ namespace OrmTxcSql.Npgsql.Data
             {
                 dbType = NpgsqlDbType.Numeric;
             }
-#if NET6_0_OR_GREATER
-            else if (new Type[] { typeof(DateOnly), typeof(DateOnly?) }.Contains(propertyType))
-            {
-                dbType = NpgsqlDbType.Date;
-            }
-            else if (new Type[] { typeof(TimeOnly), typeof(TimeOnly?) }.Contains(propertyType))
-            {
-                dbType = NpgsqlDbType.Time;
-            }
-#endif
             else if (new Type[] { typeof(DateTime), typeof(DateTime?) }.Contains(propertyType))
             {
                 dbType = NpgsqlDbType.TimestampTz;
-            }
-            else if (new Type[] { typeof(TimeSpan), typeof(TimeSpan?) }.Contains(propertyType))
-            {
-                dbType = NpgsqlDbType.Time;
-            }
-            else if (new Type[] { typeof(DateTimeOffset), typeof(DateTimeOffset?) }.Contains(propertyType))
-            {
-                dbType = NpgsqlDbType.TimeTz;
             }
             else
             {
@@ -267,11 +232,7 @@ namespace OrmTxcSql.Npgsql.Data
                 dbType = NpgsqlDbType.Varchar;
             }
             // パラメータに設定する値を取得する。
-#if NET6_0_OR_GREATER
-            object? value = property.GetValue(obj);
-#else
             object value = property.GetValue(obj);
-#endif
             //
             // nullを考慮し、下のメソッド経由で設定する。
             NpgsqlServer.AddParameterOrReplace(command, parameterName, dbType, value);
@@ -285,11 +246,7 @@ namespace OrmTxcSql.Npgsql.Data
         /// <param name="dbType"></param>
         /// <param name="value"></param>
         /// <remarks>値がnullの場合、DBNull.Valueに変換して設定する。</remarks>
-#if NET6_0_OR_GREATER
-        public static void AddParameterOrReplace(IDbCommand command, string parameterName, NpgsqlDbType dbType, [AllowNull] object value)
-#else
         public static void AddParameterOrReplace(IDbCommand command, string parameterName, NpgsqlDbType dbType, object value)
-#endif
         {
             IDataParameter parameter = new NpgsqlParameter(parameterName, dbType);
             parameter.Value = NpgsqlServer.ParameterValueConverter.Convert(value, null, null);

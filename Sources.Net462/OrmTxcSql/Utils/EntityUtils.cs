@@ -8,11 +8,13 @@ using OrmTxcSql.Entities;
 
 namespace OrmTxcSql.Utils
 {
+
     /// <summary>
     /// Entityに関するユーティリティクラス。（AbstractEntityの拡張メソッドを含む）
     /// </summary>
     public static class EntityUtils
     {
+
         /// <summary>
         /// テーブル名を取得する。
         /// </summary>
@@ -35,13 +37,7 @@ namespace OrmTxcSql.Utils
         private static string GetTableName(Type type)
         {
             // テーブル名を取得する。
-#if NET6_0_OR_GREATER
-#nullable disable
-#endif
             string tableName = type.GetCustomAttribute<TableAttribute>(false).TableName;
-#if NET6_0_OR_GREATER
-#nullable restore
-#endif
             // 結果を戻す。
             return tableName;
         }
@@ -116,5 +112,7 @@ namespace OrmTxcSql.Utils
             // 結果を戻す。
             return entity;
         }
+
     }
+
 }

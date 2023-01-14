@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Npgsql;
+﻿using Npgsql;
 using OrmTxcSql.Data;
 
 namespace OrmTxcSql.Npgsql.Data
@@ -12,9 +11,6 @@ namespace OrmTxcSql.Npgsql.Data
         /// <summary>
         /// <see cref="NpgsqlConnectionStringBuilder"/>を取得または設定します。
         /// </summary>
-#if NET6_0_OR_GREATER
-        [AllowNull]
-#endif
         public NpgsqlConnectionStringBuilder ConnectionStringBuilder { get; set; }
         /// <summary>
         /// 接続文字列を取得します。
