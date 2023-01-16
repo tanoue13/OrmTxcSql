@@ -35,7 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrmTxcSql.Npgsql", "Sources
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrmTxcSql.SqlClient", "Sources\OrmTxcSql.SqlClient\OrmTxcSql.SqlClient.csproj", "{26FA73C7-21C7-4490-8530-03681B9A1890}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrmTxcSqlTests", "Tests\OrmTxcSqlTests\OrmTxcSqlTests.csproj", "{9C3832EF-0180-4D5D-BA07-AFBA9F3EE8D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrmTxcSqlTests", "Tests\OrmTxcSqlTests\OrmTxcSqlTests.csproj", "{9C3832EF-0180-4D5D-BA07-AFBA9F3EE8D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrmTxcSql.DB2", "Sources\OrmTxcSql.DB2\OrmTxcSql.DB2.csproj", "{086C7EA4-A39A-46EB-8D89-658909E97628}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,10 @@ Global
 		{9C3832EF-0180-4D5D-BA07-AFBA9F3EE8D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C3832EF-0180-4D5D-BA07-AFBA9F3EE8D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C3832EF-0180-4D5D-BA07-AFBA9F3EE8D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{086C7EA4-A39A-46EB-8D89-658909E97628}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{086C7EA4-A39A-46EB-8D89-658909E97628}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{086C7EA4-A39A-46EB-8D89-658909E97628}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{086C7EA4-A39A-46EB-8D89-658909E97628}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +104,7 @@ Global
 		{1C34A1DD-5410-4EFB-BB2B-0B8FEF8183DE} = {FAF77276-88C8-4438-88EC-9690DA1C7925}
 		{26FA73C7-21C7-4490-8530-03681B9A1890} = {FAF77276-88C8-4438-88EC-9690DA1C7925}
 		{9C3832EF-0180-4D5D-BA07-AFBA9F3EE8D3} = {AFE0B887-2A93-44A6-BD52-74FB5F403774}
+		{086C7EA4-A39A-46EB-8D89-658909E97628} = {FAF77276-88C8-4438-88EC-9690DA1C7925}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1B432B9-F378-4E02-9331-85D7F99D3B4C}
