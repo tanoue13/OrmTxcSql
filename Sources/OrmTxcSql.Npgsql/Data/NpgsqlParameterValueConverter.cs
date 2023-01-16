@@ -1,6 +1,6 @@
 ﻿using System;
 using OrmTxcSql.Data;
-using OrmTxcSql.Npgsql.Utils;
+using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.Npgsql.Data
 {
