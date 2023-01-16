@@ -4,6 +4,7 @@
     <TargetFrameworks>net6.0;net462</TargetFrameworks>
     <Nullable>enable</Nullable>
     <UseWPF>false</UseWPF>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
