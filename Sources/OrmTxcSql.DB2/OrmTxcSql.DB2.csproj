@@ -1,9 +1,36 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
+    <TargetFrameworks>net48;net462</TargetFrameworks>
+    <Description>OrmTxcSql.DB2 helps you with O/R mapping, Transaction control, and running SQL.</Description>
+    <PackageTags>orm transaction sql ibm iSeries db2</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="5.1.0" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net48' ">
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
+    <None Include="../../ReferenceAssemblies/IBM.Data.DB2.iSeries.dll" Pack="true" PackagePath="/lib/net48" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
+    <None Include="../../ReferenceAssemblies/IBM.Data.DB2.iSeries.dll" Pack="true" PackagePath="/lib/net462" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OrmTxcSql\OrmTxcSql.csproj" />
+    <Reference Include="IBM.Data.DB2.iSeries, Version=12.0.0.0, Culture=neutral, PublicKeyToken=9cdb2ebfb1f93a26, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ReferenceAssemblies\IBM.Data.DB2.iSeries.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
 </Project>
