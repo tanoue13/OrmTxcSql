@@ -15,7 +15,7 @@ namespace OrmTxcSql.SqlClient.Data
     public class SqlServer : DbServer<SqlConnection>
     {
 
-        private static IParameterValueConverter ParameterValueConverter { get; set; } = new SqlParameterValueConverter();
+        private static readonly IParameterValueConverter s_parameterValueConverter = new SqlParameterValueConverter();
 
         /// <summary>
         /// コマンドにパラメータを追加する。パラメータが存在する場合、置き換える。
@@ -48,7 +48,11 @@ namespace OrmTxcSql.SqlClient.Data
                 dbType = SqlDbType.NVarChar;
             }
             // パラメータに設定する値を取得する。
+#if NET6_0_OR_GREATER
+            object? value = property.GetValue(obj);
+#else
             object value = property.GetValue(obj);
+#endif
             //
             // nullを考慮し、下のメソッド経由で設定する。
             SqlServer.AddParameterOrReplace(command, parameterName, dbType, value);
@@ -62,10 +66,14 @@ namespace OrmTxcSql.SqlClient.Data
         /// <param name="dbType"></param>
         /// <param name="value"></param>
         /// <remarks>値がnullの場合、DBNull.Valueに変換して設定する。</remarks>
+#if NET6_0_OR_GREATER
+        public static void AddParameterOrReplace(IDbCommand command, string parameterName, SqlDbType dbType, object? value)
+#else
         public static void AddParameterOrReplace(IDbCommand command, string parameterName, SqlDbType dbType, object value)
+#endif
         {
             IDataParameter parameter = CreateSqlParameter(parameterName, dbType, value);
-            parameter.Value = SqlServer.ParameterValueConverter.Convert(value, null, null);
+            parameter.Value = SqlServer.s_parameterValueConverter.Convert(value, null, null);
             DbServer<SqlConnection>.AddParameterOrReplace(command, parameter);
         }
         /// <summary>
@@ -79,7 +87,7 @@ namespace OrmTxcSql.SqlClient.Data
         public static void AddParameterIfNotExists(IDbCommand command, string parameterName, SqlDbType dbType, object value)
         {
             IDataParameter parameter = CreateSqlParameter(parameterName, dbType, value);
-            parameter.Value = SqlServer.ParameterValueConverter.Convert(value, null, null);
+            parameter.Value = SqlServer.s_parameterValueConverter.Convert(value, null, null);
             DbServer<SqlConnection>.AddParameterIfNotExists(command, parameter);
         }
         /// <summary>
@@ -94,7 +102,11 @@ namespace OrmTxcSql.SqlClient.Data
         /// <br/>
         /// <seealso href="https://docs.microsoft.com/ja-jp/dotnet/api/system.data.sqlclient.sqlcommand.prepare?view=dotnet-plat-ext-3.1"/>
         /// </remarks>
+#if NET6_0_OR_GREATER
+        private static SqlParameter CreateSqlParameter(string parameterName, SqlDbType dataType, object? value)
+#else
         private static SqlParameter CreateSqlParameter(string parameterName, SqlDbType dataType, object value)
+#endif
         {
             // パラメータを生成する。
             SqlParameter parameter = new SqlParameter(parameterName, dataType);
@@ -104,7 +116,11 @@ namespace OrmTxcSql.SqlClient.Data
                 case SqlDbType.NChar:
                     {
                         // string型に変換する。
+#if NET6_0_OR_GREATER
+                        string? sValue = value as string;
+#else
                         string sValue = value as string;
+#endif
                         if (!String.IsNullOrEmpty(sValue))
                         {
                             parameter.Size = sValue.Length;
@@ -120,7 +136,11 @@ namespace OrmTxcSql.SqlClient.Data
                 case SqlDbType.NVarChar:
                     {
                         // string型に変換する。
+#if NET6_0_OR_GREATER
+                        string? sValue = value as string;
+#else
                         string sValue = value as string;
+#endif
                         if (!String.IsNullOrEmpty(sValue))
                         {
                             parameter.Size = sValue.Length;
@@ -138,7 +158,7 @@ namespace OrmTxcSql.SqlClient.Data
                         // 開発者向けコメント：有効桁数は最大値。小数点以下桁数は値から設定する。
                         // 参考：https://msdn.microsoft.com/ja-jp/library/ms187746(v=sql.120).aspx
                         parameter.Precision = 38;
-                        parameter.Scale = (byte)GetScale((decimal)value);
+                        parameter.Scale = (byte)GetScale(value as decimal?);
                         break;
                     }
                 case SqlDbType.DateTime2:
@@ -159,6 +179,8 @@ namespace OrmTxcSql.SqlClient.Data
             //
             return parameter;
         }
+        private static int GetScale(decimal? value)
+            => value.HasValue ? GetScale(value.Value) : 0;
         /// <summary>
         /// Decimal型の数値の小数部分の桁数を取得する。
         /// </summary>
@@ -224,6 +246,12 @@ namespace OrmTxcSql.SqlClient.Data
         }
 
         #region "更新系処理に関する処理"
+        /// <summary>
+        /// <see cref="DbServer{TConnection}.ExecuteNonQuery(IDbCommand, bool)"/>
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="enableOptimisticConcurrency"></param>
+        /// <returns></returns>
         public static int ExecuteNonQuery(SqlCommand command, bool enableOptimisticConcurrency = true)
         {
             try

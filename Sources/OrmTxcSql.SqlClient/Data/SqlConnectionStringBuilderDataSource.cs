@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using OrmTxcSql.Data;
 
 namespace OrmTxcSql.SqlClient.Data
