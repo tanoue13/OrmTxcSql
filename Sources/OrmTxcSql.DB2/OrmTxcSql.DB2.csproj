@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6;net48;net462</TargetFrameworks>
+    <TargetFrameworks>net48;net462</TargetFrameworks>
     <Description>OrmTxcSql.DB2 helps you with O/R mapping, Transaction control, and running SQL.</Description>
     <PackageTags>orm transaction sql ibm iSeries db2</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -9,13 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="NLog" Version="5.1.0" />
-  </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net6' ">
-    <None Include="../../ReferenceAssemblies/IBM.Data.DB2.iSeries.dll" Pack="true" PackagePath="/lib/net6" LinkBase="Assets" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net48' ">
