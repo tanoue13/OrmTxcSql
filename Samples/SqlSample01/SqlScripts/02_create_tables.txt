@@ -1,6 +1,6 @@
 ﻿
 -- USAGE:
---   1. Login to database "sample01" as user "montblanc".
+--   1. Login to database "sample01". (It is recommended to enable integrated security.)
 --   2. Run queries below.
 --
 
