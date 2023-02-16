@@ -6,7 +6,7 @@ using System.Reflection;
 using OrmTxcSql.Attributes;
 using OrmTxcSql.Entities;
 
-namespace NpgsqlSample01.Utils
+namespace OrmTxcSql.Tests.Utils
 {
     /// <summary>
     /// デバッグ用のユーティリティクラス。

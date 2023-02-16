@@ -1,26 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Npgsql;
-using NpgsqlSample01.Daos;
-using NpgsqlSample01.Data;
-using NpgsqlSample01.Entities;
+using NUnit.Framework;
 using OrmTxcSql.Attributes;
 using OrmTxcSql.Daos;
-using OrmTxcSql.Npgsql.Data;
+using OrmTxcSql.SqlClient.Data;
 using OrmTxcSql.Tests.Utils;
 using OrmTxcSql.Utils;
-#if NET462
-using NUnit.Framework;
-#endif
+using SqlSample01.Daos;
+using SqlSample01.Data;
+using SqlSample01.Entities;
 
-namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
+namespace SqlSample01Tests.Daos
 {
-    internal class AutoNumberingDaoTest
+    internal class IdentityDaoTests
     {
         private static readonly TraceListener s_listener = new TextWriterTraceListener(Console.Out);
 
@@ -37,24 +35,22 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
             Trace.Listeners.Remove(s_listener);
         }
 
-        private AutoNumberingEntity[] _entities;
+        private IdentityEntity[] _entities;
 
         [SetUp]
         public void SetUp()
         {
             //
-            var entity0 = new AutoNumberingEntity()
+            var entity0 = new IdentityEntity()
             {
-                Uid = 10,
                 Description = "abcdefg",
             };
-            var entity1 = new AutoNumberingEntity()
+            var entity1 = new IdentityEntity()
             {
-                Uid = 20,
                 Description = "hijklmn",
             };
             //
-            _entities = new AutoNumberingEntity[] {
+            _entities = new IdentityEntity[] {
                 entity0,
                 entity1,
             };
@@ -66,10 +62,10 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
             var entityI0 = _entities[0];
             var entityI1 = _entities[1];
             //
-            var dao = new AutoNumberingDaoExt();
+            var dao = new IdentityDaoExt();
             //
-            var server = new NpgsqlServer();
-            server.DataSource = new NpgsqlDataSource();
+            var server = new SqlServer();
+            server.DataSource = new SqlDataSource();
             server.Execute(new IDao[] { dao }, tx =>
             {
                 foreach (int index in Enumerable.Repeat(0, 3))
@@ -85,7 +81,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
                 // ロールバックする。
                 tx.Rollback();
                 //
-                DebugUtils.DumpEntity<AutoNumberingEntity>(result);
+                DebugUtils.DumpEntity<IdentityEntity>(result);
             });
         }
 
@@ -95,17 +91,17 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
             var entityI0 = _entities[0];
             var entityI1 = _entities[1];
             //
-            var dao = new AutoNumberingDaoExt();
+            var dao = new IdentityDaoExt();
             //
-            var server = new NpgsqlServer();
-            server.DataSource = new NpgsqlDataSource();
+            var server = new SqlServer();
+            server.DataSource = new SqlDataSource();
             server.Execute(new IDao[] { dao }, tx =>
             {
                 dao.Insert(entityI0);
                 dao.Insert(entityI1);
                 //
                 var result00 = dao.SelectAll();
-                DebugUtils.DumpEntity<AutoNumberingEntity>(result00);
+                DebugUtils.DumpEntity<IdentityEntity>(result00);
                 //
                 var entityU0 = result00.First();
                 entityU0.Description = entityU0.Description?.ToUpperInvariant();
@@ -113,7 +109,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
                 dao.UpdateByPk(entityU0);
                 //
                 var result01 = dao.SelectAll();
-                DebugUtils.DumpEntity<AutoNumberingEntity>(result01);
+                DebugUtils.DumpEntity<IdentityEntity>(result01);
                 //
                 //
                 // ロールバックする。
@@ -121,13 +117,13 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
             });
         }
 
-        internal class AutoNumberingDaoExt : AutoNumberingDao
+        internal class IdentityDaoExt : IdentityDao
         {
-            internal IEnumerable<AutoNumberingEntity> SelectAll()
+            internal IEnumerable<IdentityEntity> SelectAll()
             {
                 //
                 // コマンドの準備に必要なオブジェクトを生成する。
-                NpgsqlCommand command = this.Command;
+                SqlCommand command = this.Command;
                 //
                 // コマンドを準備する。
                 this.BuildSelectAllCommand(command);
@@ -136,17 +132,17 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
                 DataTable dataTable = this.GetDataTable(command);
                 //
                 // DataTableをオブジェクトに変換する。
-                AutoNumberingEntity[] result = dataTable.AsEnumerable<AutoNumberingEntity>().ToArray();
+                IdentityEntity[] result = dataTable.AsEnumerable<IdentityEntity>().ToArray();
                 //
                 // 結果を戻す。
                 return result;
             }
-            private void BuildSelectAllCommand(NpgsqlCommand command)
+            private void BuildSelectAllCommand(SqlCommand command)
             {
                 // テーブル名を取得する。
-                string tableName = EntityUtils.GetTableName<AutoNumberingEntity>();
+                string tableName = EntityUtils.GetTableName<IdentityEntity>();
                 // カラム名を取得する。
-                string[] columnNames = EntityUtils.GetColumnAttributes<AutoNumberingEntity>()
+                string[] columnNames = EntityUtils.GetColumnAttributes<IdentityEntity>()
                     .Select(prop => new
                     {
                         PropertyInfo = prop,

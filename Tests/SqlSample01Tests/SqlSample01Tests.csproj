@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <IsPackable>false</IsPackable>
@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Samples\NpgsqlSample01\NpgsqlSample01.csproj" />
+    <ProjectReference Include="..\..\Samples\SqlSample01\SqlSample01.csproj" />
   </ItemGroup>
 
   <Import Project="..\Tests.Shared\Tests.Shared.projitems" Label="Shared" />

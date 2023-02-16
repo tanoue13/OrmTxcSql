@@ -17,7 +17,7 @@ namespace SqlSample01.Data
             // 接続文字列ビルダを生成する。
             _connectionStringBuilder = new SqlConnectionStringBuilder()
             {
-                DataSource = "localhost",
+                DataSource = "localhsot",
                 InitialCatalog = "sample01",
                 IntegratedSecurity = true,
                 ApplicationName = this.GetType().FullName,

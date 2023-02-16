@@ -1,0 +1,23 @@
+﻿
+-- USAGE:
+--   1. Login to database "sample01" as user "montblanc".
+--   2. Run queries below.
+--
+
+
+CREATE TABLE [dbo].[identity_table](
+	[version_no] [decimal](18, 0) NOT NULL,
+	[active_flag] [nvarchar](1) NOT NULL,
+	[toroku_nitiji] [datetime2](7) NOT NULL,
+	[toroku_username] [nvarchar](64) NOT NULL,
+	[kosin_nitiji] [datetime2](7) NOT NULL,
+	[kosin_username] [nvarchar](64) NOT NULL,
+	[uid] [decimal](18, 0) IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](64) NOT NULL
+ CONSTRAINT [identity_table_pk] PRIMARY KEY NONCLUSTERED
+(
+	[uid] ASC
+) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
