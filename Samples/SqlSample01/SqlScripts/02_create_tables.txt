@@ -13,11 +13,10 @@ CREATE TABLE [dbo].[identity_table](
 	[kosin_nitiji] [datetime2](7) NOT NULL,
 	[kosin_username] [nvarchar](64) NOT NULL,
 	[uid] [decimal](18, 0) IDENTITY(1,1) NOT NULL,
-	[description] [nvarchar](64) NOT NULL
+	[description] [nvarchar](64) NULL
  CONSTRAINT [identity_table_pk] PRIMARY KEY NONCLUSTERED
 (
 	[uid] ASC
 ) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-
