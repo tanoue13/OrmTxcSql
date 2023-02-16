@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using NUnit.Framework;
 using OrmTxcSql.Attributes;
 using OrmTxcSql.Daos;
 using OrmTxcSql.SqlClient.Data;
@@ -15,6 +14,9 @@ using OrmTxcSql.Utils;
 using SqlSample01.Daos;
 using SqlSample01.Data;
 using SqlSample01.Entities;
+#if NET462
+using NUnit.Framework;
+#endif
 
 namespace SqlSample01Tests.Daos
 {
