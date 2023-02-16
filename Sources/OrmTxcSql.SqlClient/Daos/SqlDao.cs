@@ -259,9 +259,10 @@ namespace OrmTxcSql.SqlClient.Daos
             // OK: update table_name set a = @a, b = @b, c = @c where x = @x
             // NG: update table_name set a = @a, b = @b, c = @cwhere x = @x
             var builder = new StringBuilder();
-            builder.Append(" update ").Append(tableName).Append(" as x");
+            builder.Append(" update ").Append(tableName);
             builder.Append(" set ");
             builder.Append(columnStringBuilder.ToString());
+            builder.Append(" from ").Append(tableName).Append(" as x");
             builder.Append(" "); // fool-proof
             builder.Append(filter);
             //
