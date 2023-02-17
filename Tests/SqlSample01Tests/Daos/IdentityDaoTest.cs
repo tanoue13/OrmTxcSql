@@ -20,7 +20,7 @@ using NUnit.Framework;
 
 namespace SqlSample01Tests.Daos
 {
-    internal class IdentityDaoTests
+    internal class IdentityDaoTest
     {
         private static readonly TraceListener s_listener = new TextWriterTraceListener(Console.Out);
 
