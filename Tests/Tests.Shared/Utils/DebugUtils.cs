@@ -52,7 +52,14 @@ namespace OrmTxcSql.Tests.Utils
                 {
                     Debug.Write(delimiter);
                     Debug.Write("\t");
-                    Debug.Write(property.GetValue(entity));
+                    if (property.GetValue(entity) is DateTime dateTime)
+                    {
+                        Debug.Write(dateTime.ToString("yyyy/MM/dd HH:mm:ss.fffffff"));
+                    }
+                    else
+                    {
+                        Debug.Write(property.GetValue(entity));
+                    }
                 }
                 Debug.WriteLine("");
             }
