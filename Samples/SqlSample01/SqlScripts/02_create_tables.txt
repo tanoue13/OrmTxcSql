@@ -20,3 +20,27 @@ CREATE TABLE [dbo].[identity_table](
 ) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
+
+CREATE TABLE [dbo].[date_and_time_table](
+	[version_no] [decimal](18, 0) NOT NULL,
+	[active_flag] [nvarchar](1) NOT NULL,
+	[toroku_nitiji] [datetime2](7) NOT NULL,
+	[toroku_username] [nvarchar](64) NOT NULL,
+	[kosin_nitiji] [datetime2](7) NOT NULL,
+	[kosin_username] [nvarchar](64) NOT NULL,
+	[column_key] [nvarchar](4) NOT NULL,
+	[column_time]             [time] NULL,
+	[column_date]             [date] NULL,
+	[column_date_time]        [datetime] NULL,
+	[column_date_time_2]      [datetime2] NULL,
+	[column_date_time_offset] [datetimeoffset] NULL,
+	[column_net6_date]        [date] NULL,
+	[column_net6_time]        [time] NULL,
+	[description]             [nvarchar](64) NULL
+ CONSTRAINT [date_and_time_table_pk] PRIMARY KEY NONCLUSTERED
+(
+	[column_key] ASC
+) ON [PRIMARY]
+) ON [PRIMARY]
+GO
