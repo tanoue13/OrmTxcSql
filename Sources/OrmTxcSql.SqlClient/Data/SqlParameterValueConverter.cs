@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using System.Data.SqlClient;
 using OrmTxcSql.Data;
 
 namespace OrmTxcSql.SqlClient.Data
@@ -38,7 +40,7 @@ namespace OrmTxcSql.SqlClient.Data
             else if (typeof(string).Equals(valueType))
             {
                 // string型を変換する。
-                string sValue = value as string;
+                var sValue = value as string;
                 if (null != sValue)
                 {
                     return value;
@@ -63,7 +65,7 @@ namespace OrmTxcSql.SqlClient.Data
             }
             else if (typeof(decimal?).Equals(valueType))
             {
-                // int型を変換する。
+                // decimal型を変換する。
                 decimal? dValue = value as decimal?;
                 if (dValue.HasValue)
                 {
@@ -74,50 +76,70 @@ namespace OrmTxcSql.SqlClient.Data
                     return DBNull.Value;
                 }
             }
-            else if (typeof(DateTime?).Equals(valueType))
+#if NET6_0_OR_GREATER
+            else if (typeof(DateOnly?).Equals(valueType))
             {
-                // DateTime型を変換する。
-                DateTime? dValue = value as DateTime?;
+                // DateOnly型を変換する。
+                DateOnly? dValue = value as DateOnly?;
                 if (dValue.HasValue)
                 {
-                    return this.SpecifyKindLocalIfUnspecified(dValue.Value);
+                    return ToDateTime(dValue.Value);
                 }
                 else
                 {
                     return DBNull.Value;
                 }
             }
-            else if (typeof(DateTime).Equals(valueType))
+            else if (typeof(DateOnly).Equals(valueType))
             {
-                // DateTime型を変換する。
-                if (value is DateTime dValue)
+                // DateOnly型を変換する。
+                if (value is DateOnly dValue)
                 {
-                    return this.SpecifyKindLocalIfUnspecified(dValue);
+                    return ToDateTime(dValue);
                 }
                 else
                 {
                     return value;
                 }
             }
-            // fool-proof
-            return value;
-        }
-        /// <summary>
-        /// DateTime.KindがUnspecifiedの場合、
-        /// 指定された DateTime と同じティック数、および、Kind値がLocalを持つ新しい DateTime オブジェクトを戻す。
-        /// </summary>
-        /// <param name="value">DateTimeオブジェクト</param>
-        /// <returns></returns>
-        private DateTime SpecifyKindLocalIfUnspecified(DateTime value)
-        {
-            if (DateTimeKind.Unspecified == value.Kind)
+#endif
+            else if (typeof(DateTime?).Equals(valueType))
             {
-                DateTime dateTimeLocal = DateTime.SpecifyKind(value, DateTimeKind.Local);
-                return dateTimeLocal;
+                // DateTime型を変換する。
+                DateTime? dValue = value as DateTime?;
+                if (dValue.HasValue)
+                {
+                    return value;
+                }
+                else
+                {
+                    return DBNull.Value;
+                }
             }
-            //
             // fool-proof
             return value;
         }
+#if NET6_0_OR_GREATER
+        private static readonly TimeOnly s_timeOnlyZero = new TimeOnly(0, 0, 0);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// 開発者向けコメント：
+        /// <br/>・<see cref="SqlParameter.SqlDbType"/>が<see cref="SqlDbType.Date"/>の<see cref="SqlParameter"/>において、
+        /// 　　<see cref="SqlParameter.Value"/>に<see cref="DateOnly"/>型の値を設定すると<see cref="InvalidCastException"/>が投げられる。
+        /// <br/>・原因については、要調査。
+        /// <br/>・暫定回避策として、<see cref="DateTime"/>に変換した値を設定する。
+        /// <code>
+        ///  メッセージ: 
+        ///  System.InvalidCastException : Failed to convert parameter value from a DateOnly to a DateTime.
+        ///    ----> System.InvalidCastException : Object must implement IConvertible.
+        /// </code>
+        /// </remarks>
+        private static DateTime ToDateTime(DateOnly value)
+            => value.ToDateTime(s_timeOnlyZero);
+#endif
     }
 }
