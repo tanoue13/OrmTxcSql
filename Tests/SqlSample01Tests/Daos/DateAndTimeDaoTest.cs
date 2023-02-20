@@ -474,7 +474,65 @@ namespace SqlSample01Tests.Daos
                 DebugUtils.DumpEntity<DateAndTimeEntity>(result);
             });
         }
-
+        /// <summary>
+        /// 正常系：Net6Time
+        /// </summary>
+        [Test]
+        public void InsertTest_Net6Time_N01()
+        {
+            var baseDateTime = new DateTime(2020, 4, 10, 21, 30, 45, 123, DateTimeKind.Unspecified);
+            //
+            var entityI0 = new DateAndTimeEntity()
+            {
+                Key = "A00",
+                ColumnNet6Time = TimeOnly.FromDateTime(DateTime.Now),
+            };
+            var entityI1 = new DateAndTimeEntity()
+            {
+                Key = "A01",
+                ColumnNet6Time = TimeOnly.Parse("13:15:30.999"),
+            };
+            var entityI2 = new DateAndTimeEntity()
+            {
+                Key = "A02",
+                ColumnNet6Time = new TimeOnly(13, 15, 30, 999),
+            };
+            var entityI3 = new DateAndTimeEntity()
+            {
+                Key = "A03",
+                ColumnNet6Time = TimeOnly.FromDateTime(DateTime.SpecifyKind(baseDateTime, DateTimeKind.Unspecified)),
+            };
+            var entityI4 = new DateAndTimeEntity()
+            {
+                Key = "A04",
+                ColumnNet6Time = TimeOnly.FromDateTime(DateTime.SpecifyKind(baseDateTime, DateTimeKind.Local)),
+            };
+            var entityI5 = new DateAndTimeEntity()
+            {
+                Key = "A05",
+                ColumnNet6Time = TimeOnly.FromDateTime(DateTime.SpecifyKind(baseDateTime, DateTimeKind.Utc)),
+            };
+            //
+            var dao = new DateAndTimeDaoExt();
+            //
+            var server = new SqlServer();
+            server.DataSource = new SqlDataSource();
+            server.Execute(new IDao[] { dao }, tx =>
+            {
+                dao.Insert(entityI0);
+                dao.Insert(entityI1);
+                dao.Insert(entityI2);
+                dao.Insert(entityI3);
+                dao.Insert(entityI4);
+                dao.Insert(entityI5);
+                var result = dao.SelectAll();
+                //
+                // ロールバックする。
+                tx.Rollback();
+                //
+                DebugUtils.DumpEntity<DateAndTimeEntity>(result);
+            });
+        }
 #endif
 
         [Test]
