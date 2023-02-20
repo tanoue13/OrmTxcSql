@@ -9,7 +9,6 @@ using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.Daos
 {
-
     /// <summary>
     /// Daoの基底クラス。
     /// </summary>
@@ -33,7 +32,7 @@ namespace OrmTxcSql.Daos
         /// 例外に設定されるメッセージ：UPDATE文を実行する必要がないエンティティが渡された場合
         /// </summary>
         protected static readonly string ArgumentExceptionMessageForNoNeedToUpdate = $"No property values are different to those in data source.";
-       
+
         /// <summary>
         /// 例外に設定されるメッセージ：対象プロパティが与えられていない場合
         /// </summary>
@@ -85,7 +84,11 @@ namespace OrmTxcSql.Daos
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
+#if NET6_0_OR_GREATER
+        public abstract TEntity? SelectByPk(TEntity entity);
+#else
         public abstract TEntity SelectByPk(TEntity entity);
+#endif
 
         /// <summary>
         /// 検索する。（複数件）
@@ -127,8 +130,13 @@ namespace OrmTxcSql.Daos
                     foreach (DataRow dataRow in dataRows)
                     {
                         // トリムした値を設定する。
+#if NET6_0_OR_GREATER
+                        string? value = dataRow[ordinal] as string;
+                        dataRow[ordinal] = value?.TrimEnd();
+#else
                         string value = dataRow[ordinal] as string;
                         dataRow[ordinal] = value.TrimEnd();
+#endif
                     }
                 }
                 // 開発者向けコメント（2021.08.17田上）
@@ -163,7 +171,11 @@ namespace OrmTxcSql.Daos
         /// </exception>
         public int InsertOrUpdateByPk(TEntity entity)
         {
+#if NET6_0_OR_GREATER
+            TEntity? result = this.SelectByPk(entity);
+#else
             TEntity result = this.SelectByPk(entity);
+#endif
             if (null == result)
             {
                 if (entity.HasEqualPropertyValues(new TEntity()))
@@ -371,5 +383,4 @@ namespace OrmTxcSql.Daos
         #endregion
 
     }
-
 }

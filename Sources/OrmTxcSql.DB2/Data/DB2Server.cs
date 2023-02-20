@@ -9,7 +9,9 @@ using OrmTxcSql.Data;
 
 namespace OrmTxcSql.DB2.Data
 {
-
+    /// <summary>
+    /// DBMS（DB2）との接続、トランザクション管理を行うクラス。
+    /// </summary>
     public class DB2Server : DbServer<iDB2Connection>
     {
 
@@ -42,7 +44,11 @@ namespace OrmTxcSql.DB2.Data
                 dbType = iDB2DbType.iDB2VarChar;
             }
             // パラメータに設定する値を取得する。
+#if NET6_0_OR_GREATER
+            object? value = property.GetValue(obj);
+#else
             object value = property.GetValue(obj);
+#endif
             //
             // nullを考慮し、下のメソッド経由で設定する。
             DB2Server.AddParameterOrReplace(command, parameterName, dbType, value);
@@ -55,7 +61,11 @@ namespace OrmTxcSql.DB2.Data
         /// <param name="dbType"></param>
         /// <param name="value"></param>
         /// <remarks></remarks>
+#if NET6_0_OR_GREATER
+        public static void AddParameterOrReplace(IDbCommand command, string parameterName, iDB2DbType dbType, object? value)
+#else
         public static void AddParameterOrReplace(IDbCommand command, string parameterName, iDB2DbType dbType, object value)
+#endif
         {
             IDataParameter parameter = new iDB2Parameter(parameterName, dbType);
             parameter.Value = DB2Server.ParameterValueConverter.Convert(value, dbType.GetType(), dbType);
@@ -111,6 +121,12 @@ namespace OrmTxcSql.DB2.Data
         }
 
         #region "更新系処理に関する処理"
+        /// <summary>
+        /// <see cref="DbServer{TConnection}.ExecuteNonQuery(IDbCommand, bool)"/>
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="enableOptimisticConcurrency"></param>
+        /// <returns></returns>
         public static int ExecuteNonQuery(iDB2Command command, bool enableOptimisticConcurrency = true)
         {
             try

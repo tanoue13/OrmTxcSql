@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
@@ -8,13 +9,11 @@ using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.Entities
 {
-
     /// <summary>
     /// Entityの基底クラス。
     /// </summary>
     public abstract class AbstractEntity
     {
-
         /// <summary>
         /// <paramref name="dataRow"/>から値を取得し、プロパティを設定する。
         /// </summary>
@@ -25,7 +24,18 @@ namespace OrmTxcSql.Entities
             DataColumnCollection dataColumnCollection = dataRow.Table.Columns;
             // DataTable.Columnsに存在するカラム属性のみを取得する。
             IEnumerable<PropertyInfo> properties = this.GetColumnAttributes()
-                .Where(prop => dataColumnCollection.Contains(prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName));
+                // 変換
+                .Select(prop => new
+                {
+                    PropertyInfo = prop,
+                    ColumnName = prop.GetCustomAttribute<ColumnAttribute>(false)?.ColumnName ?? String.Empty
+                })
+                // カラム名を取得できない場合、対象外とする。
+                .Where(src => !String.IsNullOrEmpty(src.ColumnName))
+                // DataTable.Columnsに存在するカラム属性のみを取得する。
+                .Where(src => dataColumnCollection.Contains(src.ColumnName))
+                // 選択
+                .Select(src => src.PropertyInfo);
             //
             // プロパティを設定する。
             Parallel.ForEach(properties, property =>
@@ -40,7 +50,10 @@ namespace OrmTxcSql.Entities
         /// <param name="propertyInfo"></param>
         protected virtual void SetProperty(DataRow dataRow, PropertyInfo propertyInfo)
         {
-            string columnName = propertyInfo.GetCustomAttribute<ColumnAttribute>(false).ColumnName;
+            // プロパティのカラム属性からカラム名を取得する。
+            // カラム名を取得できない場合、例外を投げる。（呼び出し元で検証済みの前提であり、通常はありえない状況）
+            string columnName = propertyInfo.GetCustomAttribute<ColumnAttribute>(false)?.ColumnName
+                ?? throw new ArgumentException($"{typeof(ColumnAttribute).Name} is not set on {propertyInfo.Name}.");
             if (dataRow.IsNull(columnName))
             {
                 // DBNullの場合、nullを設定する。
@@ -53,7 +66,5 @@ namespace OrmTxcSql.Entities
                 propertyInfo.SetValue(this, value);
             }
         }
-
     }
-
 }

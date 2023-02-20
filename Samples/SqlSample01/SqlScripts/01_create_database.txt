@@ -1,0 +1,4 @@
+﻿
+-- USAGE:
+--   1. Connect to SQL Server and create database in some way: by GUI operations, running sqls, or whatever.
+--

@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using NLog;
 
 namespace OrmTxcSql.Utils
 {
-
     /// <summary>
     /// ログに関するユーティリティクラス。
     /// </summary>
@@ -17,22 +17,22 @@ namespace OrmTxcSql.Utils
         /// <summary>
         /// ロガーの接頭辞
         /// </summary>
-        private static readonly string LoggerPrefix = "OrmTxcSql";
+        private static readonly string s_loggerPrefix = "OrmTxcSql";
 
         /// <summary>
         /// データロガー
         /// </summary>
-        private static readonly Logger DataLogger = LogManager.GetLogger($"{LoggerPrefix}.Data");
+        private static readonly Logger s_dataLogger = LogManager.GetLogger($"{s_loggerPrefix}.Data");
 
         /// <summary>
         /// エラーロガー
         /// </summary>
-        private static readonly Logger ErrorLogger = LogManager.GetLogger($"{LoggerPrefix}.Error");
+        private static readonly Logger s_errorLogger = LogManager.GetLogger($"{s_loggerPrefix}.Error");
 
         /// <summary>
         /// SQLロガー
         /// </summary>
-        private static readonly Logger SqlLogger = LogManager.GetLogger($"{LoggerPrefix}.Sql");
+        private static readonly Logger s_sqlLogger = LogManager.GetLogger($"{s_loggerPrefix}.Sql");
 
         //// <summary>
         //// 監査ロガーを取得します。
@@ -50,21 +50,21 @@ namespace OrmTxcSql.Utils
         /// </summary>
         /// <returns></returns>
         /// <remarks>エラーロガーは、業務エラー、システムエラー、例外などの情報を記録します。</remarks>
-        public static Logger GetDataLogger() => LogUtils.DataLogger;
+        public static Logger GetDataLogger() => LogUtils.s_dataLogger;
 
         /// <summary>
         /// エラーロガーを取得します。
         /// </summary>
         /// <returns></returns>
         /// <remarks>エラーロガーは、業務エラー、システムエラー、例外などの情報を記録します。</remarks>
-        public static Logger GetErrorLogger() => LogUtils.ErrorLogger;
+        public static Logger GetErrorLogger() => LogUtils.s_errorLogger;
 
         /// <summary>
         /// SQLロガーを取得します。
         /// </summary>
         /// <returns></returns>
         /// <remarks>SQLロガーは、トランザクション、SQLなどの情報を記録します。</remarks>
-        public static Logger GetSqlLogger() => LogUtils.SqlLogger;
+        public static Logger GetSqlLogger() => LogUtils.s_sqlLogger;
 
         //// <summary>
         //// 性能ロガーを取得します。
@@ -121,7 +121,7 @@ namespace OrmTxcSql.Utils
         // <value></value>
         // <returns></returns>
         // <remarks></remarks>
-        private static readonly Regex RegexTrim = new Regex(@"\s{2,}");
+        private static readonly Regex s_regexTrim = new Regex(@"\s{2,}");
 
         /// <summary>
         /// SQLを記録する。
@@ -132,7 +132,7 @@ namespace OrmTxcSql.Utils
         {
             var builder = new StringBuilder();
             // コマンドテキストを追加する。
-            builder.Append(RegexTrim.Replace(command.CommandText, " ").Trim());
+            builder.Append(s_regexTrim.Replace(command.CommandText, " ").Trim());
             builder.Append(Environment.NewLine);
             // パラメータを追加する。
             builder.Append(LogUtils.GetParametersString(command.Parameters, Environment.NewLine));
@@ -154,22 +154,24 @@ namespace OrmTxcSql.Utils
         {
             //
             // ローカル関数を定義する。（戻り値：パラメータ名=パラメタ値）
-            string parameterNameAndValue(IDataParameter parameter) => $"{parameter?.ParameterName}={parameter?.Value.ToString()}";
+            string parameterNameAndValue(IDataParameter parameter) => $"{parameter?.ParameterName}={parameter?.Value}";
             //
             // パラメータ文字列
             var builder = new StringBuilder();
             //
-            IEnumerator enumerator = parameterCollection.GetEnumerator();
+            IEnumerator<IDataParameter> enumerator = parameterCollection.Cast<IDataParameter>().GetEnumerator();
             if (enumerator.MoveNext())
             {
+                // １件目の処理
                 {
-                    IDataParameter parameter = enumerator.Current as IDataParameter;
+                    IDataParameter parameter = enumerator.Current;
                     // パラメータ名、値を追加する。
                     builder.Append(parameterNameAndValue(parameter));
                 }
+                // ２件以降の処理
                 while (enumerator.MoveNext())
                 {
-                    IDataParameter parameter = enumerator.Current as IDataParameter;
+                    IDataParameter parameter = enumerator.Current;
                     // 区切り文字、パラメータ名、値を追加する。
                     builder.Append(delimiter);
                     builder.Append(parameterNameAndValue(parameter));
@@ -182,5 +184,4 @@ namespace OrmTxcSql.Utils
         #endregion
 
     }
-
 }

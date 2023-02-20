@@ -2,7 +2,6 @@
 
 namespace OrmTxcSql.SqlClient.Entities
 {
-
     /// <summary>
     /// SQL Server用のエンティティクラス。
     /// </summary>
@@ -10,5 +9,4 @@ namespace OrmTxcSql.SqlClient.Entities
     {
 
     }
-
 }

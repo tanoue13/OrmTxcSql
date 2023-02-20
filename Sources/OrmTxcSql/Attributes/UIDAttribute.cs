@@ -2,7 +2,6 @@
 
 namespace OrmTxcSql.Attributes
 {
-
     /// <summary>
     /// UID（unique identifier）属性
     /// </summary>
@@ -19,5 +18,4 @@ namespace OrmTxcSql.Attributes
         {
         }
     }
-
 }

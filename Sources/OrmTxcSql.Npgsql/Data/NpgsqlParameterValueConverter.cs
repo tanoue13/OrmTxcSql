@@ -1,9 +1,9 @@
 ﻿using System;
 using OrmTxcSql.Data;
+using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.Npgsql.Data
 {
-
     /// <summary>
     /// NpgsqlParameterの値に変換するコンバータ。
     /// </summary>
@@ -18,7 +18,19 @@ namespace OrmTxcSql.Npgsql.Data
         /// <param name="targetType"></param>
         /// <param name="parameter"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// 開発者向けコメント：日付/時刻データ型について<br/>
+        /// ・ C# 、および、 Npgsql において、 .NET6 以降で破壊的な変更がある。<br/>
+        /// ・ C#： DateOnly型、TimeOnly型の導入。<br/>
+        /// ・ Npgsql： <c>timestamp with time zone</c>は、 UTC タイムスタンプを表す。<c>timestamp without time zone</c>は、ローカル、または、 unspecified を表す。<br/>
+        /// <see href="https://www.npgsql.org/doc/types/datetime.html#timestamps-and-timezones"/><br/>
+        /// <see href="https://www.npgsql.org/doc/release-notes/6.0.html#major-changes-to-timestamp-mapping"/><br/>
+        /// </remarks>
+#if NET6_0_OR_GREATER
+        public object Convert(object? value, Type? targetType, object? parameter)
+#else
         public object Convert(object value, Type targetType, object parameter)
+#endif
         {
             if (null == value)
             {
@@ -71,13 +83,28 @@ namespace OrmTxcSql.Npgsql.Data
                     return DBNull.Value;
                 }
             }
+#if NET6_0_OR_GREATER
+            else if (typeof(DateOnly?).Equals(valueType))
+            {
+                // DateTime型を変換する。
+                DateOnly? dValue = value as DateOnly?;
+                if (dValue.HasValue)
+                {
+                    return value;
+                }
+                else
+                {
+                    return DBNull.Value;
+                }
+            }
+#endif
             else if (typeof(DateTime?).Equals(valueType))
             {
                 // DateTime型を変換する。
                 DateTime? dValue = value as DateTime?;
                 if (dValue.HasValue)
                 {
-                    return this.SpecifyKindLocalIfUnspecified(dValue.Value);
+                    return DateTimeUtils.ToUniversalTime(dValue.Value);
                 }
                 else
                 {
@@ -89,7 +116,7 @@ namespace OrmTxcSql.Npgsql.Data
                 // DateTime型を変換する。
                 if (value is DateTime dValue)
                 {
-                    return this.SpecifyKindLocalIfUnspecified(dValue);
+                    return DateTimeUtils.ToUniversalTime(dValue);
                 }
                 else
                 {
@@ -99,25 +126,5 @@ namespace OrmTxcSql.Npgsql.Data
             // fool-proof
             return value;
         }
-
-        /// <summary>
-        /// DateTime.KindがUnspecifiedの場合、
-        /// 指定された DateTime と同じティック数、および、Kind値がLocalを持つ新しい DateTime オブジェクトを戻す。
-        /// </summary>
-        /// <param name="value">DateTimeオブジェクト</param>
-        /// <returns></returns>
-        private DateTime SpecifyKindLocalIfUnspecified(DateTime value)
-        {
-            if (value.Kind == DateTimeKind.Unspecified)
-            {
-                DateTime dateTimeLocal = DateTime.SpecifyKind(value, DateTimeKind.Local);
-                return dateTimeLocal;
-            }
-            //
-            // fool-proof
-            return value;
-        }
-
     }
-
 }

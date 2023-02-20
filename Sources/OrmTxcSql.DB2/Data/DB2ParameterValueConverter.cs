@@ -4,7 +4,6 @@ using OrmTxcSql.Data;
 
 namespace OrmTxcSql.DB2.Data
 {
-
     /// <summary>
     /// DB2Parameterの値に変換するコンバータ。
     /// </summary>
@@ -19,7 +18,11 @@ namespace OrmTxcSql.DB2.Data
         /// <param name="targetType"></param>
         /// <param name="parameter">DB2Typeを指定する。<paramref name="value"/>がNullの場合、DB2Typeに応じた初期値を使用する。</param>
         /// <returns></returns>
+#if NET6_0_OR_GREATER
+        public object Convert(object? value, Type? targetType, object? parameter)
+#else
         public object Convert(object value, Type targetType, object parameter)
+#endif
         {
             if (null == value)
             {
@@ -94,7 +97,11 @@ namespace OrmTxcSql.DB2.Data
         /// <param name="targetType"></param>
         /// <param name="parameter"></param>
         /// <returns></returns>
+#if NET6_0_OR_GREATER
+        private static object GetDataSourceNullValue(Type? targetType, object? parameter)
+#else
         private static object GetDataSourceNullValue(Type targetType, object parameter)
+#endif
         {
             switch (parameter)
             {

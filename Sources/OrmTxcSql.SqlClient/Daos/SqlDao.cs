@@ -14,7 +14,6 @@ using OrmTxcSql.Utils;
 
 namespace OrmTxcSql.SqlClient.Daos
 {
-
     /// <summary>
     /// SQL Server用のdao。BaseEntityのサブクラスに対してInsert, UpdateByPk, FindByPkを実装済み。
     /// </summary>
@@ -66,8 +65,16 @@ namespace OrmTxcSql.SqlClient.Daos
             IEnumerator<KeyValuePair<string, PropertyInfo>> pairs = entity.GetColumnAttributes()
                 // UID属性なし
                 .Where(prop => null == prop.GetCustomAttribute<UIDAttribute>(false))
+                // 変換
+                .Select(prop => new
+                {
+                    PropertyInfo = prop,
+                    ColumnName = prop.GetCustomAttribute<ColumnAttribute>(false)?.ColumnName ?? String.Empty
+                })
+                // カラム名を取得できない場合、対象外とする。
+                .Where(src => !String.IsNullOrEmpty(src.ColumnName))
                 // ディクショナリ（カラム名→プロパティ）に変換する。
-                .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName)
+                .ToDictionary(src => src.ColumnName, src => src.PropertyInfo)
                 // IEnumeratorを取得する。
                 .GetEnumerator();
             if (pairs.MoveNext())
@@ -168,8 +175,16 @@ namespace OrmTxcSql.SqlClient.Daos
             IEnumerator<KeyValuePair<string, PropertyInfo>> pairs = EntityUtils
                 // 主キー属性を取得する。
                 .GetPrimaryKeyAttributes<TEntity>()
+                // 変換
+                .Select(prop => new
+                {
+                    PropertyInfo = prop,
+                    ColumnName = prop.GetCustomAttribute<ColumnAttribute>(false)?.ColumnName ?? String.Empty
+                })
+                // カラム名を取得できない場合、対象外とする。
+                .Where(src => !String.IsNullOrEmpty(src.ColumnName))
                 // ディクショナリ（カラム名→プロパティ）に変換する。
-                .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName)
+                .ToDictionary(src => src.ColumnName, src => src.PropertyInfo)
                 // IEnumeratorを取得する。
                 .GetEnumerator();
             if (pairs.MoveNext())
@@ -215,8 +230,16 @@ namespace OrmTxcSql.SqlClient.Daos
             //
             // 対象項目を反復処理し、更新列とSQLパラメータを設定する。
             IEnumerator<KeyValuePair<string, PropertyInfo>> pairs = properties
+                // 変換
+                .Select(prop => new
+                {
+                    PropertyInfo = prop,
+                    ColumnName = prop.GetCustomAttribute<ColumnAttribute>(false)?.ColumnName ?? String.Empty
+                })
+                // カラム名を取得できない場合、対象外とする。
+                .Where(src => !String.IsNullOrEmpty(src.ColumnName))
                 // ディクショナリ（カラム名→プロパティ）に変換する。
-                .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName)
+                .ToDictionary(src => src.ColumnName, src => src.PropertyInfo)
                 // IEnumeratorを取得する。
                 .GetEnumerator();
             if (pairs.MoveNext())
@@ -260,9 +283,10 @@ namespace OrmTxcSql.SqlClient.Daos
             // OK: update table_name set a = @a, b = @b, c = @c where x = @x
             // NG: update table_name set a = @a, b = @b, c = @cwhere x = @x
             var builder = new StringBuilder();
-            builder.Append(" update ").Append(tableName).Append(" as x");
+            builder.Append(" update ").Append(tableName);
             builder.Append(" set ");
             builder.Append(columnStringBuilder.ToString());
+            builder.Append(" from ").Append(tableName).Append(" as x");
             builder.Append(" "); // fool-proof
             builder.Append(filter);
             //
@@ -317,7 +341,11 @@ namespace OrmTxcSql.SqlClient.Daos
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
+#if NET6_0_OR_GREATER
+        public override TEntity? SelectByPk(TEntity entity)
+#else
         public override TEntity SelectByPk(TEntity entity)
+#endif
         {
             //
             // コマンドの準備に必要なオブジェクトを生成する。
@@ -367,8 +395,16 @@ namespace OrmTxcSql.SqlClient.Daos
             IEnumerator<KeyValuePair<string, PropertyInfo>> pairs = EntityUtils
                 // 主キー属性を取得する。
                 .GetPrimaryKeyAttributes<TEntity>()
+                // 変換
+                .Select(prop => new
+                {
+                    PropertyInfo = prop,
+                    ColumnName = prop.GetCustomAttribute<ColumnAttribute>(false)?.ColumnName ?? String.Empty
+                })
+                // カラム名を取得できない場合、対象外とする。
+                .Where(src => !String.IsNullOrEmpty(src.ColumnName))
                 // ディクショナリ（カラム名→プロパティ）に変換する。
-                .ToDictionary(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName)
+                .ToDictionary(src => src.ColumnName, src => src.PropertyInfo)
                 // IEnumeratorを取得する。
                 .GetEnumerator();
             if (pairs.MoveNext())
@@ -413,7 +449,16 @@ namespace OrmTxcSql.SqlClient.Daos
             string tableName = entity.GetTableName();
             // カラム名を取得する。
             string[] columnNames = entity.GetColumnAttributes()
-                .Select(prop => prop.GetCustomAttribute<ColumnAttribute>(false).ColumnName)
+                // 変換
+                .Select(prop => new
+                {
+                    PropertyInfo = prop,
+                    ColumnName = prop.GetCustomAttribute<ColumnAttribute>(false)?.ColumnName ?? String.Empty
+                })
+                // カラム名を取得できない場合、対象外とする。
+                .Where(src => !String.IsNullOrEmpty(src.ColumnName))
+                // カラム名を取得する。
+                .Select(src => src.ColumnName)
                 .ToArray();
             //
             // コマンドテキストを生成する。
@@ -433,7 +478,5 @@ namespace OrmTxcSql.SqlClient.Daos
             // データソースにコマンドを準備する。
             command.Prepare();
         }
-
     }
-
 }

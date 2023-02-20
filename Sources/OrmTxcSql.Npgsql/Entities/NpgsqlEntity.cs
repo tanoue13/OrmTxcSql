@@ -2,7 +2,6 @@
 
 namespace OrmTxcSql.Npgsql.Entities
 {
-
     /// <summary>
     /// PostgreSQL用のエンティティクラス。
     /// </summary>
@@ -10,5 +9,4 @@ namespace OrmTxcSql.Npgsql.Entities
     {
 
     }
-
 }

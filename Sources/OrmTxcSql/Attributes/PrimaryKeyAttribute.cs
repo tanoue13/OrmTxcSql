@@ -2,7 +2,6 @@
 
 namespace OrmTxcSql.Attributes
 {
-
     /// <summary>
     /// 主キー属性
     /// </summary>
@@ -16,5 +15,4 @@ namespace OrmTxcSql.Attributes
         {
         }
     }
-
 }
