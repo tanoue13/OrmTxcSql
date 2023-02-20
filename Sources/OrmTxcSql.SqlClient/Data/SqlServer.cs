@@ -38,9 +38,27 @@ namespace OrmTxcSql.SqlClient.Data
             {
                 dbType = SqlDbType.Decimal;
             }
+#if NET6_0_OR_GREATER
+            else if (new Type[] { typeof(DateOnly), typeof(DateOnly?) }.Contains(propertyType))
+            {
+                dbType = SqlDbType.Date;
+            }
+            else if (new Type[] { typeof(TimeOnly), typeof(TimeOnly?) }.Contains(propertyType))
+            {
+                dbType = SqlDbType.Time;
+            }
+#endif
             else if (new Type[] { typeof(DateTime), typeof(DateTime?) }.Contains(propertyType))
             {
-                dbType = SqlDbType.Timestamp;
+                dbType = SqlDbType.DateTime2;
+            }
+            else if (new Type[] { typeof(TimeSpan), typeof(TimeSpan?) }.Contains(propertyType))
+            {
+                dbType = SqlDbType.Time;
+            }
+            else if (new Type[] { typeof(DateTimeOffset), typeof(DateTimeOffset?) }.Contains(propertyType))
+            {
+                dbType = SqlDbType.DateTimeOffset;
             }
             else
             {
@@ -161,12 +179,33 @@ namespace OrmTxcSql.SqlClient.Data
                         parameter.Scale = (byte)GetScale(value as decimal?);
                         break;
                     }
+                case SqlDbType.Time:
+                    {
+                        // 参考：https://learn.microsoft.com/ja-jp/previous-versions/sql/sql-server-2012/bb677243(v=sql.110)
+                        string timeFormat = "hh:mm:ss.nnnnnnn"; // 16桁
+                        parameter.Size = timeFormat.Length;
+                        break;
+                    }
+                case SqlDbType.Date:
+                    {
+                        // 参考：https://learn.microsoft.com/ja-jp/previous-versions/sql/sql-server-2012/bb630352(v=sql.110)
+                        string dateFormat = "YYYY-MM-DD"; // 10桁
+                        parameter.Size = dateFormat.Length;
+                        break;
+                    }
                 case SqlDbType.DateTime2:
                     {
                         // 参考：https://stackoverflow.com/questions/29699253/trouble-writing-to-sql
-                        // 参考：https://docs.microsoft.com/ja-jp/previous-versions/sql/sql-server-2012/bb677335(v=sql.110)
-                        string datetime2format = "YYYY-MM-DD hh:mm:ss.0000000"; // 27桁
-                        parameter.Size = datetime2format.Length;
+                        // 参考：https://learn.microsoft.com/ja-jp/previous-versions/sql/sql-server-2012/bb677335(v=sql.110)
+                        string datetime2Format = "YYYY-MM-DD hh:mm:ss.0000000"; // 27桁
+                        parameter.Size = datetime2Format.Length;
+                        break;
+                    }
+                case SqlDbType.DateTimeOffset:
+                    {
+                        // 参考：https://learn.microsoft.com/ja-jp/previous-versions/sql/sql-server-2012/bb630289(v=sql.110)
+                        string dateTimeOffsetFormat = "YYYY-MM-DD hh:mm:ss.nnnnnnn +hh:mm"; // 34桁
+                        parameter.Size = dateTimeOffsetFormat.Length;
                         break;
                     }
                 default:

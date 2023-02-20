@@ -6,7 +6,7 @@ using System.Reflection;
 using OrmTxcSql.Attributes;
 using OrmTxcSql.Entities;
 
-namespace NpgsqlSample01.Utils
+namespace OrmTxcSql.Tests.Utils
 {
     /// <summary>
     /// デバッグ用のユーティリティクラス。
@@ -52,7 +52,24 @@ namespace NpgsqlSample01.Utils
                 {
                     Debug.Write(delimiter);
                     Debug.Write("\t");
-                    Debug.Write(property.GetValue(entity));
+                    if (property.GetValue(entity) is DateTime dateTime)
+                    {
+                        Debug.Write(dateTime.ToString("yyyy/MM/dd HH:mm:ss.fffffff"));
+                    }
+                    else if (property.GetValue(entity) is TimeSpan timeSpan)
+                    {
+                        Debug.Write(timeSpan.ToString("HH:mm:ss.fffffff"));
+                    }
+#if NET6_0_OR_GREATER
+                    else if (property.GetValue(entity) is TimeOnly timeOnly)
+                    {
+                        Debug.Write(timeOnly.ToString("HH:mm:ss.fffffff"));
+                    }
+#endif
+                    else
+                    {
+                        Debug.Write(property.GetValue(entity));
+                    }
                 }
                 Debug.WriteLine("");
             }

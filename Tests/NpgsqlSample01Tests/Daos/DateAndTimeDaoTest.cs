@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -10,14 +9,14 @@ using Npgsql;
 using NpgsqlSample01.Daos;
 using NpgsqlSample01.Data;
 using NpgsqlSample01.Entities;
-using NpgsqlSample01.Utils;
 using NUnit.Framework;
 using OrmTxcSql.Attributes;
 using OrmTxcSql.Daos;
 using OrmTxcSql.Npgsql.Data;
+using OrmTxcSql.Tests.Utils;
 using OrmTxcSql.Utils;
 
-namespace NpgsqlSample01Tests.Daos
+namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
 {
     internal class DateAndTimeDaoTest
     {

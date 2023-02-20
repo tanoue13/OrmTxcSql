@@ -1,13 +1,13 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Diagnostics;
-using NpgsqlSample01.Daos;
-using NpgsqlSample01.Entities;
+using SqlSample01.Daos;
+using SqlSample01.Entities;
+using System;
 #if NET462
 using NUnit.Framework;
 #endif
 
-namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
+namespace SqlSample01Tests.Daos
 {
     internal class NoPrimaryKeyDaoTest
     {
