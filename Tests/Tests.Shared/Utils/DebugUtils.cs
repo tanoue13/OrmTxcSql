@@ -56,6 +56,16 @@ namespace OrmTxcSql.Tests.Utils
                     {
                         Debug.Write(dateTime.ToString("yyyy/MM/dd HH:mm:ss.fffffff"));
                     }
+                    else if (property.GetValue(entity) is TimeSpan timeSpan)
+                    {
+                        Debug.Write(timeSpan.ToString("HH:mm:ss.fffffff"));
+                    }
+#if NET6_0_OR_GREATER
+                    else if (property.GetValue(entity) is TimeOnly timeOnly)
+                    {
+                        Debug.Write(timeOnly.ToString("HH:mm:ss.fffffff"));
+                    }
+#endif
                     else
                     {
                         Debug.Write(property.GetValue(entity));
