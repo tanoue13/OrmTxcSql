@@ -102,6 +102,31 @@ namespace OrmTxcSql.SqlClient.Data
                     return value;
                 }
             }
+            else if (typeof(TimeOnly?).Equals(valueType))
+            {
+                // TimeOnly。
+                TimeOnly? dValue = value as TimeOnly?;
+                if (dValue.HasValue)
+                {
+                    return ToTimeSpan(dValue.Value);
+                }
+                else
+                {
+                    return DBNull.Value;
+                }
+            }
+            else if (typeof(TimeOnly).Equals(valueType))
+            {
+                // DateOnly型を変換する。
+                if (value is TimeOnly dValue)
+                {
+                    return ToTimeSpan(dValue);
+                }
+                else
+                {
+                    return value;
+                }
+            }
 #endif
             else if (typeof(DateTime?).Equals(valueType))
             {
@@ -140,6 +165,25 @@ namespace OrmTxcSql.SqlClient.Data
         /// </remarks>
         private static DateTime ToDateTime(DateOnly value)
             => value.ToDateTime(s_timeOnlyZero);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// 開発者向けコメント：
+        /// <br/>・<see cref="SqlParameter.SqlDbType"/>が<see cref="SqlDbType.Time"/>の<see cref="SqlParameter"/>において、
+        /// 　　<see cref="SqlParameter.Value"/>に<see cref="TimeOnly"/>型の値を設定すると<see cref="InvalidCastException"/>が投げられる。
+        /// <br/>・原因については、要調査。
+        /// <br/>・暫定回避策として、<see cref="TimeSpan"/>に変換した値を設定する。
+        /// <code>
+        ///  メッセージ: 
+        ///  System.InvalidCastException : Failed to convert parameter value from a TimeOnly to a TimeSpan.
+        ///    ----> System.InvalidCastException : Object must implement IConvertible.
+        /// </code>
+        /// </remarks>
+        private static TimeSpan ToTimeSpan(TimeOnly value)
+            => value.ToTimeSpan();
 #endif
     }
 }
