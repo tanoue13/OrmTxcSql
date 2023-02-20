@@ -58,7 +58,7 @@ namespace OrmTxcSql.Tests.Utils
                     }
                     else if (property.GetValue(entity) is TimeSpan timeSpan)
                     {
-                        Debug.Write(timeSpan.ToString("HH:mm:ss.fffffff"));
+                        Debug.Write(timeSpan.ToString(@"hh\:mm\:ss\.fffffff"));
                     }
 #if NET6_0_OR_GREATER
                     else if (property.GetValue(entity) is TimeOnly timeOnly)
