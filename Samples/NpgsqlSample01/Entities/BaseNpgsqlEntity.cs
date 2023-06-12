@@ -80,11 +80,21 @@ namespace NpgsqlSample01.Entities
                 .Where(src => dataColumnCollection.Contains(src.ColumnName))
                 .Select(src => src.PropertyInfo);
             //
+            //#if DEBUG
+            //// プロパティを設定する。
+            //// 開発者向けコメント：デバッグしやすいように通常のforeach構文を使用する。
+            ////foreach (PropertyInfo property in properties)
+            ////{
+            ////    this.SetProperty(dataRow, property);
+            ////}
+            //#else
             // プロパティを設定する。
+            // 開発者向けコメント：タスク並列ライブラリ（PTL）を使用する。
             Parallel.ForEach(properties, property =>
             {
                 this.SetProperty(dataRow, property);
             });
+            //#endif
         }
         protected override void SetProperty(DataRow dataRow, PropertyInfo propertyInfo)
         {
@@ -128,13 +138,23 @@ namespace NpgsqlSample01.Entities
             {
                 // プロパティの型にあわせて変換する。
                 Type type = propertyInfo.PropertyType;
+                // プロパティ名にあわせて変換する。
+                string name = propertyInfo.Name;
+                //
                 if (new Type[] { typeof(DateOnly), typeof(DateOnly?) }.Contains(type))
                 {
                     return DateOnly.FromDateTime(dateTimeValue);
                 }
+                else if (new string[] { nameof(DateAndTimeEntity.ColumnTimestampWithoutTimeZone), nameof(DateAndTimeEntity.ColumnDate) }.Contains(name))
+                {
+                    // Npgsql： timestamp without time zone は、ローカル、または、 unspecified を表す。
+                    return DateTimeUtils.ToLocalTime(DateTime.SpecifyKind(dateTimeValue, DateTimeKind.Local));
+                }
                 else
                 {
-                    return dateTimeValue;
+                    // Npgsql： timestamp with time zone は、 UTC タイムスタンプを表す。
+                    // そのため、 UTC として取得後、ローカルに変換する。
+                    return DateTimeUtils.ToLocalTime(DateTime.SpecifyKind(dateTimeValue, DateTimeKind.Utc));
                 }
             }
             else if (value is TimeSpan timeSpanValue)
