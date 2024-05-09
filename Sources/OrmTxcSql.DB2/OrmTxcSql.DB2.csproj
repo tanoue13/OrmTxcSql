@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="5.1.0" />
+    <PackageReference Include="NLog" Version="5.3.2" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net48' ">
@@ -25,7 +25,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\ReferenceAssemblies\IBM.Data.DB2.iSeries.dll</HintPath>
     </Reference>
-    <Content Include="../../ReferenceAssemblies/IBM.Data.DB2.iSeries.dll" Pack="true" PackagePath="/lib/net48"  LinkBase="Assets" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../ReferenceAssemblies/IBM.Data.DB2.iSeries.dll" Pack="true" PackagePath="/lib/net48" LinkBase="Assets" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../ReferenceAssemblies/IBM.Data.DB2.iSeries.dll" Pack="true" PackagePath="/lib/net462" LinkBase="Assets" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
