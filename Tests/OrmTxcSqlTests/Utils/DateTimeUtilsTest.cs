@@ -21,6 +21,7 @@ namespace OrmTxcSqlTests.Utils
         {
             // DEBUG出力先からコンソール出力を削除。
             Trace.Listeners.Remove(s_listener);
+            s_listener.Dispose();
         }
 
         private void Dump(DateTime datetime)
