@@ -9,12 +9,14 @@ using Npgsql;
 using NpgsqlSample01.Daos;
 using NpgsqlSample01.Data;
 using NpgsqlSample01.Entities;
-using NUnit.Framework;
 using OrmTxcSql.Attributes;
 using OrmTxcSql.Daos;
 using OrmTxcSql.Npgsql.Data;
 using OrmTxcSql.Tests.Utils;
 using OrmTxcSql.Utils;
+#if NET462
+using NUnit.Framework;
+#endif
 
 namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
 {
@@ -33,6 +35,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
         {
             // DEBUG出力先からコンソール出力を削除。
             Trace.Listeners.Remove(s_listener);
+            s_listener.Dispose();
         }
 
         private DateAndTimeEntity[] _entities;
