@@ -70,7 +70,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
             var dao = new AutoNumberingDaoExt();
             //
             var server = new NpgsqlServer();
-            server.DataSource = new NpgsqlDataSource();
+            server.DataSource = new NpgsqlSample01.Data.NpgsqlDataSource();
             server.Execute(new IDao[] { dao }, tx =>
             {
                 foreach (int index in Enumerable.Repeat(0, 3))
@@ -99,7 +99,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
             var dao = new AutoNumberingDaoExt();
             //
             var server = new NpgsqlServer();
-            server.DataSource = new NpgsqlDataSource();
+            server.DataSource = new NpgsqlSample01.Data.NpgsqlDataSource();
             server.Execute(new IDao[] { dao }, tx =>
             {
                 dao.Insert(entityI0);

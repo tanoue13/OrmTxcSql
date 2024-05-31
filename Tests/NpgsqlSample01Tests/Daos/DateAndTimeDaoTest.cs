@@ -70,7 +70,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
             var dao = new DateAndTimeDaoExt();
             //
             var server = new NpgsqlServer();
-            server.DataSource = new NpgsqlDataSource();
+            server.DataSource = new NpgsqlSample01.Data.NpgsqlDataSource();
             server.Execute(new IDao[] { dao }, tx =>
             {
                 dao.Insert(entityI0);
@@ -119,7 +119,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
             var dao = new DateAndTimeDaoExt();
             //
             var server = new NpgsqlServer();
-            server.DataSource = new NpgsqlDataSource();
+            server.DataSource = new NpgsqlSample01.Data.NpgsqlDataSource();
             server.Execute(new IDao[] { dao }, tx =>
             {
                 dao.Insert(entityI0);
@@ -171,7 +171,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
             var dao = new DateAndTimeDaoExt();
             //
             var server = new NpgsqlServer();
-            server.DataSource = new NpgsqlDataSource();
+            server.DataSource = new NpgsqlSample01.Data.NpgsqlDataSource();
             server.Execute(new IDao[] { dao }, tx =>
             {
                 dao.Insert(entityI0);
@@ -248,7 +248,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
             var dao = new DateAndTimeDaoExt();
             //
             var server = new NpgsqlServer();
-            server.DataSource = new NpgsqlDataSource();
+            server.DataSource = new NpgsqlSample01.Data.NpgsqlDataSource();
             server.Execute(new IDao[] { dao }, tx =>
             {
                 dao.Insert(entityI00);
@@ -279,7 +279,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
             var dao = new DateAndTimeDaoExt();
             //
             var server = new NpgsqlServer();
-            server.DataSource = new NpgsqlDataSource();
+            server.DataSource = new NpgsqlSample01.Data.NpgsqlDataSource();
             server.Execute(new IDao[] { dao }, tx =>
             {
                 dao.Insert(entityI0);
