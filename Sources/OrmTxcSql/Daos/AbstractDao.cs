@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using System.Threading.Tasks;
 using OrmTxcSql.Attributes;
 using OrmTxcSql.Entities;
 using OrmTxcSql.Utils;
@@ -108,46 +109,164 @@ namespace OrmTxcSql.Daos
             LogUtils.LogSql(command);
             //
             // コマンドを実行する。
-            DataTable dt = new DataTable();
+            DataTable dataTable = new DataTable();
             using (var adapter = new TDbDataAdapter())
             {
                 adapter.SelectCommand = command;
-                adapter.Fill(dt);
+                adapter.Fill(dataTable);
             }
             //
             // 末尾をトリムする場合、トリムする。
             if (this.TrimEnd)
             {
-                // 文字列型のDataColumnを対象とする。（トリム）
-                IEnumerable<int> ordinals = dt.Columns.Cast<DataColumn>()
-                    .Where(dataColumn => typeof(string).Equals(dataColumn.DataType))
-                    .Select(x => x.Ordinal);
-                foreach (int ordinal in ordinals)
-                {
-                    // 値がnullでないDataRowのみを対象とする。（トリム）
-                    IEnumerable<DataRow> dataRows = dt.Rows.Cast<DataRow>()
-                        .Where(dataRow => !dataRow.IsNull(ordinal));
-                    foreach (DataRow dataRow in dataRows)
-                    {
-                        // トリムした値を設定する。
-#if NET6_0_OR_GREATER
-                        string? value = dataRow[ordinal] as string;
-                        dataRow[ordinal] = value?.TrimEnd();
-#else
-                        string value = dataRow[ordinal] as string;
-                        dataRow[ordinal] = value.TrimEnd();
-#endif
-                    }
-                }
-                // 開発者向けコメント（2021.08.17田上）
-                // DataRowに対する書き込み操作は、同期する必要があるとのこと。
-                // したがって、非同期処理（Parallel.ForEach）を使用すると例外が投げられる。
+                AbstractDao<TEntity, TDbCommand, TDbDataAdapter>.TrimEndStringTypeColumnValues(dataTable);
             }
             // 内部処理での変更内容をコミットする。
-            dt.AcceptChanges();
+            dataTable.AcceptChanges();
             //
             // 結果を戻す。
-            return dt;
+            return dataTable;
+        }
+        /// <summary>
+        /// SELECT文実行時の共通処理。
+        /// </summary>
+        /// <param name="command">command</param>
+        /// <returns></returns>
+        protected async Task<DataTable> GetDataTableAsync(TDbCommand command)
+        {
+            // ログを出力する。
+            LogUtils.LogSql(command);
+            //
+            // コマンドを実行する。
+            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            {
+                // DataTableを初期化する。（スキーマ情報が設定された空のDataTableを生成）
+#if NET6_0_OR_GREATER
+                DataTable dataTable = await AbstractDao<TEntity, TDbCommand, TDbDataAdapter>.CreateEmptyDataTableWithSchemaAsync(reader);
+#else
+                DataTable dataTable = AbstractDao<TEntity, TDbCommand, TDbDataAdapter>.CreateEmptyDataTableWithSchema(reader);
+#endif
+                //
+                while (await reader.ReadAsync())
+                {
+                    // 新規レコードを生成する。（ここではDataTableに追加しない）
+                    DataRow dataRow = dataTable.NewRow();
+                    // 開発者向けコメント（2024.07.09田上）：
+                    // DataTableへの追加は、全フィールドの値を設定した後で実施すること。
+                    // 不正なデータ（文字化けなど）が含まれるフィールドが存在する場合に
+                    // フィールドの値が途中まで設定された中途半端なレコードを取得することを防ぐため。
+                    //
+                    // フィールドの値を設定する。
+                    foreach (DataColumn dataColumn in dataTable.Columns)
+                    {
+                        string columnName = dataColumn.ColumnName;
+                        int ordinal = reader.GetOrdinal(columnName);
+                        dataRow[columnName] = reader.GetValue(ordinal);
+                    }
+                    //
+                    // 新規レコードをDataTableに追加する。
+                    dataTable.Rows.Add(dataRow);
+                }
+                //
+                // 末尾をトリムする場合、トリムする。
+                if (this.TrimEnd)
+                {
+                    AbstractDao<TEntity, TDbCommand, TDbDataAdapter>.TrimEndStringTypeColumnValues(dataTable);
+                }
+                // 内部処理での変更内容をコミットする。
+                dataTable.AcceptChanges();
+                //
+                // 結果を戻す。
+                return dataTable;
+            }
+        }
+#if NET6_0_OR_GREATER
+        /// <summary>
+        /// スキーマ情報が設定された空のDataTableを生成する。
+        /// </summary>
+        /// <param name="reader"><see cref="DbDataReader"/></param>
+        /// <returns></returns>
+        private static async Task<DataTable> CreateEmptyDataTableWithSchemaAsync(DbDataReader reader)
+        {
+            // スキーマ情報を取得する。
+            IReadOnlyCollection<DbColumn> dbColumns = await reader.GetColumnSchemaAsync();
+            //
+            // 空のDataTableを生成する。
+            DataTable dataTable = new();
+            //
+            // カラムを追加する。
+            foreach (DbColumn dbColumn in dbColumns)
+            {
+                dataTable.Columns.Add(
+                    new DataColumn()
+                    {
+                        ColumnName = dbColumn.ColumnName,
+                        DataType = dbColumn.DataType,
+                    }
+                );
+            }
+            //
+            // 結果を戻す。
+            return dataTable;
+        }
+#else
+        /// <summary>
+        /// スキーマ情報が設定された空のDataTableを生成する。
+        /// </summary>
+        /// <param name="reader"><see cref="DbDataReader"/></param>
+        /// <returns></returns>
+        private static DataTable CreateEmptyDataTableWithSchema(DbDataReader reader)
+        {
+            // スキーマ情報を取得する。
+            DataTable schemaTable = reader.GetSchemaTable();
+            //
+            // 空のDataTableを生成する。
+            var dataTable = new DataTable();
+            //
+            // カラムを追加する。
+            foreach (DataRow dataRow in schemaTable.Rows)
+            {
+                var dataColumn = new DataColumn();
+                dataTable.Columns.Add(dataColumn);
+                //
+                dataColumn.ColumnName = dataRow["ColumnName"].ToString();
+                dataColumn.DataType = Type.GetType(dataRow["DataType"].ToString());
+            }
+            //
+            // 結果を戻す。
+            return dataTable;
+        }
+#endif
+        /// <summary>
+        /// 文字列型のDataColumnの値の末尾をトリムする。
+        /// </summary>
+        /// <param name="dataTable"></param>
+        private static void TrimEndStringTypeColumnValues(DataTable dataTable)
+        {
+            // 文字列型のDataColumnを対象とする。（トリム）
+            IEnumerable<int> ordinals = dataTable.Columns.Cast<DataColumn>()
+                .Where(dataColumn => typeof(string).Equals(dataColumn.DataType))
+                .Select(x => x.Ordinal);
+            foreach (int ordinal in ordinals)
+            {
+                // 値がnullでないDataRowのみを対象とする。（トリム）
+                IEnumerable<DataRow> dataRows = dataTable.Rows.Cast<DataRow>()
+                    .Where(dataRow => !dataRow.IsNull(ordinal));
+                foreach (DataRow dataRow in dataRows)
+                {
+                    // トリムした値を設定する。
+#if NET6_0_OR_GREATER
+                    string? value = dataRow[ordinal] as string;
+                    dataRow[ordinal] = value?.TrimEnd();
+#else
+                    string value = dataRow[ordinal] as string;
+                    dataRow[ordinal] = value.TrimEnd();
+#endif
+                }
+            }
+            // 開発者向けコメント（2021.08.17田上）
+            // DataRowに対する書き込み操作は、同期する必要があるとのこと。
+            // したがって、非同期処理（Parallel.ForEach）を使用すると例外が投げられる。
         }
 
         /// <summary>
