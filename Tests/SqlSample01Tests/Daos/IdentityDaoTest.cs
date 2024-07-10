@@ -84,7 +84,7 @@ namespace SqlSample01Tests.Daos
                 // ロールバックする。
                 tx.Rollback();
                 //
-                DebugUtils.DumpEntity<IdentityEntity>(result);
+                DebugUtils.Dump<IdentityEntity>(result);
             });
         }
 
@@ -104,7 +104,7 @@ namespace SqlSample01Tests.Daos
                 dao.Insert(entityI1);
                 //
                 var result00 = dao.SelectAll();
-                DebugUtils.DumpEntity<IdentityEntity>(result00);
+                DebugUtils.Dump<IdentityEntity>(result00);
                 //
                 var entityU0 = result00.First();
                 entityU0.Description = entityU0.Description?.ToUpperInvariant();
@@ -112,7 +112,7 @@ namespace SqlSample01Tests.Daos
                 dao.UpdateByPk(entityU0);
                 //
                 var result01 = dao.SelectAll();
-                DebugUtils.DumpEntity<IdentityEntity>(result01);
+                DebugUtils.Dump<IdentityEntity>(result01);
                 //
                 //
                 // ロールバックする。

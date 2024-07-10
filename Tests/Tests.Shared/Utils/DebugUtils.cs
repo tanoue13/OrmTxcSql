@@ -14,7 +14,7 @@ namespace OrmTxcSql.Tests.Utils
     /// </summary>
     public class DebugUtils
     {
-        public static void DumpEntity<TEntity>(IEnumerable<TEntity> entities, int maxNumberOfLines = 10, string delimiter = ",\t")
+        public static void Dump<TEntity>(IEnumerable<TEntity> entities, int maxNumberOfLines = 10, string delimiter = ",\t")
             where TEntity : AbstractEntity
         {
             // カラム属性を取得する。
@@ -77,8 +77,8 @@ namespace OrmTxcSql.Tests.Utils
                 Debug.WriteLine(builder.ToString());
             }
         }
-        public static void DumpEntity<TEntity>(TEntity entity, int maxNumberOfLines = 10, string delimiter = ",\t")
+        public static void Dump<TEntity>(TEntity entity, int maxNumberOfLines = 10, string delimiter = ",\t")
             where TEntity : AbstractEntity
-            => DebugUtils.DumpEntity<TEntity>(new TEntity[] { entity }, maxNumberOfLines, delimiter);
+            => DebugUtils.Dump<TEntity>(new TEntity[] { entity }, maxNumberOfLines, delimiter);
     }
 }
