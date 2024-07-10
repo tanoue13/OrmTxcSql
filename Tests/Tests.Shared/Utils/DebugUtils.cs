@@ -77,5 +77,8 @@ namespace OrmTxcSql.Tests.Utils
                 Debug.WriteLine(builder.ToString());
             }
         }
+        public static void DumpEntity<TEntity>(TEntity entity, int maxNumberOfLines = 10, string delimiter = ",\t")
+            where TEntity : AbstractEntity
+            => DebugUtils.DumpEntity<TEntity>(new TEntity[] { entity }, maxNumberOfLines, delimiter);
     }
 }
