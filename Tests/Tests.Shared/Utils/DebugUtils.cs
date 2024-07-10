@@ -80,5 +80,30 @@ namespace OrmTxcSql.Tests.Utils
         public static void Dump<TEntity>(TEntity entity, int maxNumberOfLines = 10, string delimiter = ",\t")
             where TEntity : AbstractEntity
             => DebugUtils.Dump<TEntity>(new TEntity[] { entity }, maxNumberOfLines, delimiter);
+
+        /// <summary>
+        /// <paramref name="action"/>を実行し、その処理時間を計測します。
+        /// </summary>
+        /// <param name="name">ログに出力する名前</param>
+        /// <param name="action">処理時間を計測する処理</param>
+        /// <returns></returns>
+        public static TimeSpan RunWithTimeMeasurement(string name, Action action)
+        {
+            // 開始時間を取得する。（ログにも出力）
+            DateTime startTime = DateTime.Now;
+            Debug.WriteLine($"BEGIN: {0}; {1}", startTime.ToString(), name);
+            //
+            // 処理を実行する。
+            action();
+            //
+            // 終了時間を取得し、経過時間を算出する。（ログにも出力）
+            DateTime endTime = DateTime.Now;
+            TimeSpan timeSpan = endTime.Subtract(startTime);
+            Debug.WriteLine($"END:   {0}; {1}; timespan : {2}", endTime.ToString(), name, timeSpan.TotalSeconds);
+            //
+            // 結果を戻す。
+            return timeSpan;
+        }
+
     }
 }
