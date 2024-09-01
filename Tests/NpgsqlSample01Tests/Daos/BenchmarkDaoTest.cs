@@ -172,9 +172,9 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
                 foreach (int _ in Enumerable.Range(0, 3))
                 {
                     DebugUtils.RunWithTimeMeasurement("concurrent", () =>
-                    {
-                        IEnumerable<BenchmarkEntity> result = dao.SelectAll();
-                    });
+                        {
+                    IEnumerable<BenchmarkEntity> result = dao.SelectAll();
+                });
                     DebugUtils.RunWithTimeMeasurement("async", async () =>
                     {
                         IEnumerable<BenchmarkEntity> result = await dao.SelectAllAsync();
@@ -256,8 +256,6 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
                 command.CommandText = builder.ToString();
                 // データソースにコマンドを準備する。
                 command.Prepare();
-                //
-                this.GetDataTable(command);
             }
         }
     }
