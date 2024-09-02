@@ -99,7 +99,7 @@ namespace OrmTxcSql.Tests.Utils
             // 終了時間を取得し、経過時間を算出する。（ログにも出力）
             DateTime endTime = DateTime.Now;
             TimeSpan timeSpan = endTime.Subtract(startTime);
-            Debug.WriteLine(String.Format("END:   {0}; {1}; timespan : {2}", endTime.ToString(), name, timeSpan.TotalSeconds));
+            Debug.WriteLine(String.Format("END:   {0}; {1}; timespan : {2:F12}", endTime.ToString(), name, timeSpan.TotalSeconds));
             //
             // 結果を戻す。
             return timeSpan;
