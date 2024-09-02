@@ -86,7 +86,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
                 // ロールバックする。
                 tx.Rollback();
                 //
-                DebugUtils.DumpEntity<AutoNumberingEntity>(result);
+                DebugUtils.Dump<AutoNumberingEntity>(result);
             });
         }
 
@@ -106,7 +106,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
                 dao.Insert(entityI1);
                 //
                 var result00 = dao.SelectAll();
-                DebugUtils.DumpEntity<AutoNumberingEntity>(result00);
+                DebugUtils.Dump<AutoNumberingEntity>(result00);
                 //
                 var entityU0 = result00.First();
                 entityU0.Description = entityU0.Description?.ToUpperInvariant();
@@ -114,7 +114,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
                 dao.UpdateByPk(entityU0);
                 //
                 var result01 = dao.SelectAll();
-                DebugUtils.DumpEntity<AutoNumberingEntity>(result01);
+                DebugUtils.Dump<AutoNumberingEntity>(result01);
                 //
                 //
                 // ロールバックする。

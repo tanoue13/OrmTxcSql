@@ -79,7 +79,7 @@ namespace SqlSample01Tests.Daos
                 // ロールバックする。
                 tx.Rollback();
                 //
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result);
+                DebugUtils.Dump<DateAndTimeEntity>(result);
             });
         }
 
@@ -139,7 +139,7 @@ namespace SqlSample01Tests.Daos
                 // ロールバックする。
                 tx.Rollback();
                 //
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result);
+                DebugUtils.Dump<DateAndTimeEntity>(result);
             });
         }
         /// <summary>
@@ -198,7 +198,7 @@ namespace SqlSample01Tests.Daos
                 // ロールバックする。
                 tx.Rollback();
                 //
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result);
+                DebugUtils.Dump<DateAndTimeEntity>(result);
             });
         }
         /// <summary>
@@ -257,7 +257,7 @@ namespace SqlSample01Tests.Daos
                 // ロールバックする。
                 tx.Rollback();
                 //
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result);
+                DebugUtils.Dump<DateAndTimeEntity>(result);
             });
         }
         /// <summary>
@@ -316,7 +316,7 @@ namespace SqlSample01Tests.Daos
                 // ロールバックする。
                 tx.Rollback();
                 //
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result);
+                DebugUtils.Dump<DateAndTimeEntity>(result);
             });
         }
         /// <summary>
@@ -411,7 +411,7 @@ namespace SqlSample01Tests.Daos
                 // ロールバックする。
                 tx.Rollback();
                 //
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result, 20);
+                DebugUtils.Dump<DateAndTimeEntity>(result, 20);
             });
         }
 
@@ -472,7 +472,7 @@ namespace SqlSample01Tests.Daos
                 // ロールバックする。
                 tx.Rollback();
                 //
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result);
+                DebugUtils.Dump<DateAndTimeEntity>(result);
             });
         }
         /// <summary>
@@ -531,7 +531,7 @@ namespace SqlSample01Tests.Daos
                 // ロールバックする。
                 tx.Rollback();
                 //
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result);
+                DebugUtils.Dump<DateAndTimeEntity>(result);
             });
         }
 #endif
@@ -552,7 +552,7 @@ namespace SqlSample01Tests.Daos
                 dao.Insert(entityI1);
                 //
                 var result00 = dao.SelectAll();
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result00);
+                DebugUtils.Dump<DateAndTimeEntity>(result00);
                 //
                 var entityU0 = result00.First();
                 entityU0.Description = entityU0.Description?.ToUpperInvariant();
@@ -560,7 +560,7 @@ namespace SqlSample01Tests.Daos
                 dao.UpdateByPk(entityU0);
                 //
                 var result01 = dao.SelectAll();
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result01);
+                DebugUtils.Dump<DateAndTimeEntity>(result01);
                 //
                 //
                 // ロールバックする。

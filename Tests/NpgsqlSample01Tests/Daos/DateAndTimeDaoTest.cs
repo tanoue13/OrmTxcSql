@@ -80,7 +80,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
                 // ロールバックする。
                 tx.Rollback();
                 //
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result);
+                DebugUtils.Dump<DateAndTimeEntity>(result);
             });
         }
 
@@ -132,7 +132,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
                 // ロールバックする。
                 tx.Rollback();
                 //
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result);
+                DebugUtils.Dump<DateAndTimeEntity>(result);
             });
         }
 
@@ -184,7 +184,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
                 // ロールバックする。
                 tx.Rollback();
                 //
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result);
+                DebugUtils.Dump<DateAndTimeEntity>(result);
             });
         }
 
@@ -266,7 +266,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
                 // ロールバックする。
                 tx.Rollback();
                 //
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result);
+                DebugUtils.Dump<DateAndTimeEntity>(result);
             });
         }
 
@@ -286,7 +286,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
                 dao.Insert(entityI1);
                 //
                 var result00 = dao.SelectAll();
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result00);
+                DebugUtils.Dump<DateAndTimeEntity>(result00);
                 //
                 var entityU0 = result00.First();
                 entityU0.Description = entityU0.Description?.ToUpperInvariant();
@@ -294,7 +294,7 @@ namespace OrmTxcSql.Tests.NpgsqlSample01Tests.Daos
                 dao.UpdateByPk(entityU0);
                 //
                 var result01 = dao.SelectAll();
-                DebugUtils.DumpEntity<DateAndTimeEntity>(result01);
+                DebugUtils.Dump<DateAndTimeEntity>(result01);
                 //
                 //
                 // ロールバックする。
