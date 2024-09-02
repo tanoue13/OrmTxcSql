@@ -222,7 +222,7 @@ namespace OrmTxcSql.Npgsql.Data
         /// </summary>
         /// <param name="daos">トランザクションに参加する<see cref="IDao"/>のコレクション</param>
         /// <param name="action">トランザクション管理下で実行される処理</param>
-        public async void ExecuteAsync(IEnumerable<IDao> daos, Action<IDbTransaction> action)
+        public async ValueTask ExecuteAsync(IEnumerable<IDao> daos, Action<IDbTransaction> action)
         {
             using (var connection = new NpgsqlConnection())
             {

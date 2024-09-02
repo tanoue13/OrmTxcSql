@@ -41,3 +41,215 @@ create table if not exists date_and_time_table (
 );
 
 
+create table if not exists benchmark_table (
+  version_no               numeric(18) not null
+  , active_flag character  varying(1) not null
+  , toroku_nitiji          timestamp with time zone not null
+  , toroku_username        character varying(6) not null
+  , kosin_nitiji           timestamp with time zone not null
+  , kosin_username         character varying(6) not null
+  , key numeric(18) not null
+  , column_string_01 character varying(256)
+  , column_string_02 character varying(256)
+  , column_string_03 character varying(256)
+  , column_string_04 character varying(256)
+  , column_string_05 character varying(256)
+  , column_string_06 character varying(256)
+  , column_string_07 character varying(256)
+  , column_string_08 character varying(256)
+  , column_string_09 character varying(256)
+  , column_string_10 character varying(256)
+  , column_string_11 character varying(256)
+  , column_string_12 character varying(256)
+  , column_string_13 character varying(256)
+  , column_string_14 character varying(256)
+  , column_string_15 character varying(256)
+  , column_string_16 character varying(256)
+  , column_string_17 character varying(256)
+  , column_string_18 character varying(256)
+  , column_string_19 character varying(256)
+  , column_string_20 character varying(256)
+  , column_string_21 character varying(256)
+  , column_string_22 character varying(256)
+  , column_string_23 character varying(256)
+  , column_string_24 character varying(256)
+  , column_string_25 character varying(256)
+  , column_string_26 character varying(256)
+  , column_string_27 character varying(256)
+  , column_string_28 character varying(256)
+  , column_string_29 character varying(256)
+  , column_string_30 character varying(256)
+  , column_string_31 character varying(256)
+  , column_string_32 character varying(256)
+  , column_string_33 character varying(256)
+  , column_string_34 character varying(256)
+  , column_string_35 character varying(256)
+  , column_string_36 character varying(256)
+  , column_string_37 character varying(256)
+  , column_string_38 character varying(256)
+  , column_string_39 character varying(256)
+  , column_string_40 character varying(256)
+  , column_string_41 character varying(256)
+  , column_string_42 character varying(256)
+  , column_string_43 character varying(256)
+  , column_string_44 character varying(256)
+  , column_string_45 character varying(256)
+  , column_string_46 character varying(256)
+  , column_string_47 character varying(256)
+  , column_string_48 character varying(256)
+  , column_string_49 character varying(256)
+  , column_string_50 character varying(256)
+  , column_integer_01 numeric(18)
+  , column_integer_02 numeric(18)
+  , column_integer_03 numeric(18)
+  , column_integer_04 numeric(18)
+  , column_integer_05 numeric(18)
+  , column_integer_06 numeric(18)
+  , column_integer_07 numeric(18)
+  , column_integer_08 numeric(18)
+  , column_integer_09 numeric(18)
+  , column_integer_10 numeric(18)
+  , column_integer_11 numeric(18)
+  , column_integer_12 numeric(18)
+  , column_integer_13 numeric(18)
+  , column_integer_14 numeric(18)
+  , column_integer_15 numeric(18)
+  , column_integer_16 numeric(18)
+  , column_integer_17 numeric(18)
+  , column_integer_18 numeric(18)
+  , column_integer_19 numeric(18)
+  , column_integer_20 numeric(18)
+  , column_integer_21 numeric(18)
+  , column_integer_22 numeric(18)
+  , column_integer_23 numeric(18)
+  , column_integer_24 numeric(18)
+  , column_integer_25 numeric(18)
+  , column_integer_26 numeric(18)
+  , column_integer_27 numeric(18)
+  , column_integer_28 numeric(18)
+  , column_integer_29 numeric(18)
+  , column_integer_30 numeric(18)
+  , column_integer_31 numeric(18)
+  , column_integer_32 numeric(18)
+  , column_integer_33 numeric(18)
+  , column_integer_34 numeric(18)
+  , column_integer_35 numeric(18)
+  , column_integer_36 numeric(18)
+  , column_integer_37 numeric(18)
+  , column_integer_38 numeric(18)
+  , column_integer_39 numeric(18)
+  , column_integer_40 numeric(18)
+  , column_integer_41 numeric(18)
+  , column_integer_42 numeric(18)
+  , column_integer_43 numeric(18)
+  , column_integer_44 numeric(18)
+  , column_integer_45 numeric(18)
+  , column_integer_46 numeric(18)
+  , column_integer_47 numeric(18)
+  , column_integer_48 numeric(18)
+  , column_integer_49 numeric(18)
+  , column_integer_50 numeric(18)
+  , column_numeric_01 numeric(18,6)
+  , column_numeric_02 numeric(18,6)
+  , column_numeric_03 numeric(18,6)
+  , column_numeric_04 numeric(18,6)
+  , column_numeric_05 numeric(18,6)
+  , column_numeric_06 numeric(18,6)
+  , column_numeric_07 numeric(18,6)
+  , column_numeric_08 numeric(18,6)
+  , column_numeric_09 numeric(18,6)
+  , column_numeric_10 numeric(18,6)
+  , column_numeric_11 numeric(18,6)
+  , column_numeric_12 numeric(18,6)
+  , column_numeric_13 numeric(18,6)
+  , column_numeric_14 numeric(18,6)
+  , column_numeric_15 numeric(18,6)
+  , column_numeric_16 numeric(18,6)
+  , column_numeric_17 numeric(18,6)
+  , column_numeric_18 numeric(18,6)
+  , column_numeric_19 numeric(18,6)
+  , column_numeric_20 numeric(18,6)
+  , column_numeric_21 numeric(18,6)
+  , column_numeric_22 numeric(18,6)
+  , column_numeric_23 numeric(18,6)
+  , column_numeric_24 numeric(18,6)
+  , column_numeric_25 numeric(18,6)
+  , column_numeric_26 numeric(18,6)
+  , column_numeric_27 numeric(18,6)
+  , column_numeric_28 numeric(18,6)
+  , column_numeric_29 numeric(18,6)
+  , column_numeric_30 numeric(18,6)
+  , column_numeric_31 numeric(18,6)
+  , column_numeric_32 numeric(18,6)
+  , column_numeric_33 numeric(18,6)
+  , column_numeric_34 numeric(18,6)
+  , column_numeric_35 numeric(18,6)
+  , column_numeric_36 numeric(18,6)
+  , column_numeric_37 numeric(18,6)
+  , column_numeric_38 numeric(18,6)
+  , column_numeric_39 numeric(18,6)
+  , column_numeric_40 numeric(18,6)
+  , column_numeric_41 numeric(18,6)
+  , column_numeric_42 numeric(18,6)
+  , column_numeric_43 numeric(18,6)
+  , column_numeric_44 numeric(18,6)
+  , column_numeric_45 numeric(18,6)
+  , column_numeric_46 numeric(18,6)
+  , column_numeric_47 numeric(18,6)
+  , column_numeric_48 numeric(18,6)
+  , column_numeric_49 numeric(18,6)
+  , column_numeric_50 numeric(18,6)
+  , column_date_01    date
+  , column_date_02    date
+  , column_date_03    date
+  , column_date_04    date
+  , column_date_05    date
+  , column_date_06    date
+  , column_date_07    date
+  , column_date_08    date
+  , column_date_09    date
+  , column_date_10    date
+  , column_date_11    date
+  , column_date_12    date
+  , column_date_13    date
+  , column_date_14    date
+  , column_date_15    date
+  , column_date_16    date
+  , column_date_17    date
+  , column_date_18    date
+  , column_date_19    date
+  , column_date_20    date
+  , column_date_21    date
+  , column_date_22    date
+  , column_date_23    date
+  , column_date_24    date
+  , column_date_25    date
+  , column_date_26    date
+  , column_date_27    date
+  , column_date_28    date
+  , column_date_29    date
+  , column_date_30    date
+  , column_date_31    date
+  , column_date_32    date
+  , column_date_33    date
+  , column_date_34    date
+  , column_date_35    date
+  , column_date_36    date
+  , column_date_37    date
+  , column_date_38    date
+  , column_date_39    date
+  , column_date_40    date
+  , column_date_41    date
+  , column_date_42    date
+  , column_date_43    date
+  , column_date_44    date
+  , column_date_45    date
+  , column_date_46    date
+  , column_date_47    date
+  , column_date_48    date
+  , column_date_49    date
+  , column_date_50    date
+  , description character varying(50)
+  , primary key (key)
+);
+
