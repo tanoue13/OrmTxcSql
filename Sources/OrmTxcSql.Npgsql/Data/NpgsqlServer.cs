@@ -235,9 +235,9 @@ namespace OrmTxcSql.Npgsql.Data
                 //
                 LogUtils.GetDataLogger().Debug("Transaction is starting.");
 #if NET6_0_OR_GREATER
-                using (var tx = await connection.BeginTransactionAsync())
+                using (NpgsqlTransaction tx = await connection.BeginTransactionAsync())
 #else
-                using (var tx = connection.BeginTransaction())
+                using (NpgsqlTransaction tx = connection.BeginTransaction())
 #endif
                 {
                     //LogUtils.GetDataLogger().Debug("Transaction has started.");
