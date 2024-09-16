@@ -322,13 +322,11 @@ namespace OrmTxcSql.Npgsql.Data
             {
                 // トランザクションは、既にコミットまたはロールバックされています。
                 // または、接続が切断されています。
-                LogUtils.GetDataLogger().Error(ex);
                 LogUtils.GetErrorLogger().Error(ex);
             }
             catch (Exception ex)
             {
                 // トランザクションのコミット中にエラーが発生しました。
-                LogUtils.GetDataLogger().Error(ex);
                 LogUtils.GetErrorLogger().Error(ex);
             }
         }
@@ -364,13 +362,11 @@ namespace OrmTxcSql.Npgsql.Data
             {
                 // トランザクションは、既にコミットまたはロールバックされています。
                 // または、接続が切断されています。
-                LogUtils.GetDataLogger().Error(ex);
                 LogUtils.GetErrorLogger().Error(ex);
             }
             catch (Exception ex)
             {
                 // トランザクションのロールバック中にエラーが発生しました。
-                LogUtils.GetDataLogger().Error(ex);
                 LogUtils.GetErrorLogger().Error(ex);
             }
         }
