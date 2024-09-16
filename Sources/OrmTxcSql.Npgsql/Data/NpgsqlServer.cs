@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Npgsql;
 using NpgsqlTypes;
 using OrmTxcSql.Daos;
@@ -213,6 +214,204 @@ namespace OrmTxcSql.Npgsql.Data
             // 接続を閉じる。
             //LogUtils.GetDataLogger().Debug($"Connection is being closed. [ConnectionState: {Enum.GetName(typeof(ConnectionState), connection.State)}]");
             connection.Close();
+            //LogUtils.GetDataLogger().Debug($"Connection has been closed.");
+        }
+
+        /// <summary>
+        /// トランザクション管理下において、<paramref name="action"/>を実行する。（非同期）
+        /// </summary>
+        /// <param name="daos">トランザクションに参加する<see cref="IDao"/>のコレクション</param>
+        /// <param name="action">トランザクション管理下で実行される処理</param>
+        public override async ValueTask ExecuteAsync(IEnumerable<IDao> daos, Action<IDbTransaction> action)
+        {
+            using (var connection = new NpgsqlConnection())
+            {
+                connection.ConnectionString = this.DataSource.GetConnectionString();
+                connection.UserCertificateValidationCallback = this.DataSource.GetRemoteCertificateValidationCallback();
+                //
+                LogUtils.GetDataLogger().Debug("Connection is being opened.");
+                await connection.OpenAsync();
+                LogUtils.GetDataLogger().Debug("Connection has been opened.");
+                //
+                LogUtils.GetDataLogger().Debug("Transaction is starting.");
+#if NET6_0_OR_GREATER
+                using (NpgsqlTransaction tx = await connection.BeginTransactionAsync())
+#else
+                using (NpgsqlTransaction tx = connection.BeginTransaction())
+#endif
+                {
+                    //LogUtils.GetDataLogger().Debug("Transaction has started.");
+                    //
+                    // 前処理：コマンドに接続とトランザクションを設定する。
+                    foreach (IDao dao in daos)
+                    {
+                        IEnumerable<IDbCommand> commands = dao.Commands ?? Enumerable.Empty<IDbCommand>();
+                        foreach (IDbCommand command in commands)
+                        {
+                            // 接続を設定する。
+                            command.Connection = connection;
+                            // トランザクションを設定する。
+                            command.Transaction = tx;
+                        }
+                    }
+                    //
+                    // メイン処理：実装クラスのexecute()を実行する。
+                    try
+                    {
+                        // メイン処理を実行する。
+                        action(tx);
+                        //
+                        // トランザクションをコミットする。
+                        await this.CommitAsync(tx);
+                    }
+                    catch (DbException ex)
+                    {
+                        LogUtils.GetDataLogger().Error(ex);
+                        LogUtils.GetErrorLogger().Error(ex);
+                        // トランザクションをロールバックする。
+                        await this.RollbackAsync(tx);
+                        //
+                        // 例外を投げる。（丸投げ）
+                        throw;
+                    }
+                    catch (Exception ex)
+                    {
+                        LogUtils.GetDataLogger().Error(ex);
+                        LogUtils.GetErrorLogger().Error(ex);
+                        // トランザクションをロールバックする。
+                        await this.RollbackAsync(tx);
+                        //
+                        // 例外を投げる。（丸投げ）
+                        throw;
+                    }
+                }
+                //
+                // 接続を閉じる。
+                await this.CloseConnectionAsync(connection);
+            }
+        }
+        /// <summary>
+        /// トランザクションをコミットする。（非同期）
+        /// </summary>
+        /// <param name="tx"></param>
+        private async ValueTask CommitAsync(NpgsqlTransaction tx)
+        {
+            try
+            {
+                // トランザクションをコミットする。
+#if NET6_0_OR_GREATER
+                // The NpgsqlTransaction.IsCompleted property has been removed.
+                // cf. https://www.npgsql.org/doc/release-notes/5.0.html
+                //LogUtils.GetDataLogger().Debug("Transaction is being committed.");
+                await tx.CommitAsync();
+                //LogUtils.GetDataLogger().Debug("Transaction has been committed.");
+#else
+                if (!tx.IsCompleted)
+                {
+                    //LogUtils.GetDataLogger().Debug("Transaction is being committed.");
+                    await tx.CommitAsync();
+                    //LogUtils.GetDataLogger().Debug("Transaction has been committed.");
+                }
+                else
+                {
+                    //LogUtils.GetDataLogger().Debug("Commit statement is skipped because the transaction has been completed.");
+                }
+#endif
+            }
+            catch (InvalidOperationException ex)
+            {
+                // トランザクションは、既にコミットまたはロールバックされています。
+                // または、接続が切断されています。
+                LogUtils.GetErrorLogger().Error(ex);
+            }
+            catch (Exception ex)
+            {
+                // トランザクションのコミット中にエラーが発生しました。
+                LogUtils.GetErrorLogger().Error(ex);
+            }
+        }
+        /// <summary>
+        /// トランザクションをロールバックする。（非同期）
+        /// </summary>
+        /// <param name="tx"></param>
+        private async ValueTask RollbackAsync(NpgsqlTransaction tx)
+        {
+            try
+            {
+                // トランザクションをロールバックする。
+#if NET6_0_OR_GREATER
+                // The NpgsqlTransaction.IsCompleted property has been removed.
+                // cf. https://www.npgsql.org/doc/release-notes/5.0.html
+                //LogUtils.GetDataLogger().Debug("Transaction is being rollbacked.");
+                await tx.RollbackAsync();
+                //LogUtils.GetDataLogger().Debug("Transaction has been rollbacked.");
+#else
+                if (!tx.IsCompleted)
+                {
+                    //LogUtils.GetDataLogger().Debug("Transaction is being rollbacked.");
+                    await tx.RollbackAsync();
+                    //LogUtils.GetDataLogger().Debug("Transaction has been rollbacked.");
+                }
+                else
+                {
+                    //LogUtils.GetDataLogger().Debug("Rollback statement is skipped because the transaction has been completed.");
+                }
+#endif
+            }
+            catch (InvalidOperationException ex)
+            {
+                // トランザクションは、既にコミットまたはロールバックされています。
+                // または、接続が切断されています。
+                LogUtils.GetErrorLogger().Error(ex);
+            }
+            catch (Exception ex)
+            {
+                // トランザクションのロールバック中にエラーが発生しました。
+                LogUtils.GetErrorLogger().Error(ex);
+            }
+        }
+
+        /// <summary>
+        /// ［拡張］接続のオープン、クローズのみ管理する。（非同期）
+        /// </summary>
+        public async ValueTask ConnectAsync(Action<NpgsqlConnection> action)
+        {
+            using (var connection = new NpgsqlConnection())
+            {
+                connection.ConnectionString = this.DataSource.GetConnectionString();
+                connection.UserCertificateValidationCallback = this.DataSource.GetRemoteCertificateValidationCallback();
+                await connection.OpenAsync();
+                //
+                // メイン処理
+                try
+                {
+                    // メイン処理を実行する。
+                    action(connection);
+                    //
+                }
+                catch (NpgsqlException)
+                {
+                    // 例外を投げる。（丸投げ）
+                    throw;
+                }
+                catch (Exception)
+                {
+                    // 例外を投げる。（丸投げ）
+                    throw;
+                }
+                // 接続を閉じる。
+                await this.CloseConnectionAsync(connection);
+            }
+        }
+        /// <summary>
+        /// 接続を閉じる。（非同期）
+        /// </summary>
+        /// <param name="connection"></param>
+        private async ValueTask CloseConnectionAsync(NpgsqlConnection connection)
+        {
+            // 接続を閉じる。
+            //LogUtils.GetDataLogger().Debug($"Connection is being closed. [ConnectionState: {Enum.GetName(typeof(ConnectionState), connection.State)}]");
+            await connection.CloseAsync();
             //LogUtils.GetDataLogger().Debug($"Connection has been closed.");
         }
 

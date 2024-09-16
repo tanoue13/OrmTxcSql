@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using OrmTxcSql.Daos;
 using OrmTxcSql.Utils;
 
@@ -20,6 +21,31 @@ namespace OrmTxcSql.Data
         /// データソースを取得または設定します。
         /// </summary>
         public virtual DataSource DataSource { protected get; set; } = new ConnectionStringDataSource();
+
+        /// <summary>
+        /// <see cref="ExecuteAsync(IEnumerable{IDao}, Action{IDbTransaction})"/>.
+        /// </summary>
+        /// <param name="dao"></param>
+        /// <param name="action"></param>
+        public void ExecuteAsync(IDao dao, Action action) => this.Execute(new IDao[] { dao }, action);
+        /// <summary>
+        /// <see cref="ExecuteAsync(IEnumerable{IDao}, Action{IDbTransaction})"/>
+        /// </summary>
+        /// <param name="daos"></param>
+        /// <param name="action"></param>
+        public void ExecuteAsync(IEnumerable<IDao> daos, Action action) => this.Execute(daos, tx => { action(); });
+        /// <summary>
+        /// <see cref="ExecuteAsync(IEnumerable{IDao}, Action{IDbTransaction})"/>
+        /// </summary>
+        /// <param name="dao"></param>
+        /// <param name="action"></param>
+        public void ExecuteAsync(IDao dao, Action<IDbTransaction> action) => this.Execute(new IDao[] { dao }, action);
+        /// <summary>
+        /// トランザクション管理下において、<paramref name="action"/>を実行する。（非同期）
+        /// </summary>
+        /// <param name="daos">トランザクションに参加する<see cref="IDao"/>のコレクション</param>
+        /// <param name="action">トランザクション管理下で実行される処理</param>
+        public abstract ValueTask ExecuteAsync(IEnumerable<IDao> daos, Action<IDbTransaction> action);
 
         /// <summary>
         /// <see cref="Execute(IEnumerable{IDao}, Action{IDbTransaction})"/>.
@@ -326,5 +352,4 @@ namespace OrmTxcSql.Data
         #endregion
 
     }
-
 }
