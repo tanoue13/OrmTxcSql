@@ -14,7 +14,7 @@ using OrmTxcSql.Utils;
 using SqlSample01.Daos;
 using SqlSample01.Data;
 using SqlSample01.Entities;
-#if NET462
+#if NET462 || NET48
 using NUnit.Framework;
 #endif
 

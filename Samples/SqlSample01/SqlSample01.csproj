@@ -1,11 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net462</TargetFrameworks>
+    <TargetFrameworks>net462;net48;net6.0;net8.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <UseWPF>false</UseWPF>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+  </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <Nullable>enable</Nullable>
@@ -13,6 +20,10 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net48' ">
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
     <Nullable>disable</Nullable>
