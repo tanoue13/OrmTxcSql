@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net48;net462</TargetFrameworks>
+    <TargetFrameworks>net8.0;net6.0;net48;net462</TargetFrameworks>
     <Description>OrmTxcSql.Npgsql helps you with O/R mapping, Transaction control, and running SQL.</Description>
     <PackageTags>orm transaction sql npgsql postgresql</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -9,6 +9,13 @@
 
   <ItemGroup>
     <PackageReference Include="NLog" Version="5.3.4" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+    <PackageReference Include="Npgsql" Version="8.0.4" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
