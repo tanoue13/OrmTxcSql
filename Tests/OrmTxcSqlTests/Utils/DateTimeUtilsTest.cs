@@ -62,6 +62,7 @@ namespace OrmTxcSqlTests.Utils
                 this.Dump(datetime.ToLocalTime());
                 Debug.WriteLine("DateTime.Now では、DateTime.Kind に DateTimeKind.Local が設定される。");
                 Debug.WriteLine("値は、DateTime.ToLocalTime() と等しい。");
+                Assert.That(datetime, Is.EqualTo(datetime.ToLocalTime()));
             }
             Debug.WriteLine(null);
             //
@@ -73,9 +74,11 @@ namespace OrmTxcSqlTests.Utils
                 this.Dump(datetime.ToLocalTime());
                 Debug.WriteLine("DateTimeKind を指定しないコンストラクタを使用した場合、DateTime.Kind に DateTimeKind.Unspecified が設定される。");
                 Debug.WriteLine("値は、DateTime.ToUniversalTime()、DateTime.ToLocalTime() のいずれとも異なる。");
+                Debug.WriteLine("DateTimeKindにDateTimeKind.Localを設定すると以下のようになる。");
                 this.Dump(ConvertToUniversalTime(datetime));
                 this.Dump(ConvertToLocalTime(datetime));
-                Debug.WriteLine("値が DateTime.ToLocalTime() と等しくなった。");
+                Debug.WriteLine("値が DateTime.SpecifyKind(datetime, DateTimeKind.Local).ToLocalTime() と等しくなった。");
+                Assert.That(datetime, Is.EqualTo(DateTime.SpecifyKind(datetime, DateTimeKind.Local).ToLocalTime()));
             }
             Debug.WriteLine(null);
             //
@@ -87,9 +90,11 @@ namespace OrmTxcSqlTests.Utils
                 this.Dump(datetime.ToLocalTime());
                 Debug.WriteLine("コンストラクタの引数で DateTimeKind.Unspecified を指定した場合、DateTime.Kind に DateTimeKind.Unspecified が設定される。");
                 Debug.WriteLine("値は、DateTime.ToUniversalTime()、DateTime.ToLocalTime() のいずれとも異なる。");
+                Debug.WriteLine("DateTimeKindにDateTimeKind.Localを設定すると以下のようになる。");
                 this.Dump(ConvertToUniversalTime(datetime));
                 this.Dump(ConvertToLocalTime(datetime));
-                Debug.WriteLine("値が DateTime.ToLocalTime() と等しくなった。");
+                Debug.WriteLine("値が DateTime.SpecifyKind(datetime, DateTimeKind.Local).ToLocalTime() と等しくなった。");
+                Assert.That(datetime, Is.EqualTo(DateTime.SpecifyKind(datetime, DateTimeKind.Local).ToLocalTime()));
             }
             Debug.WriteLine(null);
             //
@@ -101,6 +106,7 @@ namespace OrmTxcSqlTests.Utils
                 this.Dump(datetime.ToLocalTime());
                 Debug.WriteLine("コンストラクタの引数で DateTimeKind.Local を指定した場合、DateTime.Kind に DateTimeKind.Local が設定される。");
                 Debug.WriteLine("値は、DateTime.ToLocalTime() と等しい。");
+                Assert.That(datetime, Is.EqualTo(datetime.ToLocalTime()));
             }
             Debug.WriteLine(null);
             //
@@ -110,8 +116,9 @@ namespace OrmTxcSqlTests.Utils
                 this.Dump(datetime);
                 this.Dump(datetime.ToUniversalTime());
                 this.Dump(datetime.ToLocalTime());
-                Debug.WriteLine("コンストラクタの引数で DateTimeKind.Unspecified を指定した場合、DateTime.Kind に DateTimeKind.Unspecified が設定される。");
+                Debug.WriteLine("コンストラクタの引数で DateTimeKind.Utc を指定した場合、DateTime.Kind に DateTimeKind.Utc が設定される。");
                 Debug.WriteLine("値は、DateTime.ToUniversalTime() と等しい。");
+                Assert.That(datetime, Is.EqualTo(datetime.ToUniversalTime()));
             }
             Debug.WriteLine(null);
             //
