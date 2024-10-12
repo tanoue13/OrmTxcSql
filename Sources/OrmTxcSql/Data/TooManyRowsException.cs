@@ -37,6 +37,9 @@ namespace OrmTxcSql.Data
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
+#if NET8_0_OR_GREATER
+        [Obsolete]
+#endif
         public TooManyRowsException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
