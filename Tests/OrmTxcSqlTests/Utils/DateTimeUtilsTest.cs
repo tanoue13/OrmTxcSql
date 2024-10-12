@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-#if NET462
+#if NET462 || NET48
 using NUnit.Framework;
 #endif
 
