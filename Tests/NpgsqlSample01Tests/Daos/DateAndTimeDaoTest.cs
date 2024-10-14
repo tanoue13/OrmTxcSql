@@ -14,7 +14,7 @@ using OrmTxcSql.Daos;
 using OrmTxcSql.Npgsql.Data;
 using OrmTxcSql.Tests.Utils;
 using OrmTxcSql.Utils;
-#if NET462
+#if NET462 || NET48
 using NUnit.Framework;
 #endif
 

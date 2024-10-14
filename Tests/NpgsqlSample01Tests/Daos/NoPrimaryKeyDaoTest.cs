@@ -3,7 +3,7 @@ using System.Data;
 using System.Diagnostics;
 using NpgsqlSample01.Daos;
 using NpgsqlSample01.Entities;
-#if NET462
+#if NET462 || NET48
 using NUnit.Framework;
 #endif
 

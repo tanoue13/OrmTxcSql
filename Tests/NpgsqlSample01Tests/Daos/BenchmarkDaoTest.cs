@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using Npgsql;
 using NpgsqlSample01.Daos;
 using NpgsqlSample01.Entities;
-using OrmTxcSql.Attributes;
 using OrmTxcSql.Daos;
 using OrmTxcSql.Npgsql.Data;
 using OrmTxcSql.Tests.Utils;
-using OrmTxcSql.Utils;
-#if NET462
+#if NET462 || NET48
 using NUnit.Framework;
 #endif
 

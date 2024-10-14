@@ -3,12 +3,18 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>net462;net6.0</TargetFrameworks>
+    <TargetFrameworks>net462;net48;net6.0;net8.0</TargetFrameworks>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net48' ">
+    <Nullable>disable</Nullable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
     <Nullable>disable</Nullable>

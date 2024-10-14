@@ -3,7 +3,7 @@ using System.Diagnostics;
 using SqlSample01.Daos;
 using SqlSample01.Entities;
 using System;
-#if NET462
+#if NET462 || NET48
 using NUnit.Framework;
 #endif
 
