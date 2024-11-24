@@ -34,6 +34,13 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+    <PackageReference Include="System.Text.Encodings.Web" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net6.0' ">
+    <PackageReference Include="System.Text.Encodings.Web" Version="9.0.0" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\Samples\SqlSample01\SqlSample01.csproj" />
   </ItemGroup>
