@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Data;
+#if NET6_0_OR_GREATER
+using Microsoft.Data.SqlClient;
+#else
 using System.Data.SqlClient;
+#endif
 using System.Linq;
 using System.Text;
 using OrmTxcSql.SqlClient.Daos;

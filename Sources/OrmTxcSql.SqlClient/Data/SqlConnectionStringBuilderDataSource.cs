@@ -1,4 +1,8 @@
-﻿using System.Data.SqlClient;
+﻿#if NET6_0_OR_GREATER
+using Microsoft.Data.SqlClient;
+#else
+using System.Data.SqlClient;
+#endif
 using System.Diagnostics.CodeAnalysis;
 using OrmTxcSql.Data;
 
