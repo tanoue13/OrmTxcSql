@@ -3,6 +3,10 @@ using System.Data;
 using System.Data.SqlClient;
 using OrmTxcSql.Data;
 
+#if NET6_0_OR_GREATER
+using Microsoft.Data.SqlClient;
+#endif
+
 namespace OrmTxcSql.SqlClient.Data
 {
     /// <summary>
