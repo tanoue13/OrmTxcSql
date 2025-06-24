@@ -20,7 +20,7 @@ namespace OrmTxcSql.Data
         /// <summary>
         /// データソースを取得または設定します。
         /// </summary>
-        public virtual DataSource DataSource { protected get; set; } = new ConnectionStringDataSource();
+        public virtual IDataSource DataSource { protected get; set; } = new ConnectionStringDataSource();
 
         /// <summary>
         /// <see cref="ExecuteAsync(IEnumerable{IDao}, Action{IDbTransaction})"/>.
