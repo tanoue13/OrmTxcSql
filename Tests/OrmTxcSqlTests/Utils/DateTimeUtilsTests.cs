@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace OrmTxcSqlTests.Utils
 {
-    internal class DateTimeUtilsTest
+    internal class DateTimeUtilsTests
     {
         private static readonly TraceListener s_listener = new TextWriterTraceListener(Console.Out);
 
