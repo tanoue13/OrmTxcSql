@@ -4,13 +4,13 @@ using System.Net.Security;
 namespace OrmTxcSql.Data
 {
     /// <summary>
-    /// データソースクラス。
+    /// データソースのインターフェイス
     /// </summary>
     /// <remarks>
-    /// ・DbServerクラス（および、そのサブクラス）において接続文字列を取得するために利用されるクラス。
+    /// ・DbServerクラス（および、そのサブクラス）において接続文字列を取得するために利用されるインターフェイス。
     /// ・GetConnectionString()メソッドで取得される文字列が接続文字列として使用されます。
     /// </remarks>
-    public abstract class DataSource : IDataSource
+    public interface IDataSource
     {
         /// <summary>
         /// 接続文字列を取得します。
@@ -22,7 +22,7 @@ namespace OrmTxcSql.Data
         /// ２．選択肢をプロパティで公開し、プロパティに応じた接続文字列を戻す。<br/>
         /// ３．接続文字列をプロパティで公開し、プロパティの値を戻す。<br/>
         /// </remarks>
-        public abstract string GetConnectionString();
+        string GetConnectionString();
 
         /// <summary>
         /// <see cref="RemoteCertificateValidationCallback"/>を取得します。
@@ -31,9 +31,6 @@ namespace OrmTxcSql.Data
 #if NET6_0_OR_GREATER
         [return: MaybeNull]
 #endif
-        public virtual RemoteCertificateValidationCallback GetRemoteCertificateValidationCallback()
-        {
-            return null;
-        }
+        RemoteCertificateValidationCallback GetRemoteCertificateValidationCallback();
     }
 }

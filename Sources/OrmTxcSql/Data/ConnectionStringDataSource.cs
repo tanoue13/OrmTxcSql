@@ -5,7 +5,7 @@ namespace OrmTxcSql.Data
     /// <summary>
     /// プロパティの接続文字列を戻すデータソース。
     /// </summary>
-    public class ConnectionStringDataSource : DataSource
+    public class ConnectionStringDataSource : DataSource, IDataSource
     {
         /// <summary>
         /// 接続文字列を取得または設定します。

@@ -20,7 +20,24 @@ namespace OrmTxcSql.Data
         /// <summary>
         /// データソースを取得または設定します。
         /// </summary>
-        public virtual DataSource DataSource { protected get; set; } = new ConnectionStringDataSource();
+        public virtual IDataSource DataSource
+        {
+            protected get => _dataSource;
+            set => _dataSource = value ?? throw new ArgumentNullException(nameof(value), "DataSource cannot be null.");
+        }
+        private IDataSource _dataSource;
+
+        /// <summary>コンストラクタ</summary>
+        public DbServer() : this(new ConnectionStringDataSource())
+        {
+            // no-op
+        }
+        /// <summary>コンストラクタ</summary>
+        /// <param name="dataSource">データソース</param>
+        public DbServer(IDataSource dataSource)
+        {
+            this.DataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
+        }
 
         /// <summary>
         /// <see cref="ExecuteAsync(IEnumerable{IDao}, Action{IDbTransaction})"/>.
