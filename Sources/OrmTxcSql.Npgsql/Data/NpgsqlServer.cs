@@ -19,6 +19,18 @@ namespace OrmTxcSql.Npgsql.Data
     /// </summary>
     public class NpgsqlServer : DbServer<NpgsqlConnection>
     {
+        /// <summary>コンストラクタ</summary>
+        public NpgsqlServer() : base()
+        {
+            // no-op
+        }
+        /// <summary>コンストラクタ</summary>
+        /// <param name="dataSource">データソース</param>
+        public NpgsqlServer(IDataSource dataSource) : base(dataSource)
+        {
+            // no-op
+        }
+
         /// <summary>
         /// トランザクション管理下において、<paramref name="action"/>を実行する。
         /// </summary>
