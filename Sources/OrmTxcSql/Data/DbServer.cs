@@ -31,17 +31,20 @@ namespace OrmTxcSql.Data
         private IDataSource _dataSource;
 #endif
 
-        /// <summary>コンストラクタ</summary>
-        public DbServer() : this(new ConnectionStringDataSource())
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        protected DbServer() : this(new ConnectionStringDataSource())
         {
             // no-op
         }
-
-        /// <summary>コンストラクタ</summary>
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         /// <param name="dataSource">データソース</param>
-        public DbServer(IDataSource dataSource)
+        protected DbServer(IDataSource dataSource)
         {
-            this.DataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
+            this.DataSource = dataSource;
         }
 
         /// <summary>
