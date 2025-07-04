@@ -25,13 +25,18 @@ namespace OrmTxcSql.Data
             protected get => _dataSource;
             set => _dataSource = value ?? throw new ArgumentNullException(nameof(value), "DataSource cannot be null.");
         }
+#if NET6_0_OR_GREATER
+        private IDataSource _dataSource = null!;
+#else
         private IDataSource _dataSource;
+#endif
 
         /// <summary>コンストラクタ</summary>
         public DbServer() : this(new ConnectionStringDataSource())
         {
             // no-op
         }
+
         /// <summary>コンストラクタ</summary>
         /// <param name="dataSource">データソース</param>
         public DbServer(IDataSource dataSource)
