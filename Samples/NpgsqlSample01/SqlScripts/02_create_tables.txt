@@ -253,3 +253,14 @@ create table if not exists benchmark_table (
   , primary key (key)
 );
 
+create table products (
+  version_no               numeric(18) not null
+  , active_flag character  varying(1) not null
+  , toroku_nitiji          timestamp with time zone not null
+  , toroku_username        character varying(6) not null
+  , kosin_nitiji           timestamp with time zone not null
+  , kosin_username         character varying(6) not null
+  , product_code   character varying(10)
+  , description    character varying(50)
+  , primary key (product_code)
+);
