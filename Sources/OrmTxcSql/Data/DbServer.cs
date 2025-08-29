@@ -72,7 +72,27 @@ namespace OrmTxcSql.Data
         /// <param name="daos">トランザクションに参加する<see cref="IDao"/>のコレクション</param>
         /// <param name="action">トランザクション管理下で実行される処理</param>
         public virtual void Execute(IEnumerable<IDao> daos, Action<IDbTransaction> action)
+            => this.Execute<object>(daos, tx => action);
+
+        /// <summary>
+        /// トランザクション管理下において、<paramref name="action"/>を実行する。
+        /// </summary>
+        /// <param name="daos">トランザクションに参加する<see cref="IDao"/>のコレクション</param>
+        /// <param name="action">トランザクション管理下で実行される処理</param>
+#if NET6_0_OR_GREATER
+        public virtual T? Execute<T>(IEnumerable<IDao> daos, Func<IDbTransaction, T?> action)
+#else
+        public virtual T Execute<T>(IEnumerable<IDao> daos, Func<IDbTransaction, T> action)
+#endif
+            where T : class
         {
+            // 戻り値：
+#if NET6_0_OR_GREATER
+            T? result = null;
+#else
+            T result = null;
+#endif
+            //
             using (var connection = new TConnection())
             {
                 connection.ConnectionString = this.DataSource.GetConnectionString();
@@ -96,7 +116,7 @@ namespace OrmTxcSql.Data
                     try
                     {
                         // メイン処理を実行する。
-                        action(tx);
+                        result = action(tx);
                         //
                         // トランザクションをコミットする。
                         this.Commit(tx);
@@ -124,6 +144,9 @@ namespace OrmTxcSql.Data
                 // 接続を閉じる。
                 this.CloseConnection(connection);
             }
+            //
+            // 結果を戻す。
+            return result;
         }
 
         /// <summary>
