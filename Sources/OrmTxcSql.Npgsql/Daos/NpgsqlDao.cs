@@ -336,6 +336,111 @@ namespace OrmTxcSql.Npgsql.Daos
         }
 
         /// <summary>
+        /// 削除する。（１件）
+        /// </summary>
+        /// <param name="entity">entity</param>
+        /// <returns></returns>
+        public override int DeleteByPk(TEntity entity)
+        {
+            //
+            // コマンドの準備に必要なオブジェクトを生成する。
+            NpgsqlCommand command = this.Command;
+            //
+            // コマンドを準備する。
+            this.BuildDeleteByPkCommand(command, entity);
+            //
+            // コマンドを実行する。
+            int result = this.ExecuteNonQuery(command, entity);
+            //
+            // 結果を戻す。
+            return result;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="entity"></param>
+        /// <exception cref="MissingPrimaryKeyException"></exception>
+        protected virtual void BuildDeleteByPkCommand(NpgsqlCommand command, TEntity entity)
+        {
+            // コマンドの準備に必要なオブジェクトを生成する。
+            var builder = new StringBuilder();
+            //
+            // 主キー項目を反復処理する。
+            IEnumerator<KeyValuePair<string, PropertyInfo>> pairs = EntityUtils
+                // 主キー属性を取得する。
+                .GetPrimaryKeyAttributes<TEntity>()
+                // 変換
+                .Select(prop => new
+                {
+                    PropertyInfo = prop,
+                    ColumnName = prop.GetCustomAttribute<ColumnAttribute>(false)?.ColumnName ?? String.Empty
+                })
+                // カラム名を取得できない場合、対象外とする。
+                .Where(src => !String.IsNullOrEmpty(src.ColumnName))
+                // ディクショナリ（カラム名→プロパティ）に変換する。
+                .ToDictionary(src => src.ColumnName, src => src.PropertyInfo)
+                // IEnumeratorを取得する。
+                .GetEnumerator();
+            if (pairs.MoveNext())
+            {
+                // １件目についての処理：
+                {
+                    KeyValuePair<string, PropertyInfo> pair = pairs.Current;
+                    string columnName = pair.Key;
+                    string parameterName = "@" + columnName + "_org";
+                    // 項目名を追加する。
+                    builder.Append(String.Format(" where x.{0} = {1}", columnName, parameterName));
+                    // SQLパラメータに登録値を設定する。
+                    PropertyInfo propertyInfo = pair.Value;
+                    NpgsqlServer.AddParameterOrReplace(command, parameterName, entity, propertyInfo);
+                }
+                // ２件目以降についての処理：
+                while (pairs.MoveNext())
+                {
+                    KeyValuePair<string, PropertyInfo> pair = pairs.Current;
+                    string columnName = pair.Key;
+                    string parameterName = "@" + columnName + "_org";
+                    // 項目名を追加する。
+                    builder.Append(String.Format(" and x.{0} = {1}", columnName, parameterName));
+                    // SQLパラメータに登録値を設定する。
+                    PropertyInfo propertyInfo = pair.Value;
+                    NpgsqlServer.AddParameterOrReplace(command, parameterName, entity, propertyInfo);
+                }
+                // 共通項目についての処理：
+                builder.Append(this.GetCommonFieldForUpdateCondition("x", true));
+            }
+            else
+            {
+                // fool-proof: 主キー属性ありのカラムが存在しない場合、例外を投げる。
+                throw new MissingPrimaryKeyException(MissingPrimaryKeyExceptionMessage);
+            }
+            //
+            this.BuildDeleteCommand(command, entity, builder.ToString());
+        }
+        private void BuildDeleteCommand(NpgsqlCommand command, TEntity entity, string filter)
+        {
+            // コマンドの準備に必要なオブジェクトを生成する。
+            var columnStringBuilder = new StringBuilder();
+            //
+            // テーブル名を取得する。
+            string tableName = entity.GetTableName();
+            // コマンドテキストを生成する。
+            // 開発者向けコメント：（fool-proof：条件の前に、空白を１つはさむ）
+            // OK: delete from table_name where x = @x
+            // NG: delete from table_namewhere x = @x
+            var builder = new StringBuilder();
+            builder.Append(" delete from ").Append(tableName).Append(" as x");
+            builder.Append(" "); // fool-proof
+            builder.Append(filter);
+            //
+            // コマンドテキストを設定する。
+            command.CommandText = builder.ToString();
+            // データソースにコマンドを準備する。
+            command.Prepare();
+        }
+
+        /// <summary>
         /// 検索する。（１件）
         /// </summary>
         /// <param name="entity"></param>
