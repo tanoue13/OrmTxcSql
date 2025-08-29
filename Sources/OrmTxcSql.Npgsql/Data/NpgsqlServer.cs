@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -485,7 +484,7 @@ namespace OrmTxcSql.Npgsql.Data
         /// <param name="value"></param>
         /// <remarks>値がnullの場合、DBNull.Valueに変換して設定する。</remarks>
 #if NET6_0_OR_GREATER
-        public static void AddParameterOrReplace(IDbCommand command, string parameterName, NpgsqlDbType dbType, [AllowNull] object value)
+        public static void AddParameterOrReplace(IDbCommand command, string parameterName, NpgsqlDbType dbType, object? value)
 #else
         public static void AddParameterOrReplace(IDbCommand command, string parameterName, NpgsqlDbType dbType, object value)
 #endif
