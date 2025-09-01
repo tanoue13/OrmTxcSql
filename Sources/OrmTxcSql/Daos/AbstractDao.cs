@@ -19,7 +19,7 @@ namespace OrmTxcSql.Daos
     {
 
         /// <summary>
-        /// <c>PrimaryKeyAttribute</c>が設定されていない<c>TEntity</c>において<c>UpdateByPk</c>, <c>SelectByPk</c>が呼び出された場合に、
+        /// <c>PrimaryKeyAttribute</c>が設定されていない<c>TEntity</c>において<c>UpdateByPk</c>, <c>DeleteByPk</c>, <c>SelectByPk</c>が呼び出された場合に、
         /// 投げられる例外に設定されるメッセージ。
         /// </summary>
         protected static readonly string MissingPrimaryKeyExceptionMessage = $"{nameof(PrimaryKeyAttribute)} is not found in {typeof(TEntity).Name}.";

@@ -15,7 +15,7 @@ using OrmTxcSql.Utils;
 namespace OrmTxcSql.Npgsql.Daos
 {
     /// <summary>
-    /// PostgreSQL用のdao。BaseEntityのサブクラスに対してInsert, UpdateByPk, FindByPkを実装済み。
+    /// PostgreSQL用のdao。BaseEntityのサブクラスに対して Insert, UpdateByPk, DeleteByPk, SelectByPk を実装済み。
     /// </summary>
     public abstract class NpgsqlDao<TEntity> : AbstractDao<TEntity, NpgsqlCommand, NpgsqlDataAdapter>
         where TEntity : NpgsqlEntity, new()

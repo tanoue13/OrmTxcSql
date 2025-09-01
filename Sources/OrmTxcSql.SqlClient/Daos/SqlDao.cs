@@ -19,7 +19,7 @@ using OrmTxcSql.Utils;
 namespace OrmTxcSql.SqlClient.Daos
 {
     /// <summary>
-    /// SQL Server用のdao。BaseEntityのサブクラスに対してInsert, UpdateByPk, FindByPkを実装済み。
+    /// SQL Server用のdao。BaseEntityのサブクラスに対して Insert, UpdateByPk, DeleteByPk, SelectByPk を実装済み。
     /// </summary>
     public abstract class SqlDao<TEntity> : AbstractDao<TEntity, SqlCommand, SqlDataAdapter>
         where TEntity : SqlEntity, new()

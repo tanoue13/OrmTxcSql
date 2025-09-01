@@ -15,7 +15,7 @@ using OrmTxcSql.Utils;
 namespace OrmTxcSql.DB2.Daos
 {
     /// <summary>
-    /// DB2用のdao。BaseEntityのサブクラスに対してInsert, UpdateByPk, FindByPkを実装済み。
+    /// DB2用のdao。BaseEntityのサブクラスに対して Insert, UpdateByPk, DeleteByPk, SelectByPk を実装済み。
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <remarks>
