@@ -80,6 +80,13 @@ namespace OrmTxcSql.Daos
         public abstract int UpdateUnlessNullByPk(TEntity entity);
 
         /// <summary>
+        /// 削除する。（１件）
+        /// </summary>
+        /// <param name="entity">entity</param>
+        /// <returns></returns>
+        public abstract int DeleteByPk(TEntity entity);
+
+        /// <summary>
         /// 検索する。（１件）
         /// </summary>
         /// <param name="entity"></param>
