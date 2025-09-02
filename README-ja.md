@@ -2,25 +2,25 @@
 
 O/R mapping, Transaction control, SQL
 
-## Overview
+## 概要
 
-OrmTxcSql is a lightweight O/R mapping, transaction control, and SQL execution library for .NET applications.
+OrmTxcSqlは、.NETアプリケーション向けの軽量なO/Rマッピング、トランザクション制御、SQL実行ライブラリです。
 
-## Packages
+## パッケージ
 
-- **OrmTxcSql** - Core library
-- **OrmTxcSql.Npgsql** - PostgreSQL support
-- **OrmTxcSql.SqlClient** - SQL Server support
-- **OrmTxcSql.DB2** - IBM DB2/iSeries support
+- **OrmTxcSql** - コアライブラリ
+- **OrmTxcSql.Npgsql** - PostgreSQL対応
+- **OrmTxcSql.SqlClient** - SQL Server対応
+- **OrmTxcSql.DB2** - IBM DB2/iSeries対応
 
-## Supported Frameworks
+## 対応フレームワーク
 
 - .NET 8.0
 - .NET 6.0
 - .NET Framework 4.8
 - .NET Framework 4.6.2
 
-## Installation
+## インストール
 
 ```bash
 # PostgreSQL
@@ -33,9 +33,9 @@ dotnet add package OrmTxcSql.SqlClient
 dotnet add package OrmTxcSql.DB2
 ```
 
-## Basic Usage
+## 基本的な使用方法
 
-### Entity Definition
+### エンティティの定義
 
 ```csharp
 [Table("products")]
@@ -48,7 +48,7 @@ public class ProductEntity : BaseNpgsqlEntity
 }
 ```
 
-### DAO Implementation
+### DAOの実装
 
 ```csharp
 public class ProductDao : BaseNpgsqlDao<ProductEntity>
@@ -95,7 +95,7 @@ public class ProductDao : BaseNpgsqlDao<ProductEntity>
 }
 ```
 
-### Data Source Configuration
+### データソースの設定
 
 ```csharp
 // PostgreSQL
@@ -105,18 +105,18 @@ var dataSource = new NpgsqlDataSource("Host=localhost;Database=mydb;Username=use
 var dataSource = new SqlClientDataSource("Server=localhost;Database=mydb;Integrated Security=true");
 ```
 
-## Key Features
+## 主な機能
 
-- Simple O/R mapping
-- Automatic transaction management
-- Parameterized query support
-- Multiple database support
-- Lightweight and high performance
+- シンプルなO/Rマッピング
+- 自動トランザクション管理
+- パラメータ化クエリ対応
+- 複数データベース対応
+- 軽量で高性能
 
-## License
+## ライセンス
 
 MIT License
 
-## Repository
+## リポジトリ
 
 https://github.com/tanoue13/OrmTxcSql
