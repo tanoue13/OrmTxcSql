@@ -14,5 +14,10 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Version>2.0.7.1</Version>
     <Authors>tanoue13</Authors>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 </Project>
