@@ -104,7 +104,21 @@ namespace NpgsqlSample01.Entities
             // dataRowから値を取得する。
             var value = this.GetValue(dataRow, propertyInfo);
             // 値を設定する。
+#if NET6_0_OR_GREATER
+            // プロパティの型にあわせて変換する。
+            Type type = propertyInfo.PropertyType;
+            if (value is not null && typeof(DateTime?).Equals(type))
+            {
+                DateTime? nullable = value as DateTime?;
+                propertyInfo.SetValue(this, nullable);
+            }
+            else
+            {
+                propertyInfo.SetValue(this, value);
+            }
+#else
             propertyInfo.SetValue(this, value);
+#endif
         }
 #if NET6_0_OR_GREATER
         [return: MaybeNull]
@@ -168,6 +182,19 @@ namespace NpgsqlSample01.Entities
                 else
                 {
                     return timeSpanValue;
+                }
+            }
+            else if (value is TimeOnly timeOnlyValue)
+            {
+                // プロパティの型にあわせて変換する。
+                Type type = propertyInfo.PropertyType;
+                if (new Type[] { typeof(TimeSpan), typeof(TimeSpan?) }.Contains(type))
+                {
+                    return timeOnlyValue.ToTimeSpan();
+                }
+                else
+                {
+                    return timeOnlyValue;
                 }
             }
 #endif
