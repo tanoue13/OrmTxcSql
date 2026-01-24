@@ -29,7 +29,12 @@ namespace OrmTxcSql.Npgsql.Data
             using (var connection = new NpgsqlConnection())
             {
                 connection.ConnectionString = this.DataSource.GetConnectionString();
+#if NET10_0_OR_GREATER
+                // unsupported in .NET 10.0 or later.
+                //connection.UserCertificateValidationCallback = this.DataSource.GetRemoteCertificateValidationCallback();
+#else
                 connection.UserCertificateValidationCallback = this.DataSource.GetRemoteCertificateValidationCallback();
+#endif
                 //
                 LogUtils.GetDataLogger().Debug("Connection is being opened.");
                 connection.Open();
@@ -181,7 +186,12 @@ namespace OrmTxcSql.Npgsql.Data
             using (var connection = new NpgsqlConnection())
             {
                 connection.ConnectionString = this.DataSource.GetConnectionString();
+#if NET10_0_OR_GREATER
+                // unsupported in .NET 10.0 or later.
+                //connection.UserCertificateValidationCallback = this.DataSource.GetRemoteCertificateValidationCallback();
+#else
                 connection.UserCertificateValidationCallback = this.DataSource.GetRemoteCertificateValidationCallback();
+#endif
                 connection.Open();
                 //
                 // メイン処理
@@ -227,7 +237,12 @@ namespace OrmTxcSql.Npgsql.Data
             using (var connection = new NpgsqlConnection())
             {
                 connection.ConnectionString = this.DataSource.GetConnectionString();
+#if NET10_0_OR_GREATER
+                // unsupported in .NET 10.0 or later.
+                //connection.UserCertificateValidationCallback = this.DataSource.GetRemoteCertificateValidationCallback();
+#else
                 connection.UserCertificateValidationCallback = this.DataSource.GetRemoteCertificateValidationCallback();
+#endif
                 //
                 LogUtils.GetDataLogger().Debug("Connection is being opened.");
                 await connection.OpenAsync();
@@ -379,7 +394,12 @@ namespace OrmTxcSql.Npgsql.Data
             using (var connection = new NpgsqlConnection())
             {
                 connection.ConnectionString = this.DataSource.GetConnectionString();
+#if NET10_0_OR_GREATER
+                // unsupported in .NET 10.0 or later.
+                //connection.UserCertificateValidationCallback = this.DataSource.GetRemoteCertificateValidationCallback();
+#else
                 connection.UserCertificateValidationCallback = this.DataSource.GetRemoteCertificateValidationCallback();
+#endif
                 await connection.OpenAsync();
                 //
                 // メイン処理

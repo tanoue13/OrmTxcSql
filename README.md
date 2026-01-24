@@ -15,10 +15,10 @@ OrmTxcSql is a lightweight O/R mapping, transaction control, and SQL execution l
 
 ## Supported Frameworks
 
+- .NET 10.0
 - .NET 8.0
 - .NET 6.0
 - .NET Framework 4.8
-- .NET Framework 4.6.2
 
 ## Installation
 
