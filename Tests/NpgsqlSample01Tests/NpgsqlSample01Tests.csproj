@@ -3,7 +3,7 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>net462;net48;net6.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net10.0;net8.0;net6.0;net48</TargetFrameworks>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
@@ -28,13 +28,6 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
   </ItemGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
-    <Nullable>disable</Nullable>
-  </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="NUnit" Version="4.4.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="5.1.0" />
@@ -52,7 +45,7 @@
     <PackageReference Include="System.Text.Encodings.Web" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' != 'net6.0' ">
-    <PackageReference Include="System.Text.Encodings.Web" Version="9.0.8" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="10.0.2" />
   </ItemGroup>
 
   <ItemGroup>
