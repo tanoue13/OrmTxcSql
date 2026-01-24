@@ -15,10 +15,10 @@ OrmTxcSqlは、.NETアプリケーション向けの軽量なO/Rマッピング�
 
 ## 対応フレームワーク
 
+- .NET 10.0
 - .NET 8.0
 - .NET 6.0
 - .NET Framework 4.8
-- .NET Framework 4.6.2
 
 ## インストール
 
