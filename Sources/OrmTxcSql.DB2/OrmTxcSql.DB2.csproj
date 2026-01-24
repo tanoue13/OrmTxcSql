@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net48;net462</TargetFrameworks>
+    <TargetFrameworks>net48</TargetFrameworks>
     <Description>OrmTxcSql.DB2 helps you with O/R mapping, Transaction control, and running SQL.</Description>
     <PackageTags>orm transaction sql ibm iSeries db2</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net48' ">
-    <Nullable>disable</Nullable>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
     <Nullable>disable</Nullable>
   </PropertyGroup>
 

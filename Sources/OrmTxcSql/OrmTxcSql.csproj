@@ -1,12 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net6.0;net48;net462</TargetFrameworks>
+    <TargetFrameworks>net10.0;net8.0;net6.0;net48</TargetFrameworks>
     <Description>OrmTxcSql helps you with O/R mapping, Transaction control, and running SQL.</Description>
     <PackageTags>orm transaction sql</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -14,9 +17,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net48' ">
-    <Nullable>disable</Nullable>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
     <Nullable>disable</Nullable>
   </PropertyGroup>
   <ItemGroup>
