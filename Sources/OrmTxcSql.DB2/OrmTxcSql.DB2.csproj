@@ -23,7 +23,6 @@
       <HintPath>..\..\ReferenceAssemblies\IBM.Data.DB2.iSeries.dll</HintPath>
     </Reference>
     <Content Include="../../ReferenceAssemblies/IBM.Data.DB2.iSeries.dll" Pack="true" PackagePath="/lib/net48" LinkBase="Assets" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="../../ReferenceAssemblies/IBM.Data.DB2.iSeries.dll" Pack="true" PackagePath="/lib/net462" LinkBase="Assets" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
