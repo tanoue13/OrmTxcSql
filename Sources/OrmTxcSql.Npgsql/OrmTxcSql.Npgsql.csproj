@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="5.5.1" />
+    <PackageReference Include="NLog" Version="6.0.7" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
