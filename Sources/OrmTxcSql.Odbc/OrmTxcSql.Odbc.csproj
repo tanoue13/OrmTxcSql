@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <TargetFrameworks>net10.0;net8.0;net6.0;net48</TargetFrameworks>
+    <Description>OrmTxcSql.Odbc helps you with O/R mapping, Transaction control, and running SQL.</Description>
+    <PackageTags>orm transaction sql odbc</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
 </Project>
