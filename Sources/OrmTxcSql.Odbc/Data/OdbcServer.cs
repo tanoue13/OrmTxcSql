@@ -250,5 +250,33 @@ namespace OrmTxcSql.Odbc.Data
         }
 #endif
 
+        #region "更新系処理に関する処理"
+        /// <summary>
+        /// <see cref="DbServer{TConnection}.ExecuteNonQuery(IDbCommand, bool)"/>
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="enableOptimisticConcurrency"></param>
+        /// <returns></returns>
+        public static int ExecuteNonQuery(OdbcCommand command, bool enableOptimisticConcurrency = true)
+        {
+            try
+            {
+                int count = DbServer<OdbcConnection>.ExecuteNonQuery(command, enableOptimisticConcurrency);
+                return count;
+            }
+            catch (OdbcException ex)
+            {
+                switch (ex.ErrorCode)
+                {
+                    default:
+                        {
+                            // 例外を投げる。（丸投げ）
+                            throw;
+                        }
+                }
+            }
+        }
+        #endregion
+
     }
 }

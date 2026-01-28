@@ -7,11 +7,6 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Daos\" />
-    <Folder Include="Entities\" />
-  </ItemGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <PackageReference Include="System.Data.Odbc" Version="8.0.1" />
   </ItemGroup>
