@@ -92,7 +92,7 @@ namespace OrmTxcSql.Data
                         }
                     }
                     //
-                    // メイン処理：実装クラスのexecute()を実行する。
+                    // メイン処理：実装クラスの execute() を実行する。
                     try
                     {
                         // メイン処理を実行する。

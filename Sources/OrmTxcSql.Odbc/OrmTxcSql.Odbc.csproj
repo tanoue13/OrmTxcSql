@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net10.0;net8.0;net6.0;net48</TargetFrameworks>
+    <Description>OrmTxcSql.Odbc helps you with O/R mapping, Transaction control, and running SQL.</Description>
+    <PackageTags>orm transaction sql odbc</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+    <PackageReference Include="System.Data.Odbc" Version="8.0.1" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net6.0' ">
+    <PackageReference Include="System.Data.Odbc" Version="10.0.2" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net48' ">
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OrmTxcSql\OrmTxcSql.csproj" />
+  </ItemGroup>
+
+</Project>
